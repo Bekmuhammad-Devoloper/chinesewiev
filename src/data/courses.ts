@@ -11,6 +11,7 @@ export interface DialogueLine {
   text: string;
   pinyin: string;
   translation: string;
+  audio?: string;
 }
 
 /* ── Grammatika uchun ── */

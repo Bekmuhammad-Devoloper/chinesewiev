@@ -21,7 +21,10 @@ export default function AdminLessonsPage() {
   const [uploadingWord, setUploadingWord] = useState<{ idx: number; type: "audio" | "image" } | null>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const dialogueAudioInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadIdx, setActiveUploadIdx] = useState(-1);
+  const [uploadingDialogueAudio, setUploadingDialogueAudio] = useState<{ dIdx: number; lIdx: number } | null>(null);
+  const [activeDialogueUpload, setActiveDialogueUpload] = useState<{ dIdx: number; lIdx: number } | null>(null);
 
   useEffect(() => {
     fetch("/api/courses")
@@ -138,6 +141,38 @@ export default function AdminLessonsPage() {
     const file = e.target.files?.[0];
     if (file && activeUploadIdx >= 0) handleFileUpload(file, activeUploadIdx, "image");
     if (imageInputRef.current) imageInputRef.current.value = "";
+  };
+
+  /* ── Dialogue audio upload handler ── */
+  const handleDialogueAudioUpload = async (file: File, dIdx: number, lIdx: number) => {
+    setUploadingDialogueAudio({ dIdx, lIdx });
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) {
+        const children = [...(getDialogueSection()?.children || [])];
+        const lines = [...(children[dIdx].dialogueLines || [])];
+        lines[lIdx] = { ...lines[lIdx], audio: data.url };
+        children[dIdx] = { ...children[dIdx], dialogueLines: lines };
+        updateDialogueChildren(children);
+      } else {
+        alert(data.error || "Yuklashda xatolik");
+      }
+    } catch {
+      alert("Fayl yuklashda xatolik yuz berdi");
+    }
+    setUploadingDialogueAudio(null);
+  };
+  const triggerDialogueAudioUpload = (dIdx: number, lIdx: number) => {
+    setActiveDialogueUpload({ dIdx, lIdx });
+    setTimeout(() => dialogueAudioInputRef.current?.click(), 50);
+  };
+  const onDialogueAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && activeDialogueUpload) handleDialogueAudioUpload(file, activeDialogueUpload.dIdx, activeDialogueUpload.lIdx);
+    if (dialogueAudioInputRef.current) dialogueAudioInputRef.current.value = "";
   };
 
   /* ── Word helpers ── */
@@ -311,8 +346,9 @@ export default function AdminLessonsPage() {
 
   return (
     <div className="p-[24px] sm:p-[32px] md:p-[40px]">
-      <input type="file" ref={audioInputRef} accept="audio/*" className="hidden" onChange={onAudioFileChange} />
-      <input type="file" ref={imageInputRef} accept="image/*" className="hidden" onChange={onImageFileChange} />
+      <input type="file" ref={audioInputRef} accept="audio/*" className="hidden" onChange={onAudioFileChange} title="Audio fayl tanlash" />
+      <input type="file" ref={imageInputRef} accept="image/*" className="hidden" onChange={onImageFileChange} title="Rasm fayl tanlash" />
+      <input type="file" ref={dialogueAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueAudioFileChange} title="Dialog audio fayl tanlash" />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-[28px] flex-wrap gap-[12px]">
@@ -493,18 +529,40 @@ export default function AdminLessonsPage() {
                           </div>
                         </div>
                         <div className="p-[12px] flex flex-col gap-[6px]">
-                          {(d.dialogueLines || []).map((line, lIdx) => (
+                          {(d.dialogueLines || []).map((line, lIdx) => {
+                            const isDlgAudioUploading = uploadingDialogueAudio?.dIdx === dIdx && uploadingDialogueAudio?.lIdx === lIdx;
+                            return (
                             <div key={lIdx} className="flex items-start gap-[6px] bg-white rounded-[6px] p-[8px] border border-gray-100">
                               <span className="text-[10px] text-gray-300 mt-[8px] w-[16px] flex-shrink-0">{lIdx + 1}</span>
-                              <div className="flex-1 grid grid-cols-2 gap-[4px]">
-                                <Input value={line.speaker} onChange={(v) => updateDialogueLine(dIdx, lIdx, "speaker", v)} placeholder="So'zlovchi" className="w-full text-[12px]" />
-                                <Input value={line.text} onChange={(v) => updateDialogueLine(dIdx, lIdx, "text", v)} placeholder="Xitoycha matn" className="w-full text-[12px]" />
-                                <Input value={line.pinyin} onChange={(v) => updateDialogueLine(dIdx, lIdx, "pinyin", v)} placeholder="Pinyin" className="w-full text-[12px]" />
-                                <Input value={line.translation} onChange={(v) => updateDialogueLine(dIdx, lIdx, "translation", v)} placeholder="Tarjima" className="w-full text-[12px]" />
+                              <div className="flex-1 flex flex-col gap-[4px]">
+                                <div className="grid grid-cols-2 gap-[4px]">
+                                  <Input value={line.speaker} onChange={(v) => updateDialogueLine(dIdx, lIdx, "speaker", v)} placeholder="So'zlovchi" className="w-full text-[12px]" />
+                                  <Input value={line.text} onChange={(v) => updateDialogueLine(dIdx, lIdx, "text", v)} placeholder="Xitoycha matn" className="w-full text-[12px]" />
+                                  <Input value={line.pinyin} onChange={(v) => updateDialogueLine(dIdx, lIdx, "pinyin", v)} placeholder="Pinyin" className="w-full text-[12px]" />
+                                  <Input value={line.translation} onChange={(v) => updateDialogueLine(dIdx, lIdx, "translation", v)} placeholder="Tarjima" className="w-full text-[12px]" />
+                                </div>
+                                {/* Audio row */}
+                                <div className="flex items-center gap-[6px]">
+                                  {line.audio ? (
+                                    <div className="flex items-center gap-[5px] bg-emerald-50 rounded-[6px] px-[8px] py-[4px] flex-1 min-w-0">
+                                      <button onClick={() => playAudioPreview(line.audio!)} className="w-[22px] h-[22px] bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-emerald-600 transition-colors" title="Tinglash">
+                                        <Play size={10} className="text-white ml-[1px]" />
+                                      </button>
+                                      <p className="text-[10px] font-semibold text-emerald-700 truncate flex items-center gap-[2px] flex-1 min-w-0"><Music size={9} /> {line.audio.split("/").pop()}</p>
+                                      <button onClick={() => updateDialogueLine(dIdx, lIdx, "audio", "")} className="w-[18px] h-[18px] bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200 flex-shrink-0" title="Audioni o'chirish"><X size={9} /></button>
+                                    </div>
+                                  ) : (
+                                    <button onClick={() => triggerDialogueAudioUpload(dIdx, lIdx)} disabled={isDlgAudioUploading}
+                                      className="flex items-center gap-[4px] bg-blue-50 hover:bg-blue-100 text-blue-600 px-[8px] py-[4px] rounded-[6px] text-[10px] font-semibold transition-all disabled:opacity-50 flex-shrink-0">
+                                      {isDlgAudioUploading ? <Loader2 size={11} className="animate-spin" /> : <FileAudio size={11} />} Audio
+                                    </button>
+                                  )}
+                                </div>
                               </div>
                               <button onClick={() => removeDialogueLine(dIdx, lIdx)} className="w-[24px] h-[24px] bg-red-50 text-red-400 rounded mt-[6px] flex-shrink-0 hover:bg-red-100 flex items-center justify-center" title="O'chirish"><X size={12} /></button>
                             </div>
-                          ))}
+                            );
+                          })}
                           {(d.dialogueLines || []).length === 0 && <p className="text-[12px] text-gray-300 text-center py-[8px]">Hali qator yo&apos;q. &quot;+ Qator&quot; tugmasini bosing.</p>}
                         </div>
                       </div>

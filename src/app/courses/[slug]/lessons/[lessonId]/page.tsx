@@ -1018,12 +1018,25 @@ export default function LessonDetailPage() {
                       {dialogue.lines.map((line, idx) => (
                           <div key={idx} className="group">
                             {/* Xitoycha matni */}
-                            <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7]">
-                              <span className="font-extrabold text-[#1a1a2e]">
-                                {line.speaker}
+                            <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7] flex items-start gap-[8px]">
+                              <span className="flex-1">
+                                <span className="font-extrabold text-[#1a1a2e]">
+                                  {line.speaker}
+                                </span>
+                                <span className="text-gray-300 mx-[2px]">:</span>
+                                <span className="text-[#333] font-medium ml-[4px]">{line.text}</span>
                               </span>
-                              <span className="text-gray-300 mx-[2px]">:</span>
-                              <span className="text-[#333] font-medium ml-[4px]">{line.text}</span>
+                              {line.audio && (
+                                <button
+                                  onClick={() => { const a = new Audio(line.audio!); a.play().catch(() => {}); }}
+                                  className="flex-shrink-0 mt-[2px] w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full bg-gradient-to-br from-[#e8632b] to-[#f5a623] flex items-center justify-center shadow-[0_2px_8px_rgba(232,99,43,0.3)] hover:shadow-[0_3px_12px_rgba(232,99,43,0.4)] hover:scale-105 active:scale-95 transition-all"
+                                  title="Tinglash"
+                                >
+                                  <svg className="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] text-white ml-[1px]" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                  </svg>
+                                </button>
+                              )}
                             </p>
                             {/* Pinyin */}
                             <p className="text-[13px] sm:text-[14px] text-[#e8632b] italic mt-[3px] ml-[2px]">
