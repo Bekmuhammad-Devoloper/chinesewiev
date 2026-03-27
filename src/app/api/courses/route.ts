@@ -1,24 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import { Course } from "@/data/courses";
+import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
 
-const DATA_PATH = path.join(process.cwd(), "src", "data", "courses-data.json");
+const DATA_FILE = "courses-data.json";
 
 function readData(): Course[] {
-  try {
-    const raw = fs.readFileSync(DATA_PATH, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    // fallback: read from the TS module (initial seed)
-    const { courses } = require("@/data/courses");
-    fs.writeFileSync(DATA_PATH, JSON.stringify(courses, null, 2), "utf-8");
-    return courses;
+  const filePath = getDataPath(DATA_FILE);
+  const data = readJsonFile<Course[]>(filePath, []);
+  if (data.length === 0) {
+    // fallback: boshlang'ich ma'lumotlarni src/data dan o'qish
+    try {
+      const { courses } = require("@/data/courses");
+      writeJsonFile(filePath, courses);
+      return courses;
+    } catch {
+      return [];
+    }
   }
+  return data;
 }
 
 function writeData(courses: Course[]) {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(courses, null, 2), "utf-8");
+  writeJsonFile(getDataPath(DATA_FILE), courses);
 }
 
 // GET /api/courses — get all courses

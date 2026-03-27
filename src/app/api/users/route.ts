@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
 
 export interface UserRecord {
   id: string;
@@ -16,19 +15,14 @@ export interface UserRecord {
   expiresAt: string;
 }
 
-const DATA_PATH = path.join(process.cwd(), "src", "data", "users-data.json");
+const DATA_FILE = "users-data.json";
 
 function readUsers(): UserRecord[] {
-  try {
-    const raw = fs.readFileSync(DATA_PATH, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+  return readJsonFile<UserRecord[]>(getDataPath(DATA_FILE), []);
 }
 
 function writeUsers(users: UserRecord[]) {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(users, null, 2), "utf-8");
+  writeJsonFile(getDataPath(DATA_FILE), users);
 }
 
 function generateKey(): string {

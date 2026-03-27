@@ -157,9 +157,10 @@ export default function AdminLessonsPage() {
 
   /* ── Dialogue helpers ── */
   const getDialogueSection = () => editLesson?.sections?.find((s) => s.id === "dialogues");
-  const updateDialogueChildren = (children: NonNullable<typeof editLesson>["sections"] extends (infer S)[] ? (S extends { children?: infer C } ? C : never) : never) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateDialogueChildren = (children: any) => {
     const sections = (editLesson?.sections || []).map((s) =>
-      s.id === "dialogues" ? { ...s, children: children as typeof s.children } : s
+      s.id === "dialogues" ? { ...s, children } : s
     );
     updateLesson({ sections });
   };
@@ -199,9 +200,10 @@ export default function AdminLessonsPage() {
 
   /* ── Grammar helpers ── */
   const getGrammarSection = () => editLesson?.sections?.find((s) => s.id === "grammar");
-  const updateGrammarChildren = (children: NonNullable<ReturnType<typeof getGrammarSection>>["children"]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateGrammarChildren = (children: any) => {
     const sections = (editLesson?.sections || []).map((s) =>
-      s.id === "grammar" ? { ...s, children: children as typeof s.children } : s
+      s.id === "grammar" ? { ...s, children } : s
     );
     updateLesson({ sections });
   };

@@ -1,21 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import type { Course, Lesson } from "@/data/courses";
+import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
 
-const DATA_PATH = path.join(process.cwd(), "src", "data", "courses-data.json");
+const DATA_FILE = "courses-data.json";
 
 function readData(): Course[] {
-  try {
-    const raw = fs.readFileSync(DATA_PATH, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+  return readJsonFile<Course[]>(getDataPath(DATA_FILE), []);
 }
 
 function writeData(courses: Course[]) {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(courses, null, 2), "utf-8");
+  writeJsonFile(getDataPath(DATA_FILE), courses);
 }
 
 // GET /api/lessons?slug=hsk-1 — get all lessons for a course

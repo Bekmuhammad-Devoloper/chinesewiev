@@ -16,7 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-const ADMIN_PASSWORD = "boburbek";
+const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "boburbek";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },

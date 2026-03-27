@@ -329,7 +329,7 @@ export default function AdminDashboard() {
                           fontSize: "12px",
                           padding: "10px 14px",
                         }}
-                        formatter={(value: number, name: string) => [`${value} dars`, name]}
+                        formatter={(value: unknown, name: unknown) => [`${value} dars`, String(name)]}
                       />
                       <Legend
                         verticalAlign="bottom"

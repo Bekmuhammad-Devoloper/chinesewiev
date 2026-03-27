@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { getUploadDir } from "@/lib/data";
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,13 +37,10 @@ export async function POST(req: NextRequest) {
 
     // Determine subfolder based on type
     const isAudio = file.type.startsWith("audio/");
-    const subDir = isAudio ? "words" : "";
+    const subDir = isAudio ? "words" : undefined;
 
     // Save to public/assets/ (or public/assets/words/ for audio)
-    const uploadDir = path.join(process.cwd(), "public", "assets", subDir);
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
+    const uploadDir = getUploadDir(subDir);
 
     const filePath = path.join(uploadDir, filename);
     const buffer = Buffer.from(await file.arrayBuffer());
