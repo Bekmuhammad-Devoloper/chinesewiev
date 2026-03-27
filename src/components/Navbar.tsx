@@ -128,23 +128,6 @@ export default function Navbar() {
       <div className="max-w-[1920px] mx-auto px-[10px] md:px-[40px] lg:px-[80px]">
         <div className="flex items-center justify-between">
 
-          {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-[10px] lg:gap-[16px]">
-            {navLinks.map((link) => (
-              <a
-                key={link.sectionId}
-                href={isHome ? link.href : `/${link.href}`}
-                className={`text-[13px] lg:text-[15px] px-[20px] py-[8px] lg:px-[24px] lg:py-[9px] rounded-[6px] transition-colors tracking-[0.03em] whitespace-nowrap ${
-                  activeSection === link.sectionId
-                    ? "bg-gold text-primary font-medium hover:bg-gold-light"
-                    : "text-gold font-light hover:text-white"
-                }`}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-
           {/* Mobile: Hamburger */}
           <div className="flex md:hidden items-center gap-[8px]">
             <button
@@ -165,6 +148,29 @@ export default function Navbar() {
                 </svg>
               )}
             </button>
+          </div>
+
+          {/* Logo — always visible */}
+          <Link href="/" className="flex items-center gap-[8px] flex-shrink-0">
+            <img src="/assets/logo.png" alt="Chinese Wave" className="h-[32px] md:h-[36px] w-auto" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            <span className="hidden sm:inline text-gold font-display text-[16px] md:text-[18px] tracking-[0.02em]">Chinese Wave</span>
+          </Link>
+
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-[10px] lg:gap-[16px]">
+            {navLinks.map((link) => (
+              <a
+                key={link.sectionId}
+                href={isHome ? link.href : `/${link.href}`}
+                className={`text-[13px] lg:text-[15px] px-[20px] py-[8px] lg:px-[24px] lg:py-[9px] rounded-[6px] transition-colors tracking-[0.03em] whitespace-nowrap ${
+                  activeSection === link.sectionId
+                    ? "bg-gold text-primary font-medium hover:bg-gold-light"
+                    : "text-gold font-light hover:text-white"
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
 
           {/* Right side — Desktop */}
