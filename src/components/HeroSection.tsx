@@ -4,7 +4,7 @@ export default function HeroSection() {
   return (
     <section id="hero" className="bg-primary">
       {/* First screen: Content = exactly 100vh */}
-      <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[80px] lg:pt-[100px]">
+      <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[52px] md:pt-[80px] lg:pt-[100px]">
 
         {/* Content fills the remaining space */}
         <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[10px] md:gap-[10px] lg:gap-[14px] py-[20px] md:py-[30px] lg:py-[40px]">
@@ -15,7 +15,7 @@ export default function HeroSection() {
             width={600}
             height={520}
             priority
-            className="w-[200px] h-[166px] md:w-[260px] md:h-[223px] lg:w-[340px] lg:h-[291px] object-contain"
+            className="w-[280px] h-[233px] md:w-[320px] md:h-[274px] lg:w-[400px] lg:h-[342px] object-contain"
           />
 
           {/* Title */}
