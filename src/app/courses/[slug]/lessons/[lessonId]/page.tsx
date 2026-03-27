@@ -351,9 +351,9 @@ export default function LessonDetailPage() {
   };
 
   /* ---- Sidebar icon ---- */
-  const sectionIcon = (type: string, isActive: boolean) => {
+  const sectionIcon = (type: string, isActive: boolean, isWhite?: boolean) => {
     const cls = "w-[18px] h-[18px] flex-shrink-0";
-    const color = isActive ? "currentColor" : "#9ca3af";
+    const color = isWhite ? "#ffffff" : isActive ? "#f5a623" : "#6b7280";
     switch (type) {
       case "words":
         return (
@@ -403,41 +403,43 @@ export default function LessonDetailPage() {
       {/* ===== BODY: sidebar + content, fill remaining height ===== */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* ===== LEFT SIDEBAR — own scroll ===== */}
-        <aside className="hidden lg:flex flex-col w-[260px] flex-shrink-0 bg-[#1a1a2e] border-r border-[#2a2a45] shadow-[2px_0_12px_rgba(0,0,0,0.15)]">
-          {/* Sidebar header */}
-          <div className="px-[20px] pt-[20px] pb-[14px] border-b border-[#2a2a45]">
-            <h2 className="text-[11px] font-bold text-white/40 uppercase tracking-[0.1em]">Bo&apos;limlar</h2>
-          </div>
+        {/* ===== LEFT SIDEBAR — light theme, orange accents ===== */}
+        <aside className="hidden lg:flex flex-col w-[240px] flex-shrink-0 bg-white border-r border-gray-200 shadow-[1px_0_8px_rgba(0,0,0,0.04)]">
 
           {/* Sidebar nav — scrollable */}
-          <nav className="flex-1 overflow-y-auto py-[6px]">
-            {sections.map((section) => {
+          <nav className="flex-1 overflow-y-auto py-[14px] px-[12px]">
+            {sections.filter((s) => s.id !== "writing").map((section) => {
               const isActive = activeSection === section.id && !section.children;
+              const isParentOfActive =
+                (activeSection === "new-words-practice" && section.id === "new-words") ||
+                (activeSection === "writing" && section.id === "new-words") ||
+                (section.children && section.children.some((c) => c.id === activeSection));
+
               return (
-                <div key={section.id}>
+                <div key={section.id} className="mb-[4px]">
+                  {/* Section button */}
                   <button
                     onClick={() => {
                       if (section.children) toggleDropdown(section.id);
                       else setActiveSection(section.id);
                     }}
-                    className={`w-full flex items-center justify-between px-[20px] py-[11px] text-left text-[13.5px] transition-all duration-200 ${
+                    className={`w-full flex items-center justify-between px-[14px] py-[11px] text-left text-[13.5px] rounded-[12px] transition-all duration-200 ${
                       isActive
-                        ? "text-[#f5a623] font-semibold bg-white/[0.08] border-r-[3px] border-[#e8632b]"
-                        : activeSection === "new-words-practice" && section.id === "new-words"
-                          ? "text-[#f5a623]/70 font-semibold bg-white/[0.05]"
-                          : "text-white/60 hover:bg-white/[0.05] hover:text-white/80 font-medium"
+                        ? "text-white font-bold bg-gradient-to-r from-[#f5a623] to-[#f0c040] shadow-[0_3px_12px_rgba(245,166,35,0.35)]"
+                        : isParentOfActive
+                          ? "text-[#f5a623] font-semibold bg-[#fef7e7]"
+                          : "text-gray-700 hover:bg-gray-50 font-medium"
                     }`}
                   >
                     <span className="flex items-center gap-[10px]">
-                      {sectionIcon(section.type, isActive || (activeSection === "new-words-practice" && section.id === "new-words"))}
+                      {sectionIcon(section.type, isActive || !!isParentOfActive, isActive)}
                       {section.title}
                     </span>
                     {section.children && (
                       <svg
-                        className={`w-[13px] h-[13px] text-white/25 transition-transform duration-200 ${
-                          openDropdowns[section.id] ? "rotate-180" : ""
-                        }`}
+                        className={`w-[16px] h-[16px] transition-transform duration-200 ${
+                          isActive ? "text-white" : isParentOfActive ? "text-[#f5a623]" : "text-gray-400"
+                        } ${openDropdowns[section.id] ? "rotate-180" : ""}`}
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -448,57 +450,67 @@ export default function LessonDetailPage() {
                     )}
                   </button>
 
-                  {/* Special sub-item: Yangi so'zlar praktisi */}
+                  {/* Special sub-items under "Yangi so'zlar" */}
                   {section.id === "new-words" && (
-                    <button
-                      onClick={() => setActiveSection("new-words-practice")}
-                      className={`w-full text-left pl-[50px] pr-[20px] py-[8px] text-[12.5px] transition-all duration-150 flex items-center gap-[6px] ${
-                        activeSection === "new-words-practice"
-                          ? "text-[#f5a623] font-semibold bg-white/[0.06]"
-                          : "text-white/35 hover:text-white/55"
-                      }`}
-                    >
-                      <svg className="w-[14px] h-[14px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                        <line x1="8" y1="21" x2="16" y2="21" />
-                        <line x1="12" y1="17" x2="12" y2="21" />
-                      </svg>
-                      Yangi so&apos;zlar praktisi
-                    </button>
+                    <div className="ml-[18px] mt-[4px] space-y-[2px]">
+                      <button
+                        onClick={() => setActiveSection("new-words-practice")}
+                        className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
+                          activeSection === "new-words-practice"
+                            ? "text-[#e8632b] font-semibold bg-orange-50"
+                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="text-[15px]">🎯</span>
+                        Yangi so&apos;zlar praktikasi
+                      </button>
+                      <button
+                        onClick={() => setActiveSection("writing")}
+                        className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
+                          activeSection === "writing"
+                            ? "text-[#e8632b] font-semibold bg-orange-50"
+                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="text-[15px]">✏️</span>
+                        So&apos;z yozilishi
+                      </button>
+                    </div>
                   )}
 
+                  {/* Dropdown children (Dialoglar, Grammatika) */}
                   {section.children && openDropdowns[section.id] && (
-                    <div className="bg-white/[0.03]">
-                      {section.children.map((child, ci) => (
+                    <div className="ml-[18px] mt-[4px] space-y-[2px]">
+                      {section.children.map((child) => (
                         <button
                           key={child.id}
                           onClick={() => setActiveSection(child.id)}
-                          className={`w-full text-left pl-[50px] pr-[20px] py-[8px] text-[12.5px] transition-all duration-150 ${
+                          className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
                             activeSection === child.id
-                              ? "text-[#f5a623] font-semibold"
-                              : "text-white/35 hover:text-white/55"
+                              ? "text-[#e8632b] font-semibold bg-orange-50"
+                              : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                           }`}
                         >
-                          <span className="text-white/20 mr-[3px] text-[11px]">{ci + 1}.</span>
+                          {sectionIcon(section.type, activeSection === child.id)}
                           {child.title}
                         </button>
                       ))}
                     </div>
                   )}
+
+                  {/* Divider between sections */}
+                  {section.id !== "tasks" && (
+                    <div className="h-[1px] bg-gray-100 mx-[6px] my-[8px]" />
+                  )}
                 </div>
               );
             })}
           </nav>
-
-          {/* Sidebar footer */}
-          <div className="px-[20px] py-[14px] border-t border-[#2a2a45]">
-            <div className="text-[11px] text-white/30 font-medium">{words.length} ta so&apos;z · {lesson.title}</div>
-          </div>
         </aside>
 
         {/* ===== MAIN CONTENT — own scroll ===== */}
-        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-          <div className="w-full px-[16px] sm:px-[24px] md:px-[36px] lg:px-[40px] py-[24px] md:py-[36px]">
+        <div ref={scrollContainerRef} className={`flex-1 ${activeSection === "new-words-practice" ? "overflow-hidden" : "overflow-y-auto"}`}>
+          <div className={`w-full px-[16px] sm:px-[24px] md:px-[36px] lg:px-[40px] ${activeSection === "new-words-practice" ? "py-[12px] md:py-[16px] h-full" : "py-[24px] md:py-[36px]"}`}>
 
             {/* ── Title ── */}
             {activeSection.startsWith("dialogue-") ? (() => {
@@ -1014,9 +1026,9 @@ export default function LessonDetailPage() {
             {/* ── PRACTICE VIEW (Yangi so'zlar praktisi) ── */}
             {/* ══════════════════════════════════════════════ */}
             {activeSection === "new-words-practice" && words.length > 0 && (
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center h-[calc(100vh-140px)]">
                 {/* Flashcard */}
-                <div className="relative w-full max-w-[480px]">
+                <div className="relative w-full max-w-[480px] flex-1 min-h-0 flex flex-col justify-center">
                   {/* Navigation arrows */}
                   <button
                     onClick={() => { setFlipped(false); setPracticeIndex((prev) => (prev - 1 + words.length) % words.length); }}
@@ -1043,7 +1055,7 @@ export default function LessonDetailPage() {
                     className="flashcard-scene mx-[24px] sm:mx-[32px] cursor-pointer"
                     onClick={() => setFlipped((f) => !f)}
                   >
-                    <div className={`flashcard-card aspect-[10/11] ${flipped ? "flipped" : ""}`}>
+                    <div className={`flashcard-card aspect-[10/12] sm:aspect-[10/11] max-h-[calc(100vh-260px)] ${flipped ? "flipped" : ""}`}>
                       {/* ── FRONT FACE: image + hanzi + pinyin + play ── */}
                       <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[20px] sm:p-[28px] md:p-[36px] flex flex-col items-center text-center">
                         {/* Illustration */}
