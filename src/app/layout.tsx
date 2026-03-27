@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   title: "Chinese Wave - Xitoy tili kurslari",
   description: "Xitoy tilini tez va samarali o'rganing. HSK 3.0 asosida zamonaviy kurslar.",
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: "/assets/logo.png",
+    shortcut: "/assets/logo.png",
+    apple: "/assets/logo.png",
   },
 };
 
