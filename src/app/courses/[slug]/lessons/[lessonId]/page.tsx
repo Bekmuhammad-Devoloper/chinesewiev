@@ -150,11 +150,15 @@ export default function LessonDetailPage() {
     const line = allLines[idx];
 
     if (!line.audio) {
-      // Audio yo'q — faqat highlight qilish, ishlamasdan
-      setIsPlaying(false);
+      // Audio yo'q — playerda vizual ko'rsatish uchun qisqa animatsiya
+      setIsPlaying(true);
       setAudioProgress(0);
       setAudioCurrent(0);
       setAudioDuration(0);
+      // 1.5 sekunddan keyin isPlaying ni o'chirish (vizual effekt sifatida)
+      setTimeout(() => {
+        setIsPlaying(false);
+      }, 1500);
       return;
     }
 
