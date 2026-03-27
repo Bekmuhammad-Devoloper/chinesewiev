@@ -150,34 +150,34 @@ export default function LessonsClient() {
 
   return (
     <div className="w-full bg-[#1a1a2e] border-b border-[#2a2a45] shadow-[0_2px_12px_rgba(0,0,0,0.15)] sticky top-0 z-50">
-      <div className="w-full px-[12px] sm:px-[16px] md:px-[24px] lg:px-[32px] py-[8px] md:py-[10px]">
-        <div className="flex items-center justify-between">
+      <div className="w-full px-[8px] sm:px-[16px] md:px-[24px] lg:px-[32px] py-[6px] sm:py-[8px] md:py-[10px]">
+        <div className="flex items-center justify-between gap-[6px]">
 
           {/* ── LEFT: Logo + Name ── */}
-          <a href="/" title="Bosh sahifa" className="flex items-center gap-[8px] sm:gap-[10px] flex-shrink-0 group">
+          <a href="/" title="Bosh sahifa" className="flex items-center gap-[6px] sm:gap-[10px] flex-shrink-0 group min-w-0">
             <Image
               src="/assets/logo.png"
               alt="Chinese Wave"
               width={38}
               height={38}
-              className="w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] md:w-[40px] md:h-[40px] rounded-[8px] group-hover:scale-105 transition-transform duration-200"
+              className="w-[28px] h-[28px] sm:w-[36px] sm:h-[36px] md:w-[40px] md:h-[40px] rounded-[6px] sm:rounded-[8px] group-hover:scale-105 transition-transform duration-200 flex-shrink-0"
             />
-            <div className="flex flex-col">
-              <span className="text-[13px] sm:text-[15px] md:text-[17px] font-bold text-white leading-tight tracking-[-0.01em]">
+            <div className="flex flex-col min-w-0">
+              <span className="text-[11px] sm:text-[15px] md:text-[17px] font-bold text-white leading-tight tracking-[-0.01em] truncate">
                 Chinese Wave
               </span>
-              <span className="text-[8px] sm:text-[9px] md:text-[10px] text-gray-400 leading-tight font-medium">
+              <span className="text-[7px] sm:text-[9px] md:text-[10px] text-gray-400 leading-tight font-medium truncate">
                 Xitoy tili o&apos;quv platformasi
               </span>
             </div>
           </a>
 
           {/* ── RIGHT: Clocks + Weather ── */}
-          <div className="flex items-center gap-[12px] sm:gap-[16px] md:gap-[24px]">
+          <div className="flex items-center gap-[8px] sm:gap-[16px] md:gap-[24px] flex-shrink-0">
 
             {/* UZB Clock */}
-            <div className="flex items-center gap-[5px] sm:gap-[8px]">
-              <div className="w-[22px] h-[16px] sm:w-[28px] sm:h-[20px] md:w-[32px] md:h-[22px] rounded-[2px] sm:rounded-[3px] overflow-hidden flex-shrink-0 shadow-sm border border-white/20">
+            <div className="flex items-center gap-[3px] sm:gap-[8px]">
+              <div className="w-[18px] h-[13px] sm:w-[28px] sm:h-[20px] md:w-[32px] md:h-[22px] rounded-[2px] sm:rounded-[3px] overflow-hidden flex-shrink-0 shadow-sm border border-white/20">
                 <svg viewBox="0 0 32 22" className="w-full h-full">
                   <rect width="32" height="7.33" fill="#0099B5" />
                   <rect y="7.33" width="32" height="0.8" fill="#CE1126" />
@@ -189,7 +189,7 @@ export default function LessonsClient() {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-[12px] sm:text-[14px] md:text-[17px] font-mono font-bold text-white tabular-nums leading-tight">
+                <span className="text-[10px] sm:text-[14px] md:text-[17px] font-mono font-bold text-white tabular-nums leading-tight">
                   {uzbTime || "--:--:--"}
                 </span>
                 <span className="text-[7px] sm:text-[8px] md:text-[9px] text-gray-400 font-medium leading-tight hidden sm:block">Toshkent</span>
@@ -197,8 +197,8 @@ export default function LessonsClient() {
             </div>
 
             {/* China Clock */}
-            <div className="flex items-center gap-[5px] sm:gap-[8px]">
-              <div className="w-[22px] h-[16px] sm:w-[28px] sm:h-[20px] md:w-[32px] md:h-[22px] rounded-[2px] sm:rounded-[3px] overflow-hidden flex-shrink-0 shadow-sm border border-white/20">
+            <div className="flex items-center gap-[3px] sm:gap-[8px]">
+              <div className="w-[18px] h-[13px] sm:w-[28px] sm:h-[20px] md:w-[32px] md:h-[22px] rounded-[2px] sm:rounded-[3px] overflow-hidden flex-shrink-0 shadow-sm border border-white/20">
                 <svg viewBox="0 0 32 22" className="w-full h-full">
                   <rect width="32" height="22" fill="#DE2910" />
                   <polygon points="5,2 5.9,4.7 8.7,4.7 6.4,6.4 7.2,9 5,7.3 2.8,9 3.6,6.4 1.3,4.7 4.1,4.7" fill="#FFDE00" />
@@ -209,7 +209,7 @@ export default function LessonsClient() {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-[12px] sm:text-[14px] md:text-[17px] font-mono font-bold text-red-400 tabular-nums leading-tight">
+                <span className="text-[10px] sm:text-[14px] md:text-[17px] font-mono font-bold text-red-400 tabular-nums leading-tight">
                   {chinaTime || "--:--:--"}
                 </span>
                 <span className="text-[7px] sm:text-[8px] md:text-[9px] text-gray-400 font-medium leading-tight hidden sm:block">Pekin</span>
@@ -219,19 +219,19 @@ export default function LessonsClient() {
             {/* Divider */}
             <div className="w-[1px] h-[28px] bg-white/20 hidden sm:block" />
 
-            {/* Weather */}
-            <div className="flex items-center gap-[6px] sm:gap-[8px]">
+            {/* Weather — hidden on very small screens, shown from sm+ */}
+            <div className="flex items-center gap-[4px] sm:gap-[8px]">
               {weather ? (
                 <>
                   <div className="flex flex-col items-end">
-                    <span className="text-[13px] sm:text-[15px] md:text-[18px] font-bold text-white leading-tight">
-                      {weather.temp}°C
+                    <span className="text-[11px] sm:text-[15px] md:text-[18px] font-bold text-white leading-tight">
+                      {weather.temp}°
                     </span>
                     <span className="text-[8px] sm:text-[9px] md:text-[10px] text-gray-400 leading-tight hidden sm:block">
                       {weather.city} · {weather.description}
                     </span>
                   </div>
-                  <div className="w-[30px] h-[30px] sm:w-[36px] sm:h-[36px] md:w-[42px] md:h-[42px] flex-shrink-0">
+                  <div className="w-[24px] h-[24px] sm:w-[36px] sm:h-[36px] md:w-[42px] md:h-[42px] flex-shrink-0 hidden sm:block">
                     <WeatherSVGIcon code={weather.code} />
                   </div>
                 </>
