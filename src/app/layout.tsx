@@ -18,6 +18,11 @@ const castoroTitling = Castoro_Titling({
 export const metadata: Metadata = {
   title: "Chinese Wave - Xitoy tili kurslari",
   description: "Xitoy tilini tez va samarali o'rganing. HSK 3.0 asosida zamonaviy kurslar.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

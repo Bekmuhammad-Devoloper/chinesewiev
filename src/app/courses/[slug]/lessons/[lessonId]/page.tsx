@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Course, Lesson, LessonSection, GrammarRule, Task } from "@/data/courses";
 import LessonsClient from "@/components/LessonsClient";
-import Image from "next/image";
 
 export default function LessonDetailPage() {
   const params = useParams();
@@ -815,7 +814,7 @@ export default function LessonDetailPage() {
                     {/* Image */}
                     {word.image && (
                       <div className="w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] rounded-[10px] overflow-hidden border border-gray-100 mb-[10px] group-hover:border-[#e8632b]/20 transition-colors">
-                        <Image src={word.image} alt={word.translation} width={56} height={56} className="w-full h-full object-cover" />
+                        <img src={word.image} alt={word.translation} className="w-full h-full object-cover" />
                       </div>
                     )}
 
@@ -896,11 +895,9 @@ export default function LessonDetailPage() {
                         {/* Illustration */}
                         <div className="w-full flex-1 max-h-[55%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[16px] sm:mb-[20px]">
                           {words[practiceIndex].image ? (
-                            <Image
+                            <img
                               src={words[practiceIndex].image!}
                               alt={words[practiceIndex].translation}
-                              width={260}
-                              height={180}
                               className="w-full h-full object-contain p-[8px]"
                             />
                           ) : (
@@ -949,11 +946,9 @@ export default function LessonDetailPage() {
                         {/* Illustration (same image) */}
                         <div className="w-full flex-1 max-h-[55%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[16px] sm:mb-[20px]">
                           {words[practiceIndex].image ? (
-                            <Image
+                            <img
                               src={words[practiceIndex].image!}
                               alt={words[practiceIndex].translation}
-                              width={260}
-                              height={180}
                               className="w-full h-full object-contain p-[8px]"
                             />
                           ) : (
