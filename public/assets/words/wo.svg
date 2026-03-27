@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#ddd6fe"/></linearGradient>
+  </defs>
+  <rect width="280" height="200" rx="16" fill="url(#bg5)"/>
+  <!-- Person pointing at themselves -->
+  <circle cx="140" cy="72" r="28" fill="#f5a623"/>
+  <circle cx="131" cy="67" r="3.5" fill="#333"/>
+  <circle cx="149" cy="67" r="3.5" fill="#333"/>
+  <path d="M133 80 Q140 88 147 80" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  <rect x="116" y="106" width="48" height="58" rx="10" fill="#8b5cf6"/>
+  <!-- Both hands pointing at self -->
+  <line x1="116" y1="122" x2="95" y2="115" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/>
+  <line x1="164" y1="122" x2="185" y2="115" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/>
+  <!-- Arrows pointing to self -->
+  <path d="M85 112 Q100 95 125 85" fill="none" stroke="#e8632b" stroke-width="2" stroke-dasharray="4 3"/>
+  <path d="M195 112 Q180 95 155 85" fill="none" stroke="#e8632b" stroke-width="2" stroke-dasharray="4 3"/>
+</svg>

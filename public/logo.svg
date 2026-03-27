@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#edcc8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c6a98f;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="200" cy="180" r="140" fill="url(#grad)" opacity="0.15"/>
+  <text x="200" y="160" font-family="serif" font-size="120" fill="#edcc8a" text-anchor="middle" dominant-baseline="middle">中</text>
+  <text x="200" y="280" font-family="serif" font-size="36" fill="#edcc8a" text-anchor="middle" letter-spacing="4">CHINESE</text>
+  <text x="200" y="320" font-family="serif" font-size="28" fill="#f0cc89" text-anchor="middle" letter-spacing="8" font-weight="300">WAVE</text>
+  <path d="M100 350 Q150 330 200 350 Q250 370 300 350" stroke="#edcc8a" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M100 360 Q150 340 200 360 Q250 380 300 360" stroke="#edcc8a" stroke-width="1.5" fill="none" opacity="0.3"/>
+</svg>

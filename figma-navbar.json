@@ -1,0 +1,321 @@
+﻿{
+    "id":  "1:5",
+    "name":  "Navbar",
+    "type":  "FRAME",
+    "scrollBehavior":  "SCROLLS",
+    "children":  [
+                     {
+                         "id":  "1:6",
+                         "name":  "Container",
+                         "type":  "FRAME",
+                         "scrollBehavior":  "SCROLLS",
+                         "children":  [
+                                          {
+                                              "id":  "1:7",
+                                              "name":  "Buttons Container",
+                                              "type":  "FRAME",
+                                              "scrollBehavior":  "SCROLLS",
+                                              "children":  [
+                                                               "@{id=1:8; name=Button; type=FRAME; scrollBehavior=SCROLLS; children=System.Object[]; blendMode=PASS_THROUGH; clipsContent=False; background=System.Object[]; fills=System.Object[]; strokes=System.Object[]; cornerRadius=8.0; cornerSmoothing=0.0; strokeWeight=1.0; strokeAlign=INSIDE; backgroundColor=; layoutMode=HORIZONTAL; counterAxisAlignItems=CENTER; paddingLeft=24.0; paddingRight=24.0; paddingTop=14.0; paddingBottom=14.0; itemSpacing=10.0; layoutWrap=NO_WRAP; absoluteBoundingBox=; absoluteRenderBounds=; constraints=; layoutAlign=INHERIT; layoutGrow=0.0; layoutSizingHorizontal=HUG; layoutSizingVertical=HUG; effects=System.Object[]; interactions=System.Object[]; complexStrokeProperties=}",
+                                                               "@{id=1:10; name=Text Button; type=TEXT; scrollBehavior=SCROLLS; blendMode=PASS_THROUGH; fills=System.Object[]; strokes=System.Object[]; strokeWeight=1.0; strokeAlign=OUTSIDE; absoluteBoundingBox=; absoluteRenderBounds=; constraints=; layoutAlign=INHERIT; layoutGrow=0.0; layoutSizingHorizontal=HUG; layoutSizingVertical=HUG; characters=Kurs haqida; characterStyleOverrides=System.Object[]; styleOverrideTable=; lineTypes=System.Object[]; lineIndentations=System.Object[]; style=; layoutVersion=5; effects=System.Object[]; interactions=System.Object[]; complexStrokeProperties=}",
+                                                               "@{id=1:11; name=Text Button; type=TEXT; scrollBehavior=SCROLLS; blendMode=PASS_THROUGH; fills=System.Object[]; strokes=System.Object[]; strokeWeight=1.0; strokeAlign=OUTSIDE; absoluteBoundingBox=; absoluteRenderBounds=; constraints=; layoutAlign=INHERIT; layoutGrow=0.0; layoutSizingHorizontal=HUG; layoutSizingVertical=HUG; characters=Darsliklar; characterStyleOverrides=System.Object[]; styleOverrideTable=; lineTypes=System.Object[]; lineIndentations=System.Object[]; style=; layoutVersion=5; effects=System.Object[]; interactions=System.Object[]; complexStrokeProperties=}",
+                                                               "@{id=1:12; name=Text Button; type=TEXT; scrollBehavior=SCROLLS; blendMode=PASS_THROUGH; fills=System.Object[]; strokes=System.Object[]; strokeWeight=1.0; strokeAlign=OUTSIDE; absoluteBoundingBox=; absoluteRenderBounds=; constraints=; layoutAlign=INHERIT; layoutGrow=0.0; layoutSizingHorizontal=HUG; layoutSizingVertical=HUG; characters=Narxlar; characterStyleOverrides=System.Object[]; styleOverrideTable=; lineTypes=System.Object[]; lineIndentations=System.Object[]; style=; layoutVersion=5; effects=System.Object[]; interactions=System.Object[]; complexStrokeProperties=}"
+                                                           ],
+                                              "blendMode":  "PASS_THROUGH",
+                                              "clipsContent":  false,
+                                              "background":  [
+
+                                                             ],
+                                              "fills":  [
+
+                                                        ],
+                                              "strokes":  [
+
+                                                          ],
+                                              "strokeWeight":  1.0,
+                                              "strokeAlign":  "INSIDE",
+                                              "backgroundColor":  {
+                                                                      "r":  0.0,
+                                                                      "g":  0.0,
+                                                                      "b":  0.0,
+                                                                      "a":  0.0
+                                                                  },
+                                              "layoutMode":  "HORIZONTAL",
+                                              "counterAxisAlignItems":  "CENTER",
+                                              "itemSpacing":  26.0,
+                                              "layoutWrap":  "NO_WRAP",
+                                              "absoluteBoundingBox":  {
+                                                                          "x":  162.0,
+                                                                          "y":  95.0,
+                                                                          "width":  585.0,
+                                                                          "height":  68.0
+                                                                      },
+                                              "absoluteRenderBounds":  {
+                                                                           "x":  162.0,
+                                                                           "y":  95.0,
+                                                                           "width":  585.0,
+                                                                           "height":  68.0
+                                                                       },
+                                              "constraints":  {
+                                                                  "vertical":  "TOP",
+                                                                  "horizontal":  "LEFT"
+                                                              },
+                                              "layoutAlign":  "INHERIT",
+                                              "layoutGrow":  0.0,
+                                              "layoutSizingHorizontal":  "HUG",
+                                              "layoutSizingVertical":  "HUG",
+                                              "effects":  [
+
+                                                          ],
+                                              "interactions":  [
+
+                                                               ],
+                                              "complexStrokeProperties":  {
+                                                                              "strokeType":  "BASIC"
+                                                                          }
+                                          }
+                                      ],
+                         "blendMode":  "PASS_THROUGH",
+                         "clipsContent":  false,
+                         "background":  [
+
+                                        ],
+                         "fills":  [
+
+                                   ],
+                         "strokes":  [
+
+                                     ],
+                         "strokeWeight":  1.0,
+                         "strokeAlign":  "INSIDE",
+                         "backgroundColor":  {
+                                                 "r":  0.0,
+                                                 "g":  0.0,
+                                                 "b":  0.0,
+                                                 "a":  0.0
+                                             },
+                         "layoutMode":  "HORIZONTAL",
+                         "counterAxisAlignItems":  "CENTER",
+                         "itemSpacing":  50.0,
+                         "layoutWrap":  "NO_WRAP",
+                         "absoluteBoundingBox":  {
+                                                     "x":  162.0,
+                                                     "y":  95.0,
+                                                     "width":  585.0,
+                                                     "height":  68.0
+                                                 },
+                         "absoluteRenderBounds":  {
+                                                      "x":  162.0,
+                                                      "y":  95.0,
+                                                      "width":  585.0,
+                                                      "height":  68.0
+                                                  },
+                         "constraints":  {
+                                             "vertical":  "TOP",
+                                             "horizontal":  "LEFT"
+                                         },
+                         "layoutAlign":  "INHERIT",
+                         "layoutGrow":  0.0,
+                         "layoutSizingHorizontal":  "HUG",
+                         "layoutSizingVertical":  "HUG",
+                         "effects":  [
+
+                                     ],
+                         "interactions":  [
+
+                                          ],
+                         "complexStrokeProperties":  {
+                                                         "strokeType":  "BASIC"
+                                                     }
+                     },
+                     {
+                         "id":  "1:13",
+                         "name":  "Buttons Container",
+                         "type":  "FRAME",
+                         "scrollBehavior":  "SCROLLS",
+                         "children":  [
+                                          {
+                                              "id":  "1:14",
+                                              "name":  "Button",
+                                              "type":  "FRAME",
+                                              "scrollBehavior":  "SCROLLS",
+                                              "children":  [
+                                                               "@{id=1:15; name=Text; type=TEXT; scrollBehavior=SCROLLS; blendMode=PASS_THROUGH; fills=System.Object[]; strokes=System.Object[]; strokeWeight=1.0; strokeAlign=OUTSIDE; absoluteBoundingBox=; absoluteRenderBounds=; constraints=; layoutAlign=INHERIT; layoutGrow=0.0; layoutSizingHorizontal=HUG; layoutSizingVertical=HUG; characters=Kirish; characterStyleOverrides=System.Object[]; styleOverrideTable=; lineTypes=System.Object[]; lineIndentations=System.Object[]; style=; layoutVersion=5; effects=System.Object[]; interactions=System.Object[]; complexStrokeProperties=}"
+                                                           ],
+                                              "blendMode":  "PASS_THROUGH",
+                                              "clipsContent":  false,
+                                              "background":  [
+                                                                 "@{blendMode=NORMAL; type=SOLID; color=}"
+                                                             ],
+                                              "fills":  [
+                                                            "@{blendMode=NORMAL; type=SOLID; color=}"
+                                                        ],
+                                              "strokes":  [
+
+                                                          ],
+                                              "cornerRadius":  8.0,
+                                              "cornerSmoothing":  0.0,
+                                              "strokeWeight":  1.0,
+                                              "strokeAlign":  "INSIDE",
+                                              "backgroundColor":  {
+                                                                      "r":  0.93725490570068359,
+                                                                      "g":  0.81176471710205078,
+                                                                      "b":  0.54117649793624878,
+                                                                      "a":  1.0
+                                                                  },
+                                              "layoutMode":  "HORIZONTAL",
+                                              "counterAxisAlignItems":  "CENTER",
+                                              "paddingLeft":  34.0,
+                                              "paddingRight":  34.0,
+                                              "paddingTop":  14.0,
+                                              "paddingBottom":  14.0,
+                                              "itemSpacing":  8.0,
+                                              "layoutWrap":  "NO_WRAP",
+                                              "absoluteBoundingBox":  {
+                                                                          "x":  1618.0,
+                                                                          "y":  95.0,
+                                                                          "width":  140.0,
+                                                                          "height":  68.0
+                                                                      },
+                                              "absoluteRenderBounds":  {
+                                                                           "x":  1618.0,
+                                                                           "y":  95.0,
+                                                                           "width":  140.0,
+                                                                           "height":  68.0
+                                                                       },
+                                              "constraints":  {
+                                                                  "vertical":  "TOP",
+                                                                  "horizontal":  "LEFT"
+                                                              },
+                                              "layoutAlign":  "INHERIT",
+                                              "layoutGrow":  0.0,
+                                              "layoutSizingHorizontal":  "HUG",
+                                              "layoutSizingVertical":  "HUG",
+                                              "effects":  [
+
+                                                          ],
+                                              "interactions":  [
+
+                                                               ],
+                                              "complexStrokeProperties":  {
+                                                                              "strokeType":  "BASIC"
+                                                                          }
+                                          }
+                                      ],
+                         "blendMode":  "PASS_THROUGH",
+                         "clipsContent":  false,
+                         "background":  [
+
+                                        ],
+                         "fills":  [
+
+                                   ],
+                         "strokes":  [
+
+                                     ],
+                         "strokeWeight":  1.0,
+                         "strokeAlign":  "INSIDE",
+                         "backgroundColor":  {
+                                                 "r":  0.0,
+                                                 "g":  0.0,
+                                                 "b":  0.0,
+                                                 "a":  0.0
+                                             },
+                         "layoutMode":  "HORIZONTAL",
+                         "counterAxisAlignItems":  "CENTER",
+                         "itemSpacing":  30.0,
+                         "layoutWrap":  "NO_WRAP",
+                         "absoluteBoundingBox":  {
+                                                     "x":  1618.0,
+                                                     "y":  95.0,
+                                                     "width":  140.0,
+                                                     "height":  68.0
+                                                 },
+                         "absoluteRenderBounds":  {
+                                                      "x":  1618.0,
+                                                      "y":  95.0,
+                                                      "width":  140.0,
+                                                      "height":  68.0
+                                                  },
+                         "constraints":  {
+                                             "vertical":  "TOP",
+                                             "horizontal":  "LEFT"
+                                         },
+                         "layoutAlign":  "INHERIT",
+                         "layoutGrow":  0.0,
+                         "layoutSizingHorizontal":  "HUG",
+                         "layoutSizingVertical":  "HUG",
+                         "effects":  [
+
+                                     ],
+                         "interactions":  [
+
+                                          ],
+                         "complexStrokeProperties":  {
+                                                         "strokeType":  "BASIC"
+                                                     }
+                     }
+                 ],
+    "blendMode":  "PASS_THROUGH",
+    "clipsContent":  false,
+    "background":  [
+
+                   ],
+    "fills":  [
+
+              ],
+    "strokes":  [
+
+                ],
+    "strokeWeight":  1.0,
+    "individualStrokeWeights":  {
+                                    "top":  0.0,
+                                    "right":  0.0,
+                                    "bottom":  1.0,
+                                    "left":  0.0
+                                },
+    "strokeAlign":  "INSIDE",
+    "backgroundColor":  {
+                            "r":  0.0,
+                            "g":  0.0,
+                            "b":  0.0,
+                            "a":  0.0
+                        },
+    "layoutMode":  "HORIZONTAL",
+    "primaryAxisSizingMode":  "FIXED",
+    "counterAxisAlignItems":  "CENTER",
+    "primaryAxisAlignItems":  "SPACE_BETWEEN",
+    "paddingLeft":  132.0,
+    "paddingRight":  132.0,
+    "paddingTop":  20.0,
+    "paddingBottom":  24.0,
+    "itemSpacing":  552.0,
+    "layoutWrap":  "NO_WRAP",
+    "absoluteBoundingBox":  {
+                                "x":  30.0,
+                                "y":  75.0,
+                                "width":  1860.0,
+                                "height":  112.0
+                            },
+    "absoluteRenderBounds":  {
+                                 "x":  30.0,
+                                 "y":  75.0,
+                                 "width":  1860.0,
+                                 "height":  112.0
+                             },
+    "constraints":  {
+                        "vertical":  "TOP",
+                        "horizontal":  "LEFT"
+                    },
+    "layoutSizingHorizontal":  "FIXED",
+    "layoutSizingVertical":  "HUG",
+    "effects":  [
+
+                ],
+    "interactions":  [
+
+                     ],
+    "complexStrokeProperties":  {
+                                    "strokeType":  "BASIC"
+                                }
+}

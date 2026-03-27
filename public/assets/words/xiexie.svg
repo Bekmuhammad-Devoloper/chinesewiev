@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <defs>
+    <linearGradient id="bg7" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fef3e2"/><stop offset="100%" stop-color="#fde8cd"/></linearGradient>
+  </defs>
+  <rect width="280" height="200" rx="16" fill="url(#bg7)"/>
+  <!-- Person bowing -->
+  <circle cx="120" cy="70" r="22" fill="#f5a623"/>
+  <rect x="104" y="98" width="32" height="45" rx="8" fill="#e8632b" transform="rotate(-15 120 120)"/>
+  <!-- Person 2 receiving -->
+  <circle cx="180" cy="80" r="22" fill="#63b3ed"/>
+  <rect x="164" y="108" width="32" height="45" rx="8" fill="#3182ce"/>
+  <!-- Gift/heart -->
+  <rect x="125" y="85" width="30" height="25" rx="6" fill="#f5a623" stroke="#e8632b" stroke-width="1.5"/>
+  <path d="M140 88 l-6 6 6 8 6-8z" fill="#e8632b"/>
+  <!-- Sparkles -->
+  <circle cx="155" cy="55" r="3" fill="#f5a623" opacity="0.6"/>
+  <circle cx="95" cy="50" r="4" fill="#e8632b" opacity="0.4"/>
+  <circle cx="210" cy="60" r="3" fill="#f5a623" opacity="0.5"/>
+</svg>

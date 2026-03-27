@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <defs>
+    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff7ed"/><stop offset="100%" stop-color="#ffedd5"/></linearGradient>
+  </defs>
+  <rect width="280" height="200" rx="16" fill="url(#bg6)"/>
+  <!-- Emphasis arrows going up -->
+  <path d="M80 140 L80 70" stroke="#e8632b" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="80,60 74,72 86,72" fill="#e8632b"/>
+  <path d="M140 150 L140 60" stroke="#f5a623" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="140,48 132,62 148,62" fill="#f5a623"/>
+  <path d="M200 140 L200 70" stroke="#e8632b" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="200,60 194,72 206,72" fill="#e8632b"/>
+  <!-- Sparkles at top -->
+  <circle cx="110" cy="55" r="4" fill="#f5a623" opacity="0.6"/>
+  <circle cx="170" cy="50" r="3" fill="#e8632b" opacity="0.5"/>
+  <circle cx="140" cy="40" r="5" fill="#f5a623" opacity="0.4"/>
+  <!-- "Very" text emphasis -->
+  <text x="140" y="180" text-anchor="middle" font-size="18" fill="#e8632b" font-weight="bold" opacity="0.5">很 很 很</text>
+</svg>

@@ -1,0 +1,31 @@
+﻿{
+    "id":  "0:0",
+    "name":  "Document",
+    "type":  "DOCUMENT",
+    "scrollBehavior":  "SCROLLS",
+    "children":  [
+                     {
+                         "id":  "0:1",
+                         "name":  "Page 1",
+                         "type":  "CANVAS",
+                         "scrollBehavior":  "SCROLLS",
+                         "children":  [
+
+                                      ],
+                         "backgroundColor":  {
+                                                 "r":  0.96078431606292725,
+                                                 "g":  0.96078431606292725,
+                                                 "b":  0.96078431606292725,
+                                                 "a":  1.0
+                                             },
+                         "prototypeStartNodeID":  null,
+                         "flowStartingPoints":  [
+
+                                                ],
+                         "prototypeDevice":  {
+                                                 "type":  "NONE",
+                                                 "rotation":  "NONE"
+                                             }
+                     }
+                 ]
+}

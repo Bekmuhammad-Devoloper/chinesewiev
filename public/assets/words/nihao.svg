@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e8f4fd"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient>
+  </defs>
+  <rect width="280" height="200" rx="16" fill="url(#bg1)"/>
+  <!-- Person 1 -->
+  <circle cx="90" cy="80" r="22" fill="#f5a623"/>
+  <rect x="72" y="108" width="36" height="50" rx="8" fill="#e8632b"/>
+  <line x1="72" y1="118" x2="55" y2="140" stroke="#e8632b" stroke-width="5" stroke-linecap="round"/>
+  <!-- Person 2 -->
+  <circle cx="190" cy="80" r="22" fill="#63b3ed"/>
+  <rect x="172" y="108" width="36" height="50" rx="8" fill="#3182ce"/>
+  <line x1="208" y1="118" x2="225" y2="100" stroke="#3182ce" stroke-width="5" stroke-linecap="round"/>
+  <!-- Wave lines -->
+  <path d="M120 90 Q140 70 160 90" fill="none" stroke="#f5a623" stroke-width="2.5" stroke-dasharray="4 3"/>
+  <path d="M125 100 Q140 80 155 100" fill="none" stroke="#f5a623" stroke-width="2" stroke-dasharray="4 3" opacity="0.6"/>
+  <!-- Speech bubble -->
+  <rect x="105" y="35" width="70" height="30" rx="12" fill="white" stroke="#e8632b" stroke-width="1.5"/>
+  <text x="140" y="55" text-anchor="middle" font-size="14" fill="#e8632b" font-weight="bold">你好!</text>
+  <polygon points="130,65 140,75 150,65" fill="white" stroke="#e8632b" stroke-width="1.5"/>
+</svg>

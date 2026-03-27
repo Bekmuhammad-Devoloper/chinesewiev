@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <defs>
+    <linearGradient id="bg10" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ecfdf5"/><stop offset="100%" stop-color="#d1fae5"/></linearGradient>
+  </defs>
+  <rect width="280" height="200" rx="16" fill="url(#bg10)"/>
+  <!-- Person gesturing "please" with hands together -->
+  <circle cx="140" cy="65" r="26" fill="#f5a623"/>
+  <circle cx="131" cy="60" r="3" fill="#333"/>
+  <circle cx="149" cy="60" r="3" fill="#333"/>
+  <path d="M134 73 Q140 78 146 73" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  <rect x="118" y="97" width="44" height="55" rx="10" fill="#10b981"/>
+  <!-- Hands together (praying/please) -->
+  <path d="M130 115 Q140 100 150 115" fill="none" stroke="#f5a623" stroke-width="6" stroke-linecap="round"/>
+  <!-- Gentle aura -->
+  <circle cx="140" cy="100" r="55" fill="none" stroke="#10b981" stroke-width="1" opacity="0.3"/>
+  <circle cx="140" cy="100" r="70" fill="none" stroke="#10b981" stroke-width="0.8" opacity="0.15"/>
+  <!-- Small sparkles -->
+  <circle cx="85" cy="55" r="3" fill="#10b981" opacity="0.4"/>
+  <circle cx="195" cy="50" r="4" fill="#10b981" opacity="0.3"/>
+  <circle cx="210" cy="90" r="3" fill="#f5a623" opacity="0.4"/>
+</svg>

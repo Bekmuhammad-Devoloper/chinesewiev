@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <defs>
+    <linearGradient id="bg9" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e8f4fd"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient>
+  </defs>
+  <rect width="280" height="200" rx="16" fill="url(#bg9)"/>
+  <!-- Person waving goodbye -->
+  <circle cx="100" cy="80" r="24" fill="#f5a623"/>
+  <circle cx="92" cy="76" r="3" fill="#333"/>
+  <circle cx="108" cy="76" r="3" fill="#333"/>
+  <path d="M94 88 Q100 94 106 88" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  <rect x="82" y="110" width="36" height="50" rx="8" fill="#e8632b"/>
+  <!-- Waving hand -->
+  <line x1="118" y1="118" x2="140" y2="90" stroke="#e8632b" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="142" cy="86" r="8" fill="#f5a623"/>
+  <!-- Wave motion lines -->
+  <path d="M148 78 Q155 72 152 65" stroke="#f5a623" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+  <path d="M152 82 Q160 78 158 70" stroke="#f5a623" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+  <!-- Person walking away -->
+  <circle cx="200" cy="85" r="20" fill="#63b3ed" opacity="0.6"/>
+  <rect x="186" y="111" width="28" height="42" rx="7" fill="#3182ce" opacity="0.6"/>
+  <!-- Arrow -->
+  <path d="M215 105 L235 105" stroke="#3182ce" stroke-width="2.5" stroke-linecap="round"/>
+  <polygon points="237,105 230,100 230,110" fill="#3182ce"/>
+</svg>
