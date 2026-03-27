@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
 
   // Rasmlarni optimallashtirish
   images: {
-    unoptimized: false,
-    formats: ["image/avif", "image/webp"],
+    unoptimized: true,
   },
 
   // Security headers
