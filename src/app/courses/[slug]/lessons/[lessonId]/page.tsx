@@ -461,7 +461,11 @@ export default function LessonDetailPage() {
                             : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                         }`}
                       >
-                        <span className="text-[15px]">🎯</span>
+                        <svg className="w-[16px] h-[16px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <circle cx="12" cy="12" r="6" />
+                          <circle cx="12" cy="12" r="2" />
+                        </svg>
                         Yangi so&apos;zlar praktikasi
                       </button>
                       <button
@@ -472,7 +476,10 @@ export default function LessonDetailPage() {
                             : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                         }`}
                       >
-                        <span className="text-[15px]">✏️</span>
+                        <svg className="w-[16px] h-[16px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
                         So&apos;z yozilishi
                       </button>
                     </div>
