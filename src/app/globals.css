@@ -145,3 +145,13 @@ body {
   animation: playerFlash 0.8s ease-out;
   border-radius: 14px;
 }
+
+/* ── Mobile sidebar slide in ── */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.25s ease-out;
+}

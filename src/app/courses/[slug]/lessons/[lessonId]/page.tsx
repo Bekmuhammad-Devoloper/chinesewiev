@@ -32,6 +32,7 @@ export default function LessonDetailPage() {
   }, [slug, lessonId]);
 
   const [activeSection, setActiveSection] = useState("new-words");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({
     dialogues: true,
     grammar: true,
@@ -350,6 +351,119 @@ export default function LessonDetailPage() {
     setTaskScore(null);
   };
 
+  /* ---- Mobile "Menu" trigger button ---- */
+  const renderMobileTrigger = () => (
+    <button
+      onClick={() => setSidebarOpen(true)}
+      className="lg:hidden self-start flex items-center gap-[8px] text-[14px] text-gray-500 font-medium hover:text-gray-700 transition-colors py-[4px] mb-[12px]"
+    >
+      <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M3 6h18M3 12h18M3 18h18" />
+      </svg>
+      Menu
+    </button>
+  );
+
+  /* ---- Sidebar nav content (shared between desktop + mobile) ---- */
+  const renderSidebarNav = () => (
+    <>
+      {sections.filter((s) => s.id !== "writing").map((section) => {
+        const isActive = activeSection === section.id && !section.children;
+        const isParentOfActive =
+          (activeSection === "new-words-practice" && section.id === "new-words") ||
+          (activeSection === "writing" && section.id === "new-words") ||
+          (section.children && section.children.some((c) => c.id === activeSection));
+
+        return (
+          <div key={section.id} className="mb-[4px]">
+            <button
+              onClick={() => {
+                if (section.children) toggleDropdown(section.id);
+                else { setActiveSection(section.id); setSidebarOpen(false); }
+              }}
+              className={`w-full flex items-center justify-between px-[14px] py-[11px] text-left text-[13.5px] rounded-[12px] transition-all duration-200 ${
+                isActive
+                  ? "text-white font-bold bg-gradient-to-r from-[#f5a623] to-[#f0c040] shadow-[0_3px_12px_rgba(245,166,35,0.35)]"
+                  : isParentOfActive
+                    ? "text-[#f5a623] font-semibold bg-[#fef7e7]"
+                    : "text-gray-700 hover:bg-gray-50 font-medium"
+              }`}
+            >
+              <span className="flex items-center gap-[10px]">
+                {sectionIcon(section.type, isActive || !!isParentOfActive, isActive)}
+                {section.title}
+              </span>
+              {section.children && (
+                <svg
+                  className={`w-[16px] h-[16px] transition-transform duration-200 ${
+                    isActive ? "text-white" : isParentOfActive ? "text-[#f5a623]" : "text-gray-400"
+                  } ${openDropdowns[section.id] ? "rotate-180" : ""}`}
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              )}
+            </button>
+
+            {section.id === "new-words" && (
+              <div className="ml-[18px] mt-[4px] space-y-[2px]">
+                <button
+                  onClick={() => { setActiveSection("new-words-practice"); setSidebarOpen(false); }}
+                  className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
+                    activeSection === "new-words-practice"
+                      ? "text-[#e8632b] font-semibold bg-orange-50"
+                      : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  <svg className="w-[16px] h-[16px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
+                  </svg>
+                  Yangi so&apos;zlar praktikasi
+                </button>
+                <button
+                  onClick={() => { setActiveSection("writing"); setSidebarOpen(false); }}
+                  className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
+                    activeSection === "writing"
+                      ? "text-[#e8632b] font-semibold bg-orange-50"
+                      : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  <svg className="w-[16px] h-[16px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  </svg>
+                  So&apos;z yozilishi
+                </button>
+              </div>
+            )}
+
+            {section.children && openDropdowns[section.id] && (
+              <div className="ml-[18px] mt-[4px] space-y-[2px]">
+                {section.children.map((child) => (
+                  <button
+                    key={child.id}
+                    onClick={() => { setActiveSection(child.id); setSidebarOpen(false); }}
+                    className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
+                      activeSection === child.id
+                        ? "text-[#e8632b] font-semibold bg-orange-50"
+                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {sectionIcon(section.type, activeSection === child.id)}
+                    {child.title}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {section.id !== "tasks" && (
+              <div className="h-[1px] bg-gray-100 mx-[6px] my-[8px]" />
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+
   /* ---- Sidebar icon ---- */
   const sectionIcon = (type: string, isActive: boolean, isWhite?: boolean) => {
     const cls = "w-[18px] h-[18px] flex-shrink-0";
@@ -403,115 +517,34 @@ export default function LessonDetailPage() {
       {/* ===== BODY: sidebar + content, fill remaining height ===== */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* ===== LEFT SIDEBAR — light theme, orange accents ===== */}
+        {/* ===== MOBILE SIDEBAR OVERLAY ===== */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/40" onClick={() => setSidebarOpen(false)} />
+            {/* Drawer */}
+            <aside className="absolute left-0 top-0 h-full w-[260px] bg-white shadow-[4px_0_20px_rgba(0,0,0,0.1)] flex flex-col animate-slide-in-left">
+              {/* Header */}
+              <div className="flex items-center justify-between px-[14px] py-[12px] border-b border-gray-100">
+                <span className="text-[14px] font-bold text-gray-700">Menu</span>
+                <button onClick={() => setSidebarOpen(false)} title="Yopish" className="w-[32px] h-[32px] flex items-center justify-center rounded-[8px] hover:bg-gray-100 transition-colors">
+                  <svg className="w-[18px] h-[18px] text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                </button>
+              </div>
+              {/* Nav */}
+              <nav className="flex-1 overflow-y-auto py-[14px] px-[12px]">
+                {renderSidebarNav()}
+              </nav>
+            </aside>
+          </div>
+        )}
+
+        {/* ===== LEFT SIDEBAR — desktop only ===== */}
         <aside className="hidden lg:flex flex-col w-[240px] flex-shrink-0 bg-white border-r border-gray-200 shadow-[1px_0_8px_rgba(0,0,0,0.04)]">
 
           {/* Sidebar nav — scrollable */}
           <nav className="flex-1 overflow-y-auto py-[14px] px-[12px]">
-            {sections.filter((s) => s.id !== "writing").map((section) => {
-              const isActive = activeSection === section.id && !section.children;
-              const isParentOfActive =
-                (activeSection === "new-words-practice" && section.id === "new-words") ||
-                (activeSection === "writing" && section.id === "new-words") ||
-                (section.children && section.children.some((c) => c.id === activeSection));
-
-              return (
-                <div key={section.id} className="mb-[4px]">
-                  {/* Section button */}
-                  <button
-                    onClick={() => {
-                      if (section.children) toggleDropdown(section.id);
-                      else setActiveSection(section.id);
-                    }}
-                    className={`w-full flex items-center justify-between px-[14px] py-[11px] text-left text-[13.5px] rounded-[12px] transition-all duration-200 ${
-                      isActive
-                        ? "text-white font-bold bg-gradient-to-r from-[#f5a623] to-[#f0c040] shadow-[0_3px_12px_rgba(245,166,35,0.35)]"
-                        : isParentOfActive
-                          ? "text-[#f5a623] font-semibold bg-[#fef7e7]"
-                          : "text-gray-700 hover:bg-gray-50 font-medium"
-                    }`}
-                  >
-                    <span className="flex items-center gap-[10px]">
-                      {sectionIcon(section.type, isActive || !!isParentOfActive, isActive)}
-                      {section.title}
-                    </span>
-                    {section.children && (
-                      <svg
-                        className={`w-[16px] h-[16px] transition-transform duration-200 ${
-                          isActive ? "text-white" : isParentOfActive ? "text-[#f5a623]" : "text-gray-400"
-                        } ${openDropdowns[section.id] ? "rotate-180" : ""}`}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    )}
-                  </button>
-
-                  {/* Special sub-items under "Yangi so'zlar" */}
-                  {section.id === "new-words" && (
-                    <div className="ml-[18px] mt-[4px] space-y-[2px]">
-                      <button
-                        onClick={() => setActiveSection("new-words-practice")}
-                        className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
-                          activeSection === "new-words-practice"
-                            ? "text-[#e8632b] font-semibold bg-orange-50"
-                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        <svg className="w-[16px] h-[16px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10" />
-                          <circle cx="12" cy="12" r="6" />
-                          <circle cx="12" cy="12" r="2" />
-                        </svg>
-                        Yangi so&apos;zlar praktikasi
-                      </button>
-                      <button
-                        onClick={() => setActiveSection("writing")}
-                        className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
-                          activeSection === "writing"
-                            ? "text-[#e8632b] font-semibold bg-orange-50"
-                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        <svg className="w-[16px] h-[16px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 20h9" />
-                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                        </svg>
-                        So&apos;z yozilishi
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Dropdown children (Dialoglar, Grammatika) */}
-                  {section.children && openDropdowns[section.id] && (
-                    <div className="ml-[18px] mt-[4px] space-y-[2px]">
-                      {section.children.map((child) => (
-                        <button
-                          key={child.id}
-                          onClick={() => setActiveSection(child.id)}
-                          className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
-                            activeSection === child.id
-                              ? "text-[#e8632b] font-semibold bg-orange-50"
-                              : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                          }`}
-                        >
-                          {sectionIcon(section.type, activeSection === child.id)}
-                          {child.title}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Divider between sections */}
-                  {section.id !== "tasks" && (
-                    <div className="h-[1px] bg-gray-100 mx-[6px] my-[8px]" />
-                  )}
-                </div>
-              );
-            })}
+            {renderSidebarNav()}
           </nav>
         </aside>
 
@@ -519,7 +552,6 @@ export default function LessonDetailPage() {
         <div ref={scrollContainerRef} className={`flex-1 ${activeSection === "new-words-practice" ? "overflow-hidden" : "overflow-y-auto"}`}>
           <div className={`w-full px-[16px] sm:px-[24px] md:px-[36px] lg:px-[40px] ${activeSection === "new-words-practice" ? "py-[12px] md:py-[16px] h-full" : "py-[24px] md:py-[36px]"}`}>
 
-            {/* ── Title ── */}
             {activeSection.startsWith("dialogue-") ? (() => {
               const dlg = getActiveDialogue();
               return (
@@ -773,72 +805,12 @@ export default function LessonDetailPage() {
             </div>
             )}
 
-            {/* ── Mobile Sidebar ── */}
-            <div className="lg:hidden mb-[16px]">
-              <details className="bg-white rounded-[12px] border border-gray-100 overflow-hidden">
-                <summary className="px-[16px] py-[12px] text-[13px] font-semibold text-[#444] cursor-pointer flex items-center gap-[8px]">
-                  <svg className="w-[16px] h-[16px] text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-                  Bo&apos;limlar
-                </summary>
-                <nav className="border-t border-gray-50">
-                  {sections.map((section) => {
-                    const isActive = activeSection === section.id && !section.children;
-                    return (
-                      <div key={section.id}>
-                        <button
-                          onClick={() => {
-                            if (section.children) toggleDropdown(section.id);
-                            else setActiveSection(section.id);
-                          }}
-                          className={`w-full flex items-center justify-between px-[16px] py-[10px] text-left text-[13px] transition-all ${
-                            isActive ? "text-[#e8632b] font-semibold bg-[#fef7f3]" : "text-[#555] hover:bg-gray-50/60 font-medium"
-                          }`}
-                        >
-                          <span className="flex items-center gap-[8px]">
-                            {sectionIcon(section.type, isActive)}
-                            {section.title}
-                          </span>
-                          {section.children && (
-                            <svg className={`w-[13px] h-[13px] text-gray-300 transition-transform ${openDropdowns[section.id] ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
-                          )}
-                        </button>
-                        {/* Mobile: practice sub-item */}
-                        {section.id === "new-words" && (
-                          <button
-                            onClick={() => setActiveSection("new-words-practice")}
-                            className={`w-full text-left pl-[42px] pr-[16px] py-[8px] text-[12px] flex items-center gap-[5px] ${
-                              activeSection === "new-words-practice" ? "text-[#e8632b] font-semibold" : "text-gray-400 hover:text-gray-600"
-                            }`}
-                          >
-                            <svg className="w-[12px] h-[12px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                              <line x1="8" y1="21" x2="16" y2="21" />
-                              <line x1="12" y1="17" x2="12" y2="21" />
-                            </svg>
-                            Yangi so&apos;zlar praktisi
-                          </button>
-                        )}
-                        {section.children && openDropdowns[section.id] && (
-                          <div className="bg-[#fafbfc]">
-                            {section.children.map((child, ci) => (
-                              <button key={child.id} onClick={() => setActiveSection(child.id)} className={`w-full text-left pl-[42px] pr-[16px] py-[8px] text-[12px] ${activeSection === child.id ? "text-[#e8632b] font-semibold" : "text-gray-400 hover:text-gray-600"}`}>
-                                <span className="text-gray-300 mr-[3px] text-[11px]">{ci + 1}.</span>{child.title}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </nav>
-              </details>
-            </div>
-
             {/* ══════════════════════════════════════════ */}
             {/* ── WORDS LIST VIEW (So'zlar ro'yxati) ── */}
             {/* ══════════════════════════════════════════ */}
             {activeSection === "new-words" && (
               <>
+                {renderMobileTrigger()}
                 {/* ── Tab switcher ── */}
                 <div className="flex items-center gap-[6px] mb-[16px] md:mb-[20px]">
               <button
@@ -1034,6 +1006,7 @@ export default function LessonDetailPage() {
             {/* ══════════════════════════════════════════════ */}
             {activeSection === "new-words-practice" && words.length > 0 && (
               <div className="flex flex-col items-center h-[calc(100vh-140px)]">
+                {renderMobileTrigger()}
                 {/* Flashcard */}
                 <div className="relative w-full max-w-[480px] flex-1 min-h-0 flex flex-col justify-center">
                   {/* Navigation arrows */}
@@ -1185,6 +1158,11 @@ export default function LessonDetailPage() {
               return (
                 <div className="flex flex-col gap-[16px] sm:gap-[20px]">
 
+                  {/* ── Mobile Menu trigger ── */}
+                  <div className="lg:hidden mt-[16px]">
+                    {renderMobileTrigger()}
+                  </div>
+
                   {/* ── Dialogue Lines ── */}
                   <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] px-[20px] sm:px-[28px] md:px-[40px] py-[24px] sm:py-[32px] md:py-[40px]">
                     <div className="flex flex-col gap-[24px] sm:gap-[30px] md:gap-[36px]">
@@ -1251,7 +1229,9 @@ export default function LessonDetailPage() {
             {/* ── WRITING VIEW (So'z yozilishi)        ── */}
             {/* ══════════════════════════════════════════ */}
             {activeSection === "writing" && words.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-[12px] sm:gap-[16px] md:gap-[20px]">
+              <div>
+                {renderMobileTrigger()}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-[12px] sm:gap-[16px] md:gap-[20px]">
                 {words.map((word, idx) => (
                   <div
                     key={idx}
@@ -1285,10 +1265,9 @@ export default function LessonDetailPage() {
                   </div>
                 ))}
               </div>
+              </div>
             )}
 
-            {/* ══════════════════════════════════════════ */}
-            {/* ── GRAMMAR VIEW (Grammatika)             ── */}
             {/* ══════════════════════════════════════════ */}
             {activeSection.startsWith("grammar-") && (() => {
               const grammar = getActiveGrammar();
@@ -1300,6 +1279,7 @@ export default function LessonDetailPage() {
               );
               return (
                 <div className="flex flex-col gap-[20px] sm:gap-[28px]">
+                  {renderMobileTrigger()}
                   {grammar.rules.map((rule, rIdx) => (
                     <div key={rule.id} className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] overflow-hidden">
                       {/* Rule header */}
@@ -1385,6 +1365,7 @@ export default function LessonDetailPage() {
               );
               return (
                 <div className="flex flex-col gap-[16px] sm:gap-[20px]">
+                  {renderMobileTrigger()}
                   {/* Score banner */}
                   {taskScore && (
                     <div className={`rounded-[14px] px-[20px] sm:px-[28px] py-[16px] sm:py-[20px] flex items-center justify-between shadow-[0_2px_16px_rgba(0,0,0,0.05)] ${
