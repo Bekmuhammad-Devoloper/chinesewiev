@@ -49,6 +49,7 @@ export default function LessonDetailPage() {
   const dialogueAudioRef = useRef<HTMLAudioElement | null>(null);
   const progressAnimRef = useRef<number | null>(null);
   const playerRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   /* Word audio state */
   const [playingWordIdx, setPlayingWordIdx] = useState<number | null>(null);
@@ -492,7 +493,7 @@ export default function LessonDetailPage() {
         </aside>
 
         {/* ===== MAIN CONTENT — own scroll ===== */}
-        <div className="flex-1 overflow-y-auto">
+        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
           <div className="w-full px-[16px] sm:px-[24px] md:px-[36px] lg:px-[40px] py-[24px] md:py-[36px]">
 
             {/* ── Title ── */}
@@ -1180,8 +1181,10 @@ export default function LessonDetailPage() {
                               </span>
                               <button
                                 onClick={() => {
-                                  /* Scroll to main player and play through it */
-                                  playerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                  /* Scroll the content container to top where the player is */
+                                  if (scrollContainerRef.current) {
+                                    scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+                                  }
                                   /* Flash animation on player */
                                   if (playerRef.current) {
                                     playerRef.current.classList.remove("player-flash");
@@ -1190,7 +1193,7 @@ export default function LessonDetailPage() {
                                   }
                                   setTimeout(() => {
                                     playLineByIndex(idx);
-                                  }, 350);
+                                  }, 400);
                                 }}
                                 className={`flex-shrink-0 mt-[2px] w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(232,99,43,0.3)] hover:shadow-[0_3px_12px_rgba(232,99,43,0.4)] hover:scale-105 active:scale-95 transition-all ${isCurrentlyPlaying ? "bg-gradient-to-br from-[#c0392b] to-[#e74c3c] animate-pulse" : "bg-gradient-to-br from-[#e8632b] to-[#f5a623]"}`}
                                 title={isCurrentlyPlaying ? "Ijro etilmoqda..." : "Tinglash"}
