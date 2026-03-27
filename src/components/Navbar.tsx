@@ -150,12 +150,6 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Logo — always visible */}
-          <Link href="/" className="flex items-center gap-[8px] flex-shrink-0">
-            <img src="/assets/logo.png" alt="Chinese Wave" className="h-[32px] md:h-[36px] w-auto" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-            <span className="hidden sm:inline text-gold font-display text-[16px] md:text-[18px] tracking-[0.02em]">Chinese Wave</span>
-          </Link>
-
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-[10px] lg:gap-[16px]">
             {navLinks.map((link) => (
