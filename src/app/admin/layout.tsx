@@ -203,8 +203,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               {sidebarLinks.find((l) => l.exact ? pathname === l.href : pathname.startsWith(l.href + "/") || pathname === l.href)?.label || "Admin"}
             </span>
           </div>
-          <div className="w-[34px] h-[34px] rounded-full bg-gradient-to-br from-[#063087] to-[#041e56] flex items-center justify-center shadow-sm">
-            <span className="text-[12px] font-bold text-[#edcc8a]">A</span>
+          <div className="flex items-center gap-[12px]">
+            {/* Saytga qaytish */}
+            <Link
+              href="/"
+              className="flex items-center gap-[6px] text-[12px] text-gray-400 hover:text-[#063087] font-medium px-[10px] py-[6px] rounded-[8px] hover:bg-gray-100 transition-all"
+            >
+              <Globe size={14} strokeWidth={1.6} />
+              <span className="hidden sm:inline">Saytga qaytish</span>
+            </Link>
+            {/* Kurslar */}
+            <Link
+              href="/courses"
+              className="flex items-center gap-[6px] text-[12px] text-gray-400 hover:text-[#063087] font-medium px-[10px] py-[6px] rounded-[8px] hover:bg-gray-100 transition-all"
+            >
+              <BookOpen size={14} strokeWidth={1.6} />
+              <span className="hidden sm:inline">Kurslar</span>
+            </Link>
+            {/* Divider */}
+            <div className="w-px h-[24px] bg-gray-200" />
+            {/* Admin avatar */}
+            <div className="w-[34px] h-[34px] rounded-full bg-gradient-to-br from-[#063087] to-[#041e56] flex items-center justify-center shadow-sm">
+              <span className="text-[12px] font-bold text-[#edcc8a]">A</span>
+            </div>
           </div>
         </div>
         <div className="min-h-[calc(100vh-56px)]">

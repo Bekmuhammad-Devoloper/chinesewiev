@@ -45,7 +45,10 @@ export default function LessonDetailPage() {
   const [audioProgress, setAudioProgress] = useState(0);
   const [audioCurrent, setAudioCurrent] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
-  const progressInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [currentLineIdx, setCurrentLineIdx] = useState(0);
+  const dialogueAudioRef = useRef<HTMLAudioElement | null>(null);
+  const progressAnimRef = useRef<number | null>(null);
+  const playerRef = useRef<HTMLDivElement | null>(null);
 
   /* Word audio state */
   const [playingWordIdx, setPlayingWordIdx] = useState<number | null>(null);
@@ -83,33 +86,168 @@ export default function LessonDetailPage() {
     return `${m}:${s}`;
   }, []);
 
-  /* Simulated play/pause (no real audio file yet) */
-  const togglePlay = useCallback(() => {
-    setIsPlaying((prev) => {
-      if (!prev) {
-        // Start simulated playback
-        const totalDur = audioDuration || 317; // ~5:17
-        setAudioDuration(totalDur);
-        progressInterval.current = setInterval(() => {
-          setAudioCurrent((c) => {
-            const next = c + 1;
-            if (next >= totalDur) {
-              if (progressInterval.current) clearInterval(progressInterval.current);
-              setIsPlaying(false);
-              setAudioProgress(100);
-              return totalDur;
-            }
-            setAudioProgress((next / totalDur) * 100);
-            return next;
-          });
-        }, 1000);
-        return true;
-      } else {
-        if (progressInterval.current) clearInterval(progressInterval.current);
-        return false;
-      }
+  /* Helper: get ALL dialogue lines (with or without audio) */
+  const getDialogueLinesAll = useCallback(() => {
+    const secs = lesson?.sections || [];
+    const dialogueSection = secs.find((s) => s.id === "dialogues");
+    if (!dialogueSection?.children) return [];
+    const child = dialogueSection.children.find((c) => c.id === activeSection);
+    return child?.dialogueLines || [];
+  }, [lesson, activeSection]);
+
+  const hasDialogueData = useCallback(() => {
+    return getDialogueLinesAll().length > 0;
+  }, [getDialogueLinesAll]);
+
+  /* Stop and cleanup current audio */
+  const stopAudio = useCallback(() => {
+    if (dialogueAudioRef.current) {
+      dialogueAudioRef.current.pause();
+      dialogueAudioRef.current.removeAttribute("src");
+      dialogueAudioRef.current = null;
+    }
+    if (progressAnimRef.current) {
+      cancelAnimationFrame(progressAnimRef.current);
+      progressAnimRef.current = null;
+    }
+    setIsPlaying(false);
+  }, []);
+
+  /* Update progress in animation frame for smooth waveform */
+  const updateProgress = useCallback(() => {
+    const audio = dialogueAudioRef.current;
+    if (!audio || audio.paused) return;
+    setAudioCurrent(audio.currentTime);
+    setAudioDuration(audio.duration || 0);
+    if (audio.duration > 0) {
+      setAudioProgress((audio.currentTime / audio.duration) * 100);
+    }
+    progressAnimRef.current = requestAnimationFrame(updateProgress);
+  }, []);
+
+  /* Play a specific dialogue line by index (among ALL lines) */
+  const playLineByIndex = useCallback((idx: number) => {
+    const allLines = getDialogueLinesAll();
+    if (idx < 0 || idx >= allLines.length) {
+      // Barcha liniyalar tugadi
+      stopAudio();
+      setAudioProgress(100);
+      setCurrentLineIdx(0);
+      return;
+    }
+
+    // Eski audioni to'xtat
+    if (dialogueAudioRef.current) {
+      dialogueAudioRef.current.pause();
+      dialogueAudioRef.current = null;
+    }
+    if (progressAnimRef.current) {
+      cancelAnimationFrame(progressAnimRef.current);
+    }
+
+    setCurrentLineIdx(idx);
+    const line = allLines[idx];
+
+    if (!line.audio) {
+      // Audio yo'q — faqat highlight qilish, ishlamasdan
+      setIsPlaying(false);
+      setAudioProgress(0);
+      setAudioCurrent(0);
+      setAudioDuration(0);
+      return;
+    }
+
+    const audio = new Audio(line.audio);
+    dialogueAudioRef.current = audio;
+
+    audio.addEventListener("loadedmetadata", () => {
+      setAudioDuration(audio.duration);
     });
-  }, [audioDuration]);
+
+    audio.addEventListener("ended", () => {
+      // Keyingi liniyaga o'tish
+      playLineByIndex(idx + 1);
+    });
+
+    audio.addEventListener("error", () => {
+      // Xatolik bo'lsa keyingisiga o'tish
+      playLineByIndex(idx + 1);
+    });
+
+    audio.play().then(() => {
+      setIsPlaying(true);
+      progressAnimRef.current = requestAnimationFrame(updateProgress);
+    }).catch(() => {
+      playLineByIndex(idx + 1);
+    });
+  }, [getDialogueLinesAll, stopAudio, updateProgress]);
+
+  /* Toggle play/pause */
+  const togglePlay = useCallback(() => {
+    if (!hasDialogueData()) return;
+
+    if (isPlaying && dialogueAudioRef.current) {
+      // Pauza
+      dialogueAudioRef.current.pause();
+      if (progressAnimRef.current) {
+        cancelAnimationFrame(progressAnimRef.current);
+      }
+      setIsPlaying(false);
+    } else if (dialogueAudioRef.current && dialogueAudioRef.current.src) {
+      // Davom ettirish
+      dialogueAudioRef.current.play().then(() => {
+        setIsPlaying(true);
+        progressAnimRef.current = requestAnimationFrame(updateProgress);
+      }).catch(() => {});
+    } else {
+      // Yangi boshlash
+      setAudioProgress(0);
+      setAudioCurrent(0);
+      playLineByIndex(0);
+    }
+  }, [hasDialogueData, isPlaying, playLineByIndex, updateProgress]);
+
+  /* Keyingi liniya */
+  const playNext = useCallback(() => {
+    const allLines = getDialogueLinesAll();
+    const nextIdx = currentLineIdx + 1;
+    if (nextIdx < allLines.length) {
+      playLineByIndex(nextIdx);
+    }
+  }, [currentLineIdx, getDialogueLinesAll, playLineByIndex]);
+
+  /* Oldingi liniya */
+  const playPrev = useCallback(() => {
+    const prevIdx = currentLineIdx - 1;
+    if (prevIdx >= 0) {
+      playLineByIndex(prevIdx);
+    } else {
+      // Boshiga qaytish
+      playLineByIndex(0);
+    }
+  }, [currentLineIdx, playLineByIndex]);
+
+  /* Dialogue section o'zgarganda audioni to'xtatish */
+  useEffect(() => {
+    stopAudio();
+    setAudioProgress(0);
+    setAudioCurrent(0);
+    setAudioDuration(0);
+    setCurrentLineIdx(0);
+  }, [activeSection, stopAudio]);
+
+  /* Component unmount bo'lganda tozalash */
+  useEffect(() => {
+    return () => {
+      if (dialogueAudioRef.current) {
+        dialogueAudioRef.current.pause();
+        dialogueAudioRef.current = null;
+      }
+      if (progressAnimRef.current) {
+        cancelAnimationFrame(progressAnimRef.current);
+      }
+    };
+  }, []);
 
   if (dataLoading) {
     return (
@@ -401,7 +539,7 @@ export default function LessonDetailPage() {
                 <div className="h-[1px] bg-white/10 my-[18px] sm:my-[22px]" />
 
                 {/* ── Integrated Audio Player ── */}
-                <div className="relative">
+                <div ref={playerRef} className="relative">
                   {/* Disc + title row */}
                   <div className="flex items-center gap-[14px] sm:gap-[16px] mb-[16px] sm:mb-[20px]">
                     {/* Spinning vinyl disc */}
@@ -429,21 +567,28 @@ export default function LessonDetailPage() {
                           {dlg?.title || "Audio"}
                         </span>
                       </div>
-                      <span className="text-white/30 text-[10px] sm:text-[11px] font-medium">
-                        {lesson.name} · Dialog audio
+                      <span className="text-white/30 text-[10px] sm:text-[11px] font-medium truncate block max-w-[280px] sm:max-w-[400px]">
+                        {getDialogueLinesAll()[currentLineIdx]
+                          ? `${getDialogueLinesAll()[currentLineIdx].speaker}: ${getDialogueLinesAll()[currentLineIdx].text}`
+                          : `${lesson.name} · Dialog audio`
+                        }
                       </span>
                     </div>
                   </div>
 
                   {/* Waveform progress bar */}
                   <div
-                    className="relative h-[32px] sm:h-[36px] flex items-end gap-[1.5px] sm:gap-[2px] cursor-pointer mb-[6px] sm:mb-[8px]"
+                    className={`relative h-[32px] sm:h-[36px] flex items-end gap-[1.5px] sm:gap-[2px] mb-[6px] sm:mb-[8px] ${hasDialogueData() ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
                     onClick={(e) => {
+                      if (!hasDialogueData()) return;
                       const rect = e.currentTarget.getBoundingClientRect();
                       const pct = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
-                      const dur = audioDuration || 317;
-                      setAudioProgress(pct);
-                      setAudioCurrent(Math.floor((pct / 100) * dur));
+                      if (dialogueAudioRef.current && dialogueAudioRef.current.duration) {
+                        const seekTime = (pct / 100) * dialogueAudioRef.current.duration;
+                        dialogueAudioRef.current.currentTime = seekTime;
+                        setAudioProgress(pct);
+                        setAudioCurrent(seekTime);
+                      }
                     }}
                   >
                     {Array.from({ length: 60 }).map((_, i) => {
@@ -484,7 +629,7 @@ export default function LessonDetailPage() {
                       {formatTime(audioCurrent)}
                     </span>
                     <span className="text-[10px] sm:text-[11px] text-white/40 font-mono tabular-nums">
-                      -{formatTime((audioDuration || 317) - audioCurrent)}
+                      -{formatTime(audioDuration > 0 ? audioDuration - audioCurrent : 0)}
                     </span>
                   </div>
 
@@ -497,7 +642,7 @@ export default function LessonDetailPage() {
                     </button>
 
                     <button
-                      onClick={() => { setAudioCurrent(0); setAudioProgress(0); }}
+                      onClick={playPrev}
                       aria-label="Oldingi"
                       className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95"
                     >
@@ -509,11 +654,15 @@ export default function LessonDetailPage() {
                     {/* Play/Pause */}
                     <button
                       onClick={togglePlay}
-                      aria-label={isPlaying ? "Pauza" : "Tinglash"}
-                      className={`w-[54px] h-[54px] sm:w-[60px] sm:h-[60px] md:w-[66px] md:h-[66px] rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 ${
-                        isPlaying
-                          ? 'bg-gradient-to-br from-[#e8632b] to-[#f5a623] shadow-[0_0_24px_rgba(232,99,43,0.5),0_4px_16px_rgba(0,0,0,0.3)]'
-                          : 'bg-white shadow-[0_4px_24px_rgba(255,255,255,0.12),0_2px_8px_rgba(0,0,0,0.2)]'
+                      disabled={!hasDialogueData()}
+                      aria-label={isPlaying ? "Pauza" : !hasDialogueData() ? "Audio mavjud emas" : "Tinglash"}
+                      title={!hasDialogueData() ? "Dialog audio yuklangan emas" : undefined}
+                      className={`w-[54px] h-[54px] sm:w-[60px] sm:h-[60px] md:w-[66px] md:h-[66px] rounded-full flex items-center justify-center transition-all duration-300 ${
+                        !hasDialogueData()
+                          ? 'bg-white/30 cursor-not-allowed opacity-50'
+                          : isPlaying
+                            ? 'bg-gradient-to-br from-[#e8632b] to-[#f5a623] shadow-[0_0_24px_rgba(232,99,43,0.5),0_4px_16px_rgba(0,0,0,0.3)] hover:scale-105 active:scale-95'
+                            : 'bg-white shadow-[0_4px_24px_rgba(255,255,255,0.12),0_2px_8px_rgba(0,0,0,0.2)] hover:scale-105 active:scale-95'
                       }`}
                     >
                       {isPlaying ? (
@@ -528,7 +677,7 @@ export default function LessonDetailPage() {
                       )}
                     </button>
 
-                    <button aria-label="Keyingi" className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95">
+                    <button aria-label="Keyingi" title="Keyingi" onClick={playNext} className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95">
                       <svg className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
                       </svg>
@@ -1015,39 +1164,57 @@ export default function LessonDetailPage() {
                   {/* ── Dialogue Lines ── */}
                   <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] px-[20px] sm:px-[28px] md:px-[40px] py-[24px] sm:py-[32px] md:py-[40px]">
                     <div className="flex flex-col gap-[24px] sm:gap-[30px] md:gap-[36px]">
-                      {dialogue.lines.map((line, idx) => (
-                          <div key={idx} className="group">
+                      {dialogue.lines.map((line, idx) => {
+                          /* highlight: currentLineIdx to'g'ridan-to'g'ri idx bilan taqqoslash */
+                          const isCurrentlyPlaying = idx === currentLineIdx;
+                          return (
+                          <div key={idx} className={`group transition-all duration-300 rounded-[10px] px-[12px] py-[10px] -mx-[12px] ${isCurrentlyPlaying ? "bg-gradient-to-r from-[#e8632b]/10 to-[#f5a623]/10 ring-1 ring-[#e8632b]/20" : ""}`}>
                             {/* Xitoycha matni */}
                             <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7] flex items-start gap-[8px]">
                               <span className="flex-1">
-                                <span className="font-extrabold text-[#1a1a2e]">
+                                <span className={`font-extrabold ${isCurrentlyPlaying ? "text-[#e8632b]" : "text-[#1a1a2e]"} transition-colors duration-300`}>
                                   {line.speaker}
                                 </span>
                                 <span className="text-gray-300 mx-[2px]">:</span>
-                                <span className="text-[#333] font-medium ml-[4px]">{line.text}</span>
+                                <span className={`font-medium ml-[4px] ${isCurrentlyPlaying ? "text-[#1a1a2e]" : "text-[#333]"} transition-colors duration-300`}>{line.text}</span>
                               </span>
-                              {line.audio && (
-                                <button
-                                  onClick={() => { const a = new Audio(line.audio!); a.play().catch(() => {}); }}
-                                  className="flex-shrink-0 mt-[2px] w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full bg-gradient-to-br from-[#e8632b] to-[#f5a623] flex items-center justify-center shadow-[0_2px_8px_rgba(232,99,43,0.3)] hover:shadow-[0_3px_12px_rgba(232,99,43,0.4)] hover:scale-105 active:scale-95 transition-all"
-                                  title="Tinglash"
-                                >
-                                  <svg className="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] text-white ml-[1px]" viewBox="0 0 24 24" fill="currentColor">
+                              <button
+                                onClick={() => {
+                                  /* Scroll to main player and play through it */
+                                  playerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                  /* Flash animation on player */
+                                  if (playerRef.current) {
+                                    playerRef.current.classList.remove("player-flash");
+                                    void playerRef.current.offsetWidth;
+                                    playerRef.current.classList.add("player-flash");
+                                  }
+                                  setTimeout(() => {
+                                    playLineByIndex(idx);
+                                  }, 350);
+                                }}
+                                className={`flex-shrink-0 mt-[2px] w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(232,99,43,0.3)] hover:shadow-[0_3px_12px_rgba(232,99,43,0.4)] hover:scale-105 active:scale-95 transition-all ${isCurrentlyPlaying ? "bg-gradient-to-br from-[#c0392b] to-[#e74c3c] animate-pulse" : "bg-gradient-to-br from-[#e8632b] to-[#f5a623]"}`}
+                                title={isCurrentlyPlaying ? "Ijro etilmoqda..." : "Tinglash"}
+                              >
+                                <svg className="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] text-white ml-[1px]" viewBox="0 0 24 24" fill="currentColor">
+                                  {isCurrentlyPlaying ? (
+                                    <><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></>
+                                  ) : (
                                     <polygon points="5 3 19 12 5 21 5 3"/>
-                                  </svg>
-                                </button>
-                              )}
+                                  )}
+                                </svg>
+                              </button>
                             </p>
                             {/* Pinyin */}
-                            <p className="text-[13px] sm:text-[14px] text-[#e8632b] italic mt-[3px] ml-[2px]">
+                            <p className={`text-[13px] sm:text-[14px] italic mt-[3px] ml-[2px] transition-colors duration-300 ${isCurrentlyPlaying ? "text-[#e8632b] font-semibold" : "text-[#e8632b]"}`}>
                               {line.pinyin}
                             </p>
                             {/* O'zbekcha tarjima */}
-                            <p className="text-[13px] sm:text-[14px] text-gray-400 mt-[2px] ml-[2px]">
+                            <p className={`text-[13px] sm:text-[14px] mt-[2px] ml-[2px] transition-colors duration-300 ${isCurrentlyPlaying ? "text-gray-600" : "text-gray-400"}`}>
                               {line.translation}
                             </p>
                           </div>
-                        ))}
+                          );
+                        })}
                     </div>
                   </div>
                 </div>

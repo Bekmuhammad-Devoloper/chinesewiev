@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const contacts = [
@@ -28,6 +29,45 @@ const contacts = [
 export default function LoginPage() {
   const [key, setKey] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    if (!key.trim()) {
+      setLoginError("Kalit kiritilmagan");
+      return;
+    }
+    setLoginLoading(true);
+    setLoginError("");
+    try {
+      // Device ID yaratish
+      let deviceId = localStorage.getItem("device_id");
+      if (!deviceId) {
+        deviceId = "dev-" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+        localStorage.setItem("device_id", deviceId);
+      }
+
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: key.trim(), deviceId }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setLoginError(data.error || "Xatolik yuz berdi");
+        setLoginLoading(false);
+        return;
+      }
+      // Session saqlash
+      localStorage.setItem("user_session", JSON.stringify(data.user));
+      // Kurslar sahifasiga yo'naltirish
+      router.push("/courses");
+    } catch {
+      setLoginError("Server bilan bog'lanishda xatolik");
+      setLoginLoading(false);
+    }
+  };
 
   return (
     <main className="bg-primary min-h-screen lg:h-screen lg:overflow-hidden">
@@ -114,7 +154,8 @@ export default function LoginPage() {
                   <input
                     type={showPassword ? "text" : "password"}
                     value={key}
-                    onChange={(e) => setKey(e.target.value)}
+                    onChange={(e) => { setKey(e.target.value); setLoginError(""); }}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}
                     placeholder="•••••••••••••••••"
                     className="flex-1 text-[#444] text-[12px] md:text-[16px] lg:text-[17px] outline-none bg-transparent"
                   />
@@ -130,10 +171,28 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              {/* Error message */}
+              {loginError && (
+                <div className="bg-red-50 border border-red-200 rounded-[8px] px-[12px] py-[6px] mb-[8px] md:mb-[10px] lg:mb-[6px]">
+                  <p className="text-red-600 text-[11px] md:text-[13px] font-semibold text-center">{loginError}</p>
+                </div>
+              )}
+
               {/* Login Button */}
               <div className="flex justify-center mb-[8px] md:mb-[10px] lg:mb-[6px]">
-                <button className="bg-green hover:bg-green/90 text-white font-bold text-[14px] md:text-[22px] lg:text-[24px] px-[32px] py-[7px] md:px-[40px] md:py-[8px] lg:px-[44px] lg:py-[8px] rounded-full transition-colors cursor-pointer shadow-lg shadow-green/30">
-                  KIRISH
+                <button
+                  onClick={handleLogin}
+                  disabled={loginLoading}
+                  className={`bg-green hover:bg-green/90 text-white font-bold text-[14px] md:text-[22px] lg:text-[24px] px-[32px] py-[7px] md:px-[40px] md:py-[8px] lg:px-[44px] lg:py-[8px] rounded-full transition-colors cursor-pointer shadow-lg shadow-green/30 ${loginLoading ? "opacity-60 cursor-not-allowed" : ""}`}
+                >
+                  {loginLoading ? (
+                    <span className="flex items-center gap-[8px]">
+                      <span className="w-[16px] h-[16px] md:w-[20px] md:h-[20px] border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      KIRISH...
+                    </span>
+                  ) : (
+                    "KIRISH"
+                  )}
                 </button>
               </div>
 
