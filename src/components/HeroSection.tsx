@@ -15,7 +15,7 @@ export default function HeroSection() {
             width={600}
             height={520}
             priority
-            className="w-[220px] h-[183px] md:w-[260px] md:h-[223px] lg:w-[300px] lg:h-[257px] object-contain"
+            className="w-[280px] h-[233px] md:w-[340px] md:h-[291px] lg:w-[400px] lg:h-[343px] object-contain"
           />
 
           {/* Title */}
