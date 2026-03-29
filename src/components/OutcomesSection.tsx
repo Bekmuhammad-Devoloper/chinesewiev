@@ -51,16 +51,16 @@ export default function OutcomesSection() {
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="bg-accent rounded-[12px] md:rounded-[16px] lg:rounded-[20px] p-[12px] md:p-[16px] lg:p-[20px] flex flex-col relative overflow-hidden h-[120px] md:h-[160px] lg:h-[190px]"
+              className="bg-accent rounded-[12px] md:rounded-[16px] lg:rounded-[20px] p-[12px] md:p-[16px] lg:p-[20px] flex flex-col h-[120px] md:h-[170px] lg:h-[210px]"
             >
               {/* Text — top left */}
-              <p className="text-gold text-[11px] md:text-[14px] lg:text-[17px] font-medium leading-[1.35] relative z-10">
+              <p className="text-gold text-[11px] md:text-[15px] lg:text-[18px] font-medium leading-[1.35]">
                 {item.title}
               </p>
 
-              {/* Icon — bottom right, overlapping edge */}
-              <div className="absolute bottom-[-6px] md:bottom-[-8px] lg:bottom-[-10px] right-[-6px] md:right-[-8px] lg:right-[-10px]">
-                <div className="w-[52px] h-[52px] md:w-[72px] md:h-[72px] lg:w-[90px] lg:h-[90px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
+              {/* Icon — bottom right, inside card */}
+              <div className="flex justify-end mt-auto">
+                <div className="w-[48px] h-[48px] md:w-[80px] md:h-[80px] lg:w-[110px] lg:h-[110px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
                   <item.Icon />
                 </div>
               </div>
