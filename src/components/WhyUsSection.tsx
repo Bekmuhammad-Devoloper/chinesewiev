@@ -32,7 +32,7 @@ export default function WhyUsSection() {
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="why-us">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[80px] pt-[22px] md:pt-[60px] lg:pt-[70px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
-          <h2 className="text-primary font-bold text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[40px] md:mb-[70px] lg:mb-[80px]">
+          <h2 className="text-primary font-bold text-[24px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[20px] md:mb-[70px] lg:mb-[80px]">
             Nima uchun aynan bizning kurs?
           </h2>
 
@@ -101,26 +101,31 @@ export default function WhyUsSection() {
             </div>
           </div>
 
-          {/* ── Mobile: vertical list ── */}
-          <div className="md:hidden flex flex-col gap-[22px]">
+          {/* ── Mobile: vertical list with dividers ── */}
+          <div className="md:hidden flex flex-col">
             {reasons.map((reason, index) => (
-              <div key={index} className="flex items-start gap-[12px]">
-                <div className="w-[48px] h-[48px] flex-shrink-0 flex items-center justify-center">
-                  <Image
-                    src={reason.icon}
-                    alt=""
-                    width={48}
-                    height={48}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="flex flex-col gap-[4px]">
-                  <h3 className="text-primary font-extrabold text-[13px] leading-[1.3] italic">
-                    {reason.title}
-                  </h3>
-                  <p className="text-primary text-[11px] font-normal leading-[1.6]">
-                    {reason.description}
-                  </p>
+              <div key={index}>
+                {/* Horizontal divider line */}
+                <div className="h-[1.5px] bg-primary/25 my-[2px]" />
+
+                <div className="flex items-start gap-[12px] py-[16px]">
+                  <div className="w-[56px] h-[56px] flex-shrink-0 flex items-center justify-center">
+                    <Image
+                      src={reason.icon}
+                      alt=""
+                      width={56}
+                      height={56}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-[4px] flex-1">
+                    <h3 className="text-primary font-extrabold text-[14px] leading-[1.3] italic">
+                      {reason.title}
+                    </h3>
+                    <p className="text-primary text-[11px] font-normal leading-[1.55]">
+                      {reason.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
