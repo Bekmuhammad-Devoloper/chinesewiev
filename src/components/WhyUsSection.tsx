@@ -32,19 +32,14 @@ export default function WhyUsSection() {
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="why-us">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[60px] pt-[22px] md:pt-[60px] lg:pt-[70px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
-          <h2 className="font-[family-name:var(--font-castoro-titling)] text-primary italic text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[16px] md:mb-[40px] lg:mb-[50px]">
+          <h2 className="text-primary font-bold text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[16px] md:mb-[40px] lg:mb-[50px]">
             Nima uchun aynan bizning kurs?
           </h2>
 
-          {/* Mobile: vertical list with dividers, Desktop: 2-col grid */}
-          <div className="hidden md:grid grid-cols-2 gap-x-0 gap-y-[50px] relative">
-            {/* Vertical divider - desktop only */}
-            <div className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[2px]">
-              <Image src="/assets/divider-line.svg" alt="" width={2} height={600} className="h-full w-auto opacity-30" />
-            </div>
-
+          {/* Desktop: 2-col grid */}
+          <div className="hidden md:grid grid-cols-2 gap-x-[40px] lg:gap-x-[60px] gap-y-[40px] lg:gap-y-[50px]">
             {reasons.map((reason, index) => (
-              <div key={index} className={`flex gap-[20px] ${index % 2 === 0 ? "pr-[50px]" : "pl-[50px]"}`}>
+              <div key={index} className="flex gap-[20px]">
                 <Image
                   src={reason.icon}
                   alt=""
@@ -64,28 +59,24 @@ export default function WhyUsSection() {
             ))}
           </div>
 
-          {/* Mobile: vertical list with horizontal dividers */}
-          <div className="md:hidden flex flex-col">
+          {/* Mobile: vertical list */}
+          <div className="md:hidden flex flex-col gap-[20px]">
             {reasons.map((reason, index) => (
-              <div key={index}>
-                {/* Divider line — above every item (including first) */}
-                <div className="border-t-[1.5px] border-primary/40 my-[20px]" />
-                <div className="flex gap-[12px]">
-                  <Image
-                    src={reason.icon}
-                    alt=""
-                    width={140}
-                    height={120}
-                    className="w-[50px] h-[42px] object-contain flex-shrink-0 mt-[2px]"
-                  />
-                  <div className="flex flex-col gap-[6px]">
-                    <h3 className="text-primary font-bold text-[14px] leading-[1.3]">
-                      {reason.title}
-                    </h3>
-                    <p className="text-primary text-[11px] font-normal leading-[1.6]">
-                      {reason.description}
-                    </p>
-                  </div>
+              <div key={index} className="flex gap-[12px]">
+                <Image
+                  src={reason.icon}
+                  alt=""
+                  width={140}
+                  height={120}
+                  className="w-[50px] h-[42px] object-contain flex-shrink-0 mt-[2px]"
+                />
+                <div className="flex flex-col gap-[6px]">
+                  <h3 className="text-primary font-bold text-[14px] leading-[1.3]">
+                    {reason.title}
+                  </h3>
+                  <p className="text-primary text-[11px] font-normal leading-[1.6]">
+                    {reason.description}
+                  </p>
                 </div>
               </div>
             ))}
