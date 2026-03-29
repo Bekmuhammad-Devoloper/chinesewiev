@@ -58,8 +58,8 @@ export default function OutcomesSection() {
                 {item.title}
               </p>
 
-              {/* Icon — bottom right, inside card */}
-              <div className="flex justify-end mt-auto">
+              {/* Icon — bottom right corner */}
+              <div className="mt-auto self-end">
                 <div className="w-[48px] h-[48px] md:w-[80px] md:h-[80px] lg:w-[110px] lg:h-[110px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
                   <item.Icon />
                 </div>
