@@ -18,7 +18,7 @@ export default function CoursesSection() {
   return (
     <section id="courses" className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
-        <h2 className="text-gold font-bold text-[22px] md:text-[48px] lg:text-[60px] leading-[1.15] text-center mb-[24px] md:mb-[50px] lg:mb-[60px]">
+        <h2 className="text-gold font-bold text-[22px] md:text-[48px] lg:text-[60px] leading-[1.15] text-center mb-[32px] md:mb-[56px] lg:mb-[68px]">
           Darsliklar
         </h2>
 
@@ -46,7 +46,7 @@ export default function CoursesSection() {
                 <h3 className="text-gold font-bold text-[18px] md:text-[24px] lg:text-[30px] leading-[1.2] mb-[14px] md:mb-[18px] text-center">
                   {course.title}
                 </h3>
-                <ul className="space-y-[4px] md:space-y-[6px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[10px] md:mb-[14px]">
+                <ul className="space-y-[4px] md:space-y-[6px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[18px] md:mb-[22px]">
                   {course.features.map((feature, i) => (
                     <li key={i}>&bull; {feature}</li>
                   ))}
