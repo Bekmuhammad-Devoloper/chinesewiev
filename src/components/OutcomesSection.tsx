@@ -41,26 +41,28 @@ const outcomes = [
 
 export default function OutcomesSection() {
   return (
-    <section className="bg-primary pt-[30px] md:pt-[80px] lg:pt-[100px]" id="outcomes">
+    <section className="bg-primary pt-[30px] md:pt-[80px] lg:pt-[100px] pb-[20px] md:pb-[30px] lg:pb-[40px]" id="outcomes">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         <h2 className="font-[family-name:var(--font-castoro-titling)] text-gold italic text-[22px] md:text-[42px] lg:text-[56px] leading-[1.2] mb-[16px] md:mb-[32px] lg:mb-[40px]">
           Bu kursdan keyin siz:
         </h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[12px] md:gap-[20px] lg:gap-[30px]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-[10px] md:gap-x-[18px] lg:gap-x-[24px] gap-y-[18px] md:gap-y-[24px] lg:gap-y-[30px]">
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="bg-accent rounded-[10px] md:rounded-[14px] lg:rounded-[18px] p-[10px] md:p-[14px] lg:p-[18px] flex flex-col h-[100px] md:h-[140px] lg:h-[170px]"
+              className="relative pb-[20px] md:pb-[28px] lg:pb-[36px]"
             >
-              {/* Text — top left */}
-              <p className="text-gold text-[10px] md:text-[13px] lg:text-[16px] font-medium leading-[1.3]">
-                {item.title}
-              </p>
+              {/* Card */}
+              <div className="bg-accent rounded-[10px] md:rounded-[14px] lg:rounded-[18px] p-[10px] md:p-[14px] lg:p-[18px] h-[80px] md:h-[110px] lg:h-[130px]">
+                <p className="text-gold text-[10px] md:text-[13px] lg:text-[16px] font-medium leading-[1.3]">
+                  {item.title}
+                </p>
+              </div>
 
-              {/* Icon — bottom right, inside card */}
-              <div className="mt-auto self-end">
-                <div className="w-[48px] h-[48px] md:w-[70px] md:h-[70px] lg:w-[90px] lg:h-[90px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
+              {/* Icon — overlapping bottom-right of card */}
+              <div className="absolute bottom-[0px] md:bottom-[0px] right-[6px] md:right-[10px] lg:right-[14px]">
+                <div className="w-[40px] h-[40px] md:w-[56px] md:h-[56px] lg:w-[72px] lg:h-[72px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
                   <item.Icon />
                 </div>
               </div>
