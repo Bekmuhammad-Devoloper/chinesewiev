@@ -1,5 +1,5 @@
 /* ── Shared icon sizes ── */
-const circleIconCls = "w-[22px] h-[22px] md:w-[30px] md:h-[30px] lg:w-[38px] lg:h-[38px]";
+const circleIconCls = "w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[38px] lg:h-[38px]";
 const titleIconCls  = "w-[14px] h-[14px] md:w-[16px] md:h-[16px] lg:w-[20px] lg:h-[20px] shrink-0";
 
 const lessons = [
@@ -88,29 +88,29 @@ export default function LessonsSection() {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px] md:gap-[18px] lg:gap-[22px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[8px] md:gap-[18px] lg:gap-[22px]">
           {lessons.map((lesson) => (
             <div
               key={lesson.number}
-              className="bg-accent rounded-[12px] md:rounded-[18px] lg:rounded-[20px] p-[14px] md:p-[28px] lg:p-[35px] flex flex-col justify-between min-h-[160px] md:min-h-[260px] lg:min-h-[300px]"
+              className="bg-accent rounded-[12px] md:rounded-[18px] lg:rounded-[20px] p-[12px] md:p-[28px] lg:p-[35px] flex flex-col"
             >
               {/* Top row: icon circle + number */}
-              <div className="flex items-start justify-between">
-                <div className="w-[38px] h-[38px] md:w-[65px] md:h-[65px] lg:w-[80px] lg:h-[80px] rounded-full bg-gold flex items-center justify-center shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="w-[34px] h-[34px] md:w-[65px] md:h-[65px] lg:w-[80px] lg:h-[80px] rounded-full bg-gold flex items-center justify-center shrink-0">
                   {lesson.circleIcon}
                 </div>
-                <p className="text-gold font-bold text-[42px] md:text-[65px] lg:text-[80px] leading-[1] opacity-80">
+                <p className="text-gold font-bold text-[36px] md:text-[65px] lg:text-[80px] leading-[1] opacity-80">
                   {lesson.number}
                 </p>
               </div>
 
               {/* Bottom: title + description */}
-              <div className="mt-auto pt-[10px] md:pt-[16px]">
-                <h3 className="text-gold font-semibold text-[13px] md:text-[20px] lg:text-[24px] leading-[1.35] flex items-center gap-[4px] md:gap-[8px]">
+              <div className="mt-[10px] md:mt-[16px]">
+                <h3 className="text-gold font-semibold text-[13px] md:text-[20px] lg:text-[24px] leading-[1.3] flex items-center gap-[4px] md:gap-[8px]">
                   <span className="text-gold">{lesson.titleIcon}</span>
                   {lesson.title}
                 </h3>
-                <p className="text-gold text-[9px] md:text-[14px] lg:text-[16px] font-normal leading-[1.5] opacity-80 mt-[6px] md:mt-[8px]">
+                <p className="text-gold text-[10px] md:text-[14px] lg:text-[16px] font-normal leading-[1.45] opacity-80 mt-[4px] md:mt-[8px]">
                   {lesson.description}
                 </p>
               </div>
