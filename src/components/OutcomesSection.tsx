@@ -51,20 +51,16 @@ export default function OutcomesSection() {
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="relative pb-[18px] md:pb-[24px] lg:pb-[30px]"
+              className="relative overflow-hidden bg-accent rounded-[14px] md:rounded-[18px] lg:rounded-[22px] h-[110px] md:h-[135px] lg:h-[160px]"
             >
-              {/* Card */}
-              <div className="bg-accent rounded-[14px] md:rounded-[18px] lg:rounded-[22px] p-[10px] md:p-[14px] lg:p-[18px] h-[90px] md:h-[110px] lg:h-[130px] flex items-start">
-                <p className="text-gold text-[10px] md:text-[13px] lg:text-[16px] font-medium leading-[1.35] max-w-[75%]">
-                  {item.title}
-                </p>
-              </div>
+              {/* Text */}
+              <p className="relative z-10 text-gold text-[11px] md:text-[14px] lg:text-[17px] font-medium leading-[1.4] p-[12px] md:p-[16px] lg:p-[20px] max-w-[70%]">
+                {item.title}
+              </p>
 
-              {/* Icon — overlapping bottom-right of card */}
-              <div className="absolute bottom-[0px] right-[6px] md:right-[10px] lg:right-[14px]">
-                <div className="w-[40px] h-[40px] md:w-[52px] md:h-[52px] lg:w-[66px] lg:h-[66px] rounded-full bg-gold border-[2.5px] md:border-[3px] lg:border-[3.5px] border-[#c4a050] flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.15)]">
-                  <item.Icon />
-                </div>
+              {/* Icon circle — inside card, bottom-right, partially clipped */}
+              <div className="absolute bottom-[-16px] md:bottom-[-20px] lg:bottom-[-24px] right-[-10px] md:right-[-12px] lg:right-[-14px] w-[70px] h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full bg-gold flex items-center justify-center">
+                <item.Icon />
               </div>
             </div>
           ))}
