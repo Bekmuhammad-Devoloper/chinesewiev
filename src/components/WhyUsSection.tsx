@@ -31,27 +31,29 @@ export default function WhyUsSection() {
   return (
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="why-us">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
-        <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[60px] pt-[22px] md:pt-[60px] lg:pt-[70px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
-          <h2 className="text-primary font-bold text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[16px] md:mb-[40px] lg:mb-[50px]">
+        <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[80px] pt-[22px] md:pt-[60px] lg:pt-[70px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
+          <h2 className="text-primary font-bold text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[20px] md:mb-[50px] lg:mb-[60px]">
             Nima uchun aynan bizning kurs?
           </h2>
 
           {/* Desktop: 2-col grid */}
-          <div className="hidden md:grid grid-cols-2 gap-x-[40px] lg:gap-x-[60px] gap-y-[40px] lg:gap-y-[50px]">
+          <div className="hidden md:grid grid-cols-2 gap-x-[50px] lg:gap-x-[80px] gap-y-[50px] lg:gap-y-[60px]">
             {reasons.map((reason, index) => (
-              <div key={index} className="flex gap-[20px]">
-                <Image
-                  src={reason.icon}
-                  alt=""
-                  width={140}
-                  height={120}
-                  className="w-[120px] h-[100px] lg:w-[155px] lg:h-[130px] object-contain flex-shrink-0"
-                />
-                <div className="flex flex-col gap-[10px]">
-                  <h3 className="text-primary font-bold text-[21px] lg:text-[24px] leading-[1.3]">
+              <div key={index} className="flex items-start gap-[18px] lg:gap-[24px]">
+                <div className="w-[100px] h-[100px] lg:w-[130px] lg:h-[130px] flex-shrink-0 flex items-center justify-center">
+                  <Image
+                    src={reason.icon}
+                    alt=""
+                    width={130}
+                    height={130}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="flex flex-col gap-[8px] lg:gap-[10px] pt-[4px]">
+                  <h3 className="text-primary font-extrabold text-[18px] lg:text-[22px] leading-[1.3] italic">
                     {reason.title}
                   </h3>
-                  <p className="text-primary text-[15px] lg:text-[16px] font-normal leading-[1.55]">
+                  <p className="text-primary text-[14px] lg:text-[15px] font-normal leading-[1.6]">
                     {reason.description}
                   </p>
                 </div>
@@ -60,18 +62,20 @@ export default function WhyUsSection() {
           </div>
 
           {/* Mobile: vertical list */}
-          <div className="md:hidden flex flex-col gap-[20px]">
+          <div className="md:hidden flex flex-col gap-[22px]">
             {reasons.map((reason, index) => (
-              <div key={index} className="flex gap-[12px]">
-                <Image
-                  src={reason.icon}
-                  alt=""
-                  width={140}
-                  height={120}
-                  className="w-[50px] h-[42px] object-contain flex-shrink-0 mt-[2px]"
-                />
-                <div className="flex flex-col gap-[6px]">
-                  <h3 className="text-primary font-bold text-[14px] leading-[1.3]">
+              <div key={index} className="flex items-start gap-[12px]">
+                <div className="w-[48px] h-[48px] flex-shrink-0 flex items-center justify-center">
+                  <Image
+                    src={reason.icon}
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="flex flex-col gap-[4px]">
+                  <h3 className="text-primary font-extrabold text-[13px] leading-[1.3] italic">
                     {reason.title}
                   </h3>
                   <p className="text-primary text-[11px] font-normal leading-[1.6]">
