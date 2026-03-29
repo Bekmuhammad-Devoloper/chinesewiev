@@ -32,7 +32,7 @@ export default function WhyUsSection() {
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="why-us">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[80px] pt-[22px] md:pt-[60px] lg:pt-[70px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
-          <h2 className="text-primary font-bold text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[30px] md:mb-[50px] lg:mb-[60px]">
+          <h2 className="text-primary font-bold text-[22px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[40px] md:mb-[70px] lg:mb-[80px]">
             Nima uchun aynan bizning kurs?
           </h2>
 
@@ -66,8 +66,8 @@ export default function WhyUsSection() {
               </div>
             </div>
 
-            {/* Horizontal divider */}
-            <div className="h-[1.5px] bg-primary/25 my-[30px] lg:my-[40px]" />
+            {/* Gap between rows */}
+            <div className="h-[40px] lg:h-[50px]" />
 
             {/* Bottom row */}
             <div className="flex">
