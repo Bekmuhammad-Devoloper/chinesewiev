@@ -36,8 +36,11 @@ export default function WhyUsSection() {
             Nima uchun aynan bizning kurs?
           </h2>
 
-          {/* ── Desktop: 2x2 grid with cross dividers ── */}
-          <div className="hidden md:block">
+          {/* ── Desktop: 2x2 grid with single continuous vertical divider ── */}
+          <div className="hidden md:block relative">
+            {/* Continuous vertical divider line */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-[1.5px] bg-primary/25 -translate-x-1/2" />
+
             {/* Top row */}
             <div className="flex">
               {/* Card 1 */}
@@ -51,8 +54,8 @@ export default function WhyUsSection() {
                 </div>
               </div>
 
-              {/* Vertical divider */}
-              <div className="w-[1.5px] bg-primary/25 self-stretch mx-[10px] lg:mx-[16px]" />
+              {/* Spacer for vertical divider */}
+              <div className="w-[1.5px] mx-[10px] lg:mx-[16px]" />
 
               {/* Card 2 */}
               <div className="flex-1 flex items-start gap-[18px] lg:gap-[24px] pl-[30px] lg:pl-[40px]">
@@ -82,8 +85,8 @@ export default function WhyUsSection() {
                 </div>
               </div>
 
-              {/* Vertical divider */}
-              <div className="w-[1.5px] bg-primary/25 self-stretch mx-[10px] lg:mx-[16px]" />
+              {/* Spacer for vertical divider */}
+              <div className="w-[1.5px] mx-[10px] lg:mx-[16px]" />
 
               {/* Card 4 */}
               <div className="flex-1 flex items-start gap-[18px] lg:gap-[24px] pl-[30px] lg:pl-[40px]">
