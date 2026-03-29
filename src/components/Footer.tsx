@@ -3,23 +3,23 @@ import Image from "next/image";
 const contacts = [
   {
     icon: "/assets/phone-icon.svg",
-    label: "+998 90 000 00 00",
-    href: "tel:+998900000000",
+    label: "+998 90 012 33 80",
+    href: "tel:+998900123380",
   },
   {
     icon: "/assets/telegram-icon.svg",
     label: "Telegram orqali bog\u2018lanish",
-    href: "https://t.me/chinesewave_uz",
+    href: "https://t.me/Bobur_676",
   },
   {
     icon: "/assets/telegram-icon.svg",
     label: "Telegram kanal",
-    href: "https://t.me/chinesewave_uz",
+    href: "https://t.me/chinesewave2026",
   },
   {
     icon: "/assets/instagram-icon.svg",
     label: "Instagram sahifa",
-    href: "https://instagram.com/chinesewave.uz",
+    href: "https://www.instagram.com/chinesewave2026/",
   },
 ];
 
