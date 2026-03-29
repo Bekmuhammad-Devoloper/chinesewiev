@@ -4,18 +4,22 @@ const outcomes = [
   {
     title: "Iyerogliflarni o\u2018qiy va yoza olasiz",
     icon: "/assets/outcome-icon-1.svg",
+    hasCircle: true,
   },
   {
     title: "HSK imtihonlariga ishonch bilan tayyor bo\u2018lasiz",
     icon: "/assets/outcome-icon-2.svg",
+    hasCircle: true,
   },
   {
     title: "O\u2018zingiz fikr bildira olasiz",
     icon: "/assets/outcome-emoji.svg",
+    hasCircle: false,
   },
   {
     title: "Oddiy suhbatlarni bemalol tushunasiz",
     icon: "/assets/outcome-icon-4.svg",
+    hasCircle: true,
   },
 ];
 
@@ -31,18 +35,26 @@ export default function OutcomesSection() {
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="bg-accent rounded-[16px] md:rounded-[20px] lg:rounded-[24px] border-[2px] border-accent p-[14px] md:p-[18px] lg:p-[22px] flex flex-col justify-between h-[165px] md:h-[240px] lg:h-[268px]"
+              className="bg-accent rounded-[16px] md:rounded-[20px] lg:rounded-[24px] border-[2px] border-accent p-[14px] md:p-[18px] lg:p-[22px] flex flex-col items-center h-[165px] md:h-[240px] lg:h-[268px]"
             >
               {/* Text */}
-              <p className="text-gold text-[13px] md:text-[17px] lg:text-[20px] font-medium leading-[1.35]">
+              <p className="text-gold text-[13px] md:text-[17px] lg:text-[20px] font-medium leading-[1.35] w-full">
                 {item.title}
               </p>
 
-              {/* Icon circle — bottom right */}
-              <div className="flex justify-end mt-auto">
-                <div className="w-[56px] h-[56px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] rounded-full bg-gold border-[2px] md:border-[3px] border-gold-warm flex items-center justify-center">
-                  <Image src={item.icon} alt="" width={110} height={110} className="w-[60%] h-[60%] object-contain" />
-                </div>
+              {/* Icon circle — bottom center */}
+              <div className="flex justify-center mt-auto">
+                {item.hasCircle ? (
+                  /* Icons that already have a circle in their SVG */
+                  <div className="w-[60px] h-[60px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px]">
+                    <Image src={item.icon} alt="" width={130} height={130} className="w-full h-full object-contain" />
+                  </div>
+                ) : (
+                  /* Chat icon (no circle in SVG) — wrap in gold circle */
+                  <div className="w-[60px] h-[60px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#F1F1F3] flex items-center justify-center">
+                    <Image src={item.icon} alt="" width={80} height={80} className="w-[55%] h-[55%] object-contain" />
+                  </div>
+                )}
               </div>
             </div>
           ))}
