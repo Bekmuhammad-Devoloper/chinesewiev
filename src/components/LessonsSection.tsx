@@ -1,5 +1,5 @@
 /* ── Shared icon sizes ── */
-const circleIconCls = "w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[38px] lg:h-[38px]";
+const circleIconCls = "w-[22px] h-[22px] md:w-[30px] md:h-[30px] lg:w-[38px] lg:h-[38px]";
 const titleIconCls  = "w-[14px] h-[14px] md:w-[16px] md:h-[16px] lg:w-[20px] lg:h-[20px] shrink-0";
 
 const lessons = [
@@ -78,17 +78,17 @@ export default function LessonsSection() {
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="lessons">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         {/* Heading */}
-        <div className="text-center mb-[18px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
+        <div className="text-center mb-[16px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
           <h2 className="text-white font-bold text-[20px] md:text-[48px] lg:text-[56px] leading-[1.2]">
             Darslar qanday o&apos;tiladi?
           </h2>
-          <p className="text-white font-normal text-[11px] md:text-[22px] lg:text-[28px] leading-[1.6] mt-[4px] md:mt-[12px]">
+          <p className="text-white font-normal text-[10px] md:text-[22px] lg:text-[28px] leading-[1.5] mt-[4px] md:mt-[12px]">
             Biz faqat nazariya bermaymiz &mdash; siz darsning o&apos;zidayoq gapira boshlaysiz.
           </p>
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-[10px] md:gap-[18px] lg:gap-[22px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px] md:gap-[18px] lg:gap-[22px]">
           {lessons.map((lesson) => (
             <div
               key={lesson.number}
@@ -96,21 +96,21 @@ export default function LessonsSection() {
             >
               {/* Top row: icon circle + number */}
               <div className="flex items-start justify-between">
-                <div className="w-[36px] h-[36px] md:w-[65px] md:h-[65px] lg:w-[80px] lg:h-[80px] rounded-full bg-gold flex items-center justify-center shrink-0">
+                <div className="w-[38px] h-[38px] md:w-[65px] md:h-[65px] lg:w-[80px] lg:h-[80px] rounded-full bg-gold flex items-center justify-center shrink-0">
                   {lesson.circleIcon}
                 </div>
-                <p className="text-gold font-bold text-[32px] md:text-[65px] lg:text-[80px] leading-[1] opacity-80">
+                <p className="text-gold font-bold text-[42px] md:text-[65px] lg:text-[80px] leading-[1] opacity-80">
                   {lesson.number}
                 </p>
               </div>
 
               {/* Bottom: title + description */}
               <div className="mt-auto pt-[10px] md:pt-[16px]">
-                <h3 className="text-gold font-semibold text-[12px] md:text-[20px] lg:text-[24px] leading-[1.35] flex items-center gap-[5px] md:gap-[8px]">
+                <h3 className="text-gold font-semibold text-[13px] md:text-[20px] lg:text-[24px] leading-[1.35] flex items-center gap-[4px] md:gap-[8px]">
                   <span className="text-gold">{lesson.titleIcon}</span>
                   {lesson.title}
                 </h3>
-                <p className="text-gold text-[10px] md:text-[14px] lg:text-[16px] font-normal leading-[1.55] opacity-80 mt-[4px] md:mt-[8px]">
+                <p className="text-gold text-[9px] md:text-[14px] lg:text-[16px] font-normal leading-[1.5] opacity-80 mt-[6px] md:mt-[8px]">
                   {lesson.description}
                 </p>
               </div>
