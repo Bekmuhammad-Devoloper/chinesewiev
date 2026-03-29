@@ -51,16 +51,16 @@ export default function OutcomesSection() {
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="bg-accent rounded-[12px] md:rounded-[16px] lg:rounded-[20px] p-[12px] md:p-[16px] lg:p-[20px] flex flex-col h-[120px] md:h-[170px] lg:h-[210px]"
+              className="relative bg-accent rounded-[10px] md:rounded-[14px] lg:rounded-[18px] p-[10px] md:p-[14px] lg:p-[18px] h-[100px] md:h-[140px] lg:h-[170px]"
             >
               {/* Text — top left */}
-              <p className="text-gold text-[11px] md:text-[15px] lg:text-[18px] font-medium leading-[1.35]">
+              <p className="text-gold text-[10px] md:text-[13px] lg:text-[16px] font-medium leading-[1.3] max-w-[70%]">
                 {item.title}
               </p>
 
-              {/* Icon — bottom right corner */}
-              <div className="mt-auto self-end">
-                <div className="w-[48px] h-[48px] md:w-[80px] md:h-[80px] lg:w-[110px] lg:h-[110px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
+              {/* Icon — bottom right, slightly overflowing card edge */}
+              <div className="absolute bottom-[-8px] md:bottom-[-12px] lg:bottom-[-14px] right-[-8px] md:right-[-12px] lg:right-[-14px]">
+                <div className="w-[44px] h-[44px] md:w-[65px] md:h-[65px] lg:w-[85px] lg:h-[85px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
                   <item.Icon />
                 </div>
               </div>
