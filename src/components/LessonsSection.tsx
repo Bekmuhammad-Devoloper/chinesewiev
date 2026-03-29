@@ -78,7 +78,7 @@ export default function LessonsSection() {
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="lessons">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         {/* Heading */}
-        <div className="text-center mb-[24px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
+        <div className="text-center mb-[32px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
           <h2 className="text-white font-bold text-[22px] md:text-[48px] lg:text-[56px] leading-[1.2]">
             Darslar qanday o&apos;tiladi?
           </h2>
@@ -104,13 +104,18 @@ export default function LessonsSection() {
                 </p>
               </div>
 
+              {/* Spacer after icon row */}
+              <div className="h-[10px] md:h-[16px]" />
+
               {/* Bottom: title + description */}
-              <div className="mt-[10px] md:mt-[16px]">
+              <div>
                 <h3 className="text-gold font-semibold text-[14px] md:text-[20px] lg:text-[24px] leading-[1.3] flex items-center gap-[4px] md:gap-[8px]">
                   <span className="text-gold">{lesson.titleIcon}</span>
                   {lesson.title}
                 </h3>
-                <p className="text-gold text-[11px] md:text-[14px] lg:text-[16px] font-normal leading-[1.45] opacity-80 mt-[4px] md:mt-[8px]">
+                {/* Spacer after title */}
+                <div className="h-[6px] md:h-[10px]" />
+                <p className="text-gold text-[11px] md:text-[14px] lg:text-[16px] font-normal leading-[1.45] opacity-80">
                   {lesson.description}
                 </p>
               </div>
