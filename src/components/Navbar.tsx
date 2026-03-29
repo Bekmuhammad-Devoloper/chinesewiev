@@ -114,7 +114,7 @@ export default function Navbar() {
   if (isLessonsPage || isAdminPage) return null;
 
   return (
-    <nav className="fixed top-[8px] md:top-[12px] lg:top-[14px] left-0 w-full z-50 bg-primary/95 backdrop-blur-sm py-[8px] md:py-[12px] lg:py-[14px]">
+    <nav className="fixed top-[8px] md:top-[12px] lg:top-[14px] left-0 w-full z-50 backdrop-blur-sm py-[8px] md:py-[12px] lg:py-[14px]">
       <div className="max-w-[1920px] mx-auto px-[10px] md:px-[40px] lg:px-[80px]">
         <div className="flex items-center justify-between">
 
@@ -168,76 +168,18 @@ export default function Navbar() {
             )}
 
             {userSession ? (
-              /* User profile dropdown */
-              <div className="relative" ref={profileRef}>
-                <button
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-[6px] sm:gap-[8px] px-[8px] sm:px-[12px] py-[5px] sm:py-[6px] rounded-[8px] hover:bg-white/10 transition-colors"
-                >
-                  <div className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center flex-shrink-0">
-                    <span className="text-primary font-bold text-[11px] sm:text-[13px]">
-                      {userSession.name ? userSession.name[0].toUpperCase() : "U"}
-                    </span>
-                  </div>
-                  <span className="hidden sm:block text-gold text-[13px] lg:text-[14px] font-medium max-w-[120px] truncate">
-                    {userSession.name || "Foydalanuvchi"}
-                  </span>
-                  <svg className={`hidden sm:block w-[12px] h-[12px] text-gold/50 transition-transform ${profileOpen ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </button>
-
-                {/* Profile Dropdown */}
-                {profileOpen && (
-                  <div className="absolute right-0 top-[calc(100%+6px)] w-[200px] sm:w-[220px] bg-primary border border-gold/20 rounded-[12px] shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden z-50">
-                    <div className="px-[14px] sm:px-[16px] py-[10px] sm:py-[12px] border-b border-gold/10">
-                      <p className="text-gold text-[12px] sm:text-[13px] font-semibold truncate">{userSession.name}</p>
-                      <p className="text-gold/40 text-[10px] sm:text-[11px] mt-[2px]">{userSession.course}</p>
-                    </div>
-
-                    <div className="py-[4px] sm:py-[6px]">
-                      <Link
-                        href="/courses"
-                        onClick={() => setProfileOpen(false)}
-                        className="flex items-center gap-[8px] sm:gap-[10px] px-[14px] sm:px-[16px] py-[8px] sm:py-[10px] text-gold/70 hover:bg-white/5 hover:text-gold transition-colors text-[12px] sm:text-[13px]"
-                      >
-                        <svg className="w-[14px] h-[14px] sm:w-[15px] sm:h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
-                        Mening kurslarim
-                      </Link>
-
-                      {isAdmin && (
-                        <Link
-                          href="/admin"
-                          onClick={() => setProfileOpen(false)}
-                          className="flex items-center gap-[8px] sm:gap-[10px] px-[14px] sm:px-[16px] py-[8px] sm:py-[10px] text-gold/70 hover:bg-white/5 hover:text-gold transition-colors text-[12px] sm:text-[13px]"
-                        >
-                          <svg className="w-[14px] h-[14px] sm:w-[15px] sm:h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                            <rect x="3" y="3" width="7" height="7" rx="1" />
-                            <rect x="14" y="3" width="7" height="7" rx="1" />
-                            <rect x="3" y="14" width="7" height="7" rx="1" />
-                            <rect x="14" y="14" width="7" height="7" rx="1" />
-                          </svg>
-                          Admin panel
-                        </Link>
-                      )}
-                    </div>
-
-                    <div className="border-t border-gold/10 py-[4px] sm:py-[6px]">
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-[8px] sm:gap-[10px] px-[14px] sm:px-[16px] py-[8px] sm:py-[10px] text-red-400/70 hover:bg-red-500/5 hover:text-red-400 transition-colors text-[12px] sm:text-[13px] w-full"
-                      >
-                        <svg className="w-[14px] h-[14px] sm:w-[15px] sm:h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                          <polyline points="16 17 21 12 16 7" />
-                          <line x1="21" y1="12" x2="9" y2="12" />
-                        </svg>
-                        Chiqish
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              /* Chiqish tugmasi */
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-[6px] text-gold/80 hover:text-red-400 text-[11px] sm:text-[13px] lg:text-[15px] font-medium px-[12px] sm:px-[18px] lg:px-[22px] py-[5px] sm:py-[7px] lg:py-[8px] rounded-[6px] border border-gold/30 hover:border-red-400/50 transition-colors tracking-[0.03em] whitespace-nowrap"
+              >
+                <svg className="w-[14px] h-[14px] sm:w-[15px] sm:h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Chiqish
+              </button>
             ) : (
               <Link
                 href="/login"
