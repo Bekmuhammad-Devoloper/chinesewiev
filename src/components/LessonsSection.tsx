@@ -79,10 +79,10 @@ export default function LessonsSection() {
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         {/* Heading */}
         <div className="text-center mb-[32px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
-          <h2 className="text-white font-bold text-[22px] md:text-[48px] lg:text-[56px] leading-[1.2]">
+          <h2 className="text-white font-bold text-[22px] md:text-[48px] lg:text-[56px] leading-[1.2] mb-[12px] md:mb-[16px]">
             Darslar qanday o&apos;tiladi?
           </h2>
-          <p className="text-white font-normal text-[12px] md:text-[22px] lg:text-[28px] leading-[1.5] mt-[6px] md:mt-[12px]">
+          <p className="text-white font-normal text-[12px] md:text-[22px] lg:text-[28px] leading-[1.5]">
             Biz faqat nazariya bermaymiz &mdash; siz darsning o&apos;zidayoq gapira boshlaysiz.
           </p>
         </div>
