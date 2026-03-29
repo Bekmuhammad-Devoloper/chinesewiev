@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     maxDevices: body.maxDevices ?? 2,
     active: body.active ?? true,
     createdAt: new Date().toISOString(),
-    expiresAt: body.expiresAt || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+    expiresAt: body.expiresAt || new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000).toISOString(),
   };
 
   users.push(newUser);

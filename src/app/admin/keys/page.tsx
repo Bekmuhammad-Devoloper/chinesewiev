@@ -13,6 +13,9 @@ export default function AdminKeysPage() {
   const [genCount, setGenCount] = useState(1);
   const [genCourse, setGenCourse] = useState("");
   const [genExpiry, setGenExpiry] = useState(365);
+  const [genName, setGenName] = useState("");
+  const [genPhone, setGenPhone] = useState("");
+  const [genUseExpiry, setGenUseExpiry] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [copiedKey, setCopiedKey] = useState("");
   const [search, setSearch] = useState("");
@@ -40,13 +43,15 @@ export default function AdminKeysPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: "",
-            phone: "",
+            name: genName.trim(),
+            phone: genPhone.trim(),
             telegram: "",
             course: genCourse,
             maxDevices: 2,
             active: true,
-            expiresAt: new Date(Date.now() + genExpiry * 24 * 60 * 60 * 1000).toISOString(),
+            ...(genUseExpiry
+              ? { expiresAt: new Date(Date.now() + genExpiry * 24 * 60 * 60 * 1000).toISOString() }
+              : {}),
           }),
         })
       );
@@ -54,6 +59,9 @@ export default function AdminKeysPage() {
     await Promise.all(promises);
     setShowGen(false);
     setGenerating(false);
+    setGenName("");
+    setGenPhone("");
+    setGenUseExpiry(false);
     refetch();
   };
 
@@ -89,7 +97,7 @@ export default function AdminKeysPage() {
     if (filter === "active" && !u.active) return false;
     if (filter === "inactive" && u.active) return false;
     if (filter === "unused" && (u.name || u.devices?.length > 0)) return false;
-    if (search && !u.key.toLowerCase().includes(search.toLowerCase()) && !u.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (search && !u.key.toLowerCase().includes(search.toLowerCase()) && !u.name.toLowerCase().includes(search.toLowerCase()) && !(u.phone || "").toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
@@ -163,6 +171,20 @@ export default function AdminKeysPage() {
             </div>
             <div className="px-[24px] py-[20px] flex flex-col gap-[14px]">
               <div>
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Ism (ixtiyoriy)</label>
+                <input type="text" value={genName} onChange={(e) => setGenName(e.target.value)}
+                  placeholder="Foydalanuvchi ismi"
+                  title="Ism"
+                  className="w-full px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[14px] bg-[#f9fafb] text-gray-800 outline-none focus:border-violet-500" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Telefon raqami (ixtiyoriy)</label>
+                <input type="tel" value={genPhone} onChange={(e) => setGenPhone(e.target.value)}
+                  placeholder="+998 90 123 45 67"
+                  title="Telefon"
+                  className="w-full px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[14px] bg-[#f9fafb] text-gray-800 outline-none focus:border-violet-500" />
+              </div>
+              <div>
                 <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Nechta kalit</label>
                 <input type="number" value={genCount} onChange={(e) => setGenCount(Math.max(1, Math.min(50, Number(e.target.value))))}
                   title="Nechta kalit" min={1} max={50}
@@ -177,18 +199,28 @@ export default function AdminKeysPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Amal qilish muddati (kun)</label>
-                <select value={genExpiry} onChange={(e) => setGenExpiry(Number(e.target.value))} title="Muddat"
-                  className="w-full px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[13px] bg-[#f9fafb] text-gray-800 outline-none">
-                  <option value={30}>30 kun</option>
-                  <option value={90}>90 kun</option>
-                  <option value={180}>6 oy</option>
-                  <option value={365}>1 yil</option>
-                  <option value={730}>2 yil</option>
-                </select>
+                <label className="flex items-center gap-[8px] cursor-pointer">
+                  <input type="checkbox" checked={genUseExpiry} onChange={(e) => setGenUseExpiry(e.target.checked)}
+                    className="w-[16px] h-[16px] accent-violet-600 rounded" />
+                  <span className="text-[12px] font-semibold text-gray-600">Muddat belgilash</span>
+                </label>
               </div>
+              {genUseExpiry && (
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Amal qilish muddati</label>
+                  <select value={genExpiry} onChange={(e) => setGenExpiry(Number(e.target.value))} title="Muddat"
+                    className="w-full px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[13px] bg-[#f9fafb] text-gray-800 outline-none">
+                    <option value={30}>30 kun</option>
+                    <option value={90}>90 kun</option>
+                    <option value={180}>6 oy</option>
+                    <option value={365}>1 yil</option>
+                    <option value={730}>2 yil</option>
+                    <option value={3650}>10 yil (cheksiz)</option>
+                  </select>
+                </div>
+              )}
               <div className="bg-violet-50 rounded-[10px] p-[12px] text-[12px] text-violet-700 flex items-start gap-[6px]">
-                <Lightbulb size={14} className="mt-[1px] flex-shrink-0" /> <span><strong>{genCount}</strong> ta yangi kalit yaratiladi. Har bir kalit avtomatik generatsiya qilinadi (masalan: <code className="font-mono bg-violet-100 px-[4px] rounded">CW-ABCD-EFGH-JKLM</code>).</span>
+                <Lightbulb size={14} className="mt-[1px] flex-shrink-0" /> <span><strong>{genCount}</strong> ta yangi kalit yaratiladi{genName ? ` — ${genName}` : ""}{genPhone ? ` (${genPhone})` : ""}{genUseExpiry ? `, muddat: ${genExpiry} kun` : ", muddatsiz"}.</span>
               </div>
             </div>
             <div className="px-[24px] py-[14px] border-t border-gray-100 flex justify-end gap-[8px]">
@@ -237,7 +269,16 @@ export default function AdminKeysPage() {
                           </button>
                         </div>
                       </td>
-                      <td className="px-[16px] py-[10px] text-[12px] text-gray-600">{u.name || <span className="text-gray-300 italic">Tayinlanmagan</span>}</td>
+                      <td className="px-[16px] py-[10px] text-[12px] text-gray-600">
+                        {u.name ? (
+                          <div>
+                            <span>{u.name}</span>
+                            {u.phone && <span className="block text-[10px] text-gray-400">{u.phone}</span>}
+                          </div>
+                        ) : (
+                          <span className="text-gray-300 italic">Tayinlanmagan</span>
+                        )}
+                      </td>
                       <td className="px-[16px] py-[10px] text-[12px] text-gray-500">{courses.find((c) => c.slug === u.course)?.title || u.course || "—"}</td>
                       <td className="px-[16px] py-[10px] text-[12px] text-gray-500">{u.devices?.length || 0} / {u.maxDevices}</td>
                       <td className="px-[16px] py-[10px]">
