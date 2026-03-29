@@ -105,6 +105,8 @@ export default function Navbar() {
   }, [pathname]);
 
   const handleLogout = () => {
+    const confirmed = window.confirm("Rostdan ham chiqishni xohlaysizmi?");
+    if (!confirmed) return;
     localStorage.removeItem("user_session");
     setUserSession(null);
     setProfileOpen(false);
