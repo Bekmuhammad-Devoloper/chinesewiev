@@ -58,9 +58,9 @@ export default function OutcomesSection() {
                 {item.title}
               </p>
 
-              {/* Icon — gold circle with ring border, icon centered */}
-              <div className="flex justify-center mt-auto">
-                <div className="w-[60px] h-[60px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center shadow-[0_0_0_2px_rgba(255,255,255,0.25)_inset]">
+              {/* Icon — gold circle, bottom-right corner */}
+              <div className="flex justify-end mt-auto">
+                <div className="w-[56px] h-[56px] md:w-[100px] md:h-[100px] lg:w-[130px] lg:h-[130px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
                   <item.Icon />
                 </div>
               </div>
