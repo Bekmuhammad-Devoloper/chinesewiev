@@ -13,8 +13,21 @@ export default function LessonsPage() {
 
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Foydalanuvchi sessiyasini tekshirish
+    try {
+      const session = localStorage.getItem("user_session");
+      if (session) {
+        const user = JSON.parse(session);
+        // Muddati tugamaganini tekshirish
+        if (user && user.course === slug && new Date(user.expiresAt) > new Date()) {
+          setIsAuthenticated(true);
+        }
+      }
+    } catch {}
+
     fetch("/api/courses")
       .then((r) => r.json())
       .then((courses: Course[]) => {
@@ -67,7 +80,8 @@ export default function LessonsPage() {
         {/* Lessons Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[20px]">
           {course.lessons.map((lesson) => {
-            const isLocked = lesson.locked;
+            // Agar foydalanuvchi login qilgan bo'lsa, barcha darslar ochiq
+            const isLocked = isAuthenticated ? false : lesson.locked;
             const href = isLocked
               ? "/login"
               : `/courses/${slug}/lessons/${lesson.id}`;
@@ -80,7 +94,7 @@ export default function LessonsPage() {
               >
                 {/* Card Image / Lock Area */}
                 <div className="relative w-full aspect-[5/4] bg-[#f7f7f7] flex items-center justify-center overflow-hidden">
-                  {lesson.locked ? (
+                  {isLocked ? (
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -114,7 +128,7 @@ export default function LessonsPage() {
                   <p className="text-[8px] sm:text-[9px] md:text-[11px] text-gray-400 leading-[1.3] mt-[1px] sm:mt-[2px] mb-[6px] sm:mb-[8px] line-clamp-1">
                     {lesson.description}
                   </p>
-                  {!lesson.locked ? (
+                  {!isLocked ? (
                     <span className="inline-block bg-orange-500 text-white text-[9px] sm:text-[10px] md:text-[12px] font-semibold px-[12px] sm:px-[16px] md:px-[20px] py-[4px] sm:py-[5px] md:py-[6px] rounded-full group-hover:bg-orange-600 transition-colors shadow-sm group-hover:shadow-md">
                       Kirish
                     </span>

@@ -1,12 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Course, Lesson, LessonSection, GrammarRule, Task } from "@/data/courses";
 import LessonsClient from "@/components/LessonsClient";
 
 export default function LessonDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
   const lessonId = Number(params.lessonId);
 
@@ -17,6 +18,19 @@ export default function LessonDetailPage() {
   // Fetch from API so admin edits are reflected
   useEffect(() => {
     setDataLoading(true);
+
+    // Session tekshirish
+    let isAuth = false;
+    try {
+      const session = localStorage.getItem("user_session");
+      if (session) {
+        const user = JSON.parse(session);
+        if (user && user.course === slug && new Date(user.expiresAt) > new Date()) {
+          isAuth = true;
+        }
+      }
+    } catch {}
+
     Promise.all([
       fetch("/api/courses").then((r) => r.json()),
       fetch(`/api/lessons?slug=${slug}&id=${lessonId}`).then((r) => r.json()),
@@ -25,11 +39,17 @@ export default function LessonDetailPage() {
         const arr = Array.isArray(courses) ? courses : [];
         const c = arr.find((x: Course) => x.slug === slug) || null;
         setCourse(c);
-        setLesson(lessonData?.id ? lessonData : null);
+        const les = lessonData?.id ? lessonData : null;
+        setLesson(les);
+        // Agar dars locked va foydalanuvchi login qilmagan bo'lsa
+        if (les?.locked && !isAuth) {
+          router.replace("/login");
+          return;
+        }
         setDataLoading(false);
       })
       .catch(() => setDataLoading(false));
-  }, [slug, lessonId]);
+  }, [slug, lessonId, router]);
 
   const [activeSection, setActiveSection] = useState("new-words");
   const [sidebarOpen, setSidebarOpen] = useState(false);

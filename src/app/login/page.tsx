@@ -61,8 +61,9 @@ export default function LoginPage() {
       }
       // Session saqlash
       localStorage.setItem("user_session", JSON.stringify(data.user));
-      // Kurslar sahifasiga yo'naltirish
-      router.push("/courses");
+      // Foydalanuvchining kursiga yo'naltirish
+      const courseSlug = data.user.course || "hsk-1";
+      router.push(`/courses/${courseSlug}/lessons`);
     } catch {
       setLoginError("Server bilan bog'lanishda xatolik");
       setLoginLoading(false);
