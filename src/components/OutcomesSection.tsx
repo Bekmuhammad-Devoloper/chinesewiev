@@ -51,16 +51,16 @@ export default function OutcomesSection() {
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="bg-accent rounded-[16px] md:rounded-[20px] lg:rounded-[24px] border-[2px] border-accent p-[14px] md:p-[18px] lg:p-[22px] flex flex-col items-center h-[165px] md:h-[240px] lg:h-[268px]"
+              className="bg-accent rounded-[12px] md:rounded-[16px] lg:rounded-[20px] p-[12px] md:p-[16px] lg:p-[20px] flex flex-col relative overflow-hidden h-[120px] md:h-[160px] lg:h-[190px]"
             >
-              {/* Text */}
-              <p className="text-gold text-[13px] md:text-[17px] lg:text-[20px] font-medium leading-[1.35] w-full">
+              {/* Text — top left */}
+              <p className="text-gold text-[11px] md:text-[14px] lg:text-[17px] font-medium leading-[1.35] relative z-10">
                 {item.title}
               </p>
 
-              {/* Icon — gold circle, bottom-right corner */}
-              <div className="flex justify-end mt-auto">
-                <div className="w-[56px] h-[56px] md:w-[100px] md:h-[100px] lg:w-[130px] lg:h-[130px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
+              {/* Icon — bottom right, overlapping edge */}
+              <div className="absolute bottom-[-6px] md:bottom-[-8px] lg:bottom-[-10px] right-[-6px] md:right-[-8px] lg:right-[-10px]">
+                <div className="w-[52px] h-[52px] md:w-[72px] md:h-[72px] lg:w-[90px] lg:h-[90px] rounded-full bg-gold border-[2px] md:border-[3px] border-[#d4b876] flex items-center justify-center">
                   <item.Icon />
                 </div>
               </div>
