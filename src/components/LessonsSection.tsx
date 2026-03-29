@@ -1,11 +1,10 @@
 /* ── Shared icon sizes ── */
 const circleIconCls = "w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[38px] lg:h-[38px] text-primary";
-const titleIconCls  = "w-[14px] h-[14px] md:w-[18px] md:h-[18px] lg:w-[22px] lg:h-[22px] inline-block mr-[6px] text-gold shrink-0";
+const titleIconCls  = "w-[14px] h-[14px] md:w-[16px] md:h-[16px] lg:w-[20px] lg:h-[20px] shrink-0";
 
 const lessons = [
   {
     number: "01",
-    emoji: "🗣",
     title: "Dialoglar orqali o\u2018rganish",
     description:
       "Har bir mavzu real hayotiy dialoglar asosida tushuntiriladi. Siz shunchaki so\u2018z yodlamaysiz \u2014 ularni qanday va qayerda ishlatishni o\u2018rganasiz.",
@@ -22,7 +21,6 @@ const lessons = [
   },
   {
     number: "02",
-    emoji: "📖",
     title: "Grammatikani oddiy va tushunarli tarzda",
     description:
       "Murakkab qoidalar sodda misollar bilan tushuntiriladi. Har bir grammatika real gaplar va mashqlar bilan mustahkamlanadi.",
@@ -39,7 +37,6 @@ const lessons = [
   },
   {
     number: "03",
-    emoji: "💡",
     title: "So\u2018zlarni tez yodlash metodikasi",
     description:
       "Maxsus amaliy mashqlar orqali yangi so\u2018zlar aktiv lug\u2018atingizga aylanadi. Siz o\u2018rgangan so\u2018zlarni darhol gapirishda ishlatasiz.",
@@ -56,7 +53,6 @@ const lessons = [
   },
   {
     number: "04",
-    emoji: "✍️",
     title: "Iyerogliflarni to\u2018g\u2018ri yozish",
     description:
       "Har bir iyeroglif yozilish tartibi (stroke order) bilan o\u2018rgatiladi. Siz nafaqat o\u2018qiysiz, balki to\u2018g\u2018ri yozishni ham bilasiz.",
@@ -104,10 +100,10 @@ export default function LessonsSection() {
                 </p>
               </div>
 
-              {/* Bottom: emoji + title + description */}
+              {/* Bottom: title + description */}
               <div className="mt-auto pt-[10px] md:pt-[16px]">
-                <h3 className="text-gold font-semibold text-[12px] md:text-[20px] lg:text-[24px] leading-[1.35] flex items-center">
-                  <span className="mr-[4px] md:mr-[6px] text-[12px] md:text-[18px] lg:text-[22px]">{lesson.emoji}</span>
+                <h3 className="text-gold font-semibold text-[12px] md:text-[20px] lg:text-[24px] leading-[1.35] flex items-center gap-[5px] md:gap-[8px]">
+                  <span className="text-gold">{lesson.titleIcon}</span>
                   {lesson.title}
                 </h3>
                 <p className="text-gold text-[10px] md:text-[14px] lg:text-[16px] font-normal leading-[1.55] opacity-80 mt-[4px] md:mt-[8px]">
