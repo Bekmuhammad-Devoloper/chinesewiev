@@ -109,13 +109,13 @@ export default function WhyUsSection() {
                 <div className="h-[1.5px] bg-primary/25 my-[2px]" />
 
                 <div className="flex items-start gap-[12px] py-[16px]">
-                  <div className="w-[56px] h-[56px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-[50px] h-[50px] min-w-[50px] min-h-[50px] flex-shrink-0 flex items-center justify-center">
                     <Image
                       src={reason.icon}
                       alt=""
-                      width={56}
-                      height={56}
-                      className="w-full h-full object-contain"
+                      width={50}
+                      height={50}
+                      className="w-[50px] h-[50px] object-contain"
                     />
                   </div>
                   <div className="flex flex-col gap-[4px] flex-1">
