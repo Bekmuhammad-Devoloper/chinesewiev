@@ -41,28 +41,28 @@ const outcomes = [
 
 export default function OutcomesSection() {
   return (
-    <section className="bg-primary pt-[30px] md:pt-[80px] lg:pt-[100px] pb-[20px] md:pb-[30px] lg:pb-[40px]" id="outcomes">
+    <section className="bg-primary pt-[30px] md:pt-[60px] lg:pt-[80px] pb-[20px] md:pb-[30px] lg:pb-[40px]" id="outcomes">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
-        <h2 className="font-[family-name:var(--font-castoro-titling)] text-gold italic text-[22px] md:text-[42px] lg:text-[56px] leading-[1.2] mb-[16px] md:mb-[32px] lg:mb-[40px]">
+        <h2 className="font-[family-name:var(--font-castoro-titling)] text-gold italic text-[22px] md:text-[36px] lg:text-[48px] leading-[1.2] mb-[14px] md:mb-[24px] lg:mb-[32px]">
           Bu kursdan keyin siz:
         </h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-[10px] md:gap-x-[18px] lg:gap-x-[24px] gap-y-[18px] md:gap-y-[24px] lg:gap-y-[30px]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-[8px] md:gap-x-[14px] lg:gap-x-[20px] gap-y-[16px] md:gap-y-[20px] lg:gap-y-[24px]">
           {outcomes.map((item) => (
             <div
               key={item.title}
-              className="relative pb-[22px] md:pb-[30px] lg:pb-[38px]"
+              className="relative pb-[18px] md:pb-[24px] lg:pb-[30px]"
             >
               {/* Card */}
-              <div className="bg-accent rounded-[12px] md:rounded-[16px] lg:rounded-[20px] p-[12px] md:p-[16px] lg:p-[20px] h-[100px] md:h-[130px] lg:h-[155px]">
-                <p className="text-gold text-[11px] md:text-[14px] lg:text-[17px] font-medium leading-[1.4] max-w-[80%]">
+              <div className="bg-accent rounded-[14px] md:rounded-[18px] lg:rounded-[22px] p-[10px] md:p-[14px] lg:p-[18px] h-[90px] md:h-[110px] lg:h-[130px] flex items-start">
+                <p className="text-gold text-[10px] md:text-[13px] lg:text-[16px] font-medium leading-[1.35] max-w-[75%]">
                   {item.title}
                 </p>
               </div>
 
               {/* Icon — overlapping bottom-right of card */}
-              <div className="absolute bottom-[0px] right-[8px] md:right-[12px] lg:right-[16px]">
-                <div className="w-[44px] h-[44px] md:w-[60px] md:h-[60px] lg:w-[76px] lg:h-[76px] rounded-full bg-gold border-[3px] md:border-[4px] border-[#c6a255] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.18)]">
+              <div className="absolute bottom-[0px] right-[6px] md:right-[10px] lg:right-[14px]">
+                <div className="w-[40px] h-[40px] md:w-[52px] md:h-[52px] lg:w-[66px] lg:h-[66px] rounded-full bg-gold border-[2.5px] md:border-[3px] lg:border-[3.5px] border-[#c4a050] flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.15)]">
                   <item.Icon />
                 </div>
               </div>
