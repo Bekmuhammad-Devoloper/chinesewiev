@@ -7,7 +7,7 @@ export default function HeroSection() {
       <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[52px] md:pt-[80px] lg:pt-[100px]">
 
         {/* Content fills the remaining space */}
-        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[10px] lg:gap-[12px] py-[16px] md:py-[20px] lg:py-[24px]">
+        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[4px] md:gap-[6px] lg:gap-[8px] py-[8px] md:py-[12px] lg:py-[16px]">
           {/* Logo */}
           <Image
             src="/assets/logo.png"
@@ -24,14 +24,14 @@ export default function HeroSection() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-gold-warm text-[13px] md:text-[15px] lg:text-[19px] font-light leading-[1.7] text-center max-w-[320px] md:max-w-[640px] lg:max-w-[920px] px-[4px] md:px-0 tracking-[0.02em]">
+          <p className="text-gold-warm text-[13px] md:text-[15px] lg:text-[19px] font-light leading-[1.5] text-center max-w-[320px] md:max-w-[640px] lg:max-w-[920px] px-[4px] md:px-0 tracking-[0.02em]">
             Zamonaviy metodika va amaliy mashg&apos;ulotlar orqali xitoy tilini oson, tez va samarali o&apos;rganing. Birinchi darsdanoq natijani his qiling!
           </p>
 
           {/* CTA Button */}
           <a
             href="#contact"
-            className="mt-[6px] md:mt-[8px] lg:mt-[10px] inline-flex items-center justify-center border-[2.5px] border-gold rounded-full px-[28px] py-[10px] md:px-[42px] md:py-[12px] lg:px-[50px] lg:py-[14px] text-gold font-light text-[13px] md:text-[16px] lg:text-[20px] leading-[1.5] hover:bg-gold hover:text-primary transition-colors tracking-[0.04em]"
+            className="mt-[2px] md:mt-[4px] lg:mt-[6px] inline-flex items-center justify-center border-[2.5px] border-gold rounded-full px-[28px] py-[10px] md:px-[42px] md:py-[12px] lg:px-[50px] lg:py-[14px] text-gold font-light text-[13px] md:text-[16px] lg:text-[20px] leading-[1.5] hover:bg-gold hover:text-primary transition-colors tracking-[0.04em]"
           >
             Biz bilan bog&apos;laning
           </a>
