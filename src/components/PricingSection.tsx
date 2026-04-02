@@ -146,9 +146,9 @@ export default function PricingSection() {
                       </ul>
                     </div>
                     <div className="mt-auto pt-[12px] flex justify-center">
-                      <button className="bg-primary text-white font-semibold text-[12px] px-[20px] py-[9px] rounded-full hover:bg-primary-light transition-colors cursor-pointer">
+                      <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="bg-primary text-white font-semibold text-[12px] px-[20px] py-[9px] rounded-full hover:bg-primary-light transition-colors cursor-pointer inline-block text-center">
                         Kursga yozilish
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -214,9 +214,9 @@ export default function PricingSection() {
                       </ul>
                     </div>
                     <div className="mt-auto pt-[12px] flex justify-center">
-                      <button className="bg-primary text-white font-semibold text-[13px] px-[24px] py-[10px] rounded-full hover:bg-primary-light transition-colors cursor-pointer">
+                      <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="bg-primary text-white font-semibold text-[13px] px-[24px] py-[10px] rounded-full hover:bg-primary-light transition-colors cursor-pointer inline-block text-center">
                         Kursga yozilish
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -282,9 +282,9 @@ export default function PricingSection() {
                       </ul>
                     </div>
                     <div className="mt-auto pt-[12px] flex justify-center">
-                      <button className="bg-primary text-white font-semibold text-[12px] px-[20px] py-[9px] rounded-full hover:bg-primary-light transition-colors cursor-pointer">
+                      <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="bg-primary text-white font-semibold text-[12px] px-[20px] py-[9px] rounded-full hover:bg-primary-light transition-colors cursor-pointer inline-block text-center">
                         Kursga yozilish
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -373,9 +373,9 @@ export default function PricingSection() {
               </div>
 
               <div className="mt-auto pt-[12px] md:pt-[16px] flex justify-center">
-                <button className="bg-primary text-white font-semibold text-[12px] md:text-[14px] px-[20px] md:px-[24px] py-[9px] md:py-[11px] rounded-full hover:bg-primary-light transition-colors cursor-pointer">
+                <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="bg-primary text-white font-semibold text-[12px] md:text-[14px] px-[20px] md:px-[24px] py-[9px] md:py-[11px] rounded-full hover:bg-primary-light transition-colors cursor-pointer inline-block text-center">
                   Kursga yozilish
-                </button>
+                </a>
               </div>
             </div>
 
@@ -448,9 +448,9 @@ export default function PricingSection() {
               </div>
 
               <div className="mt-auto pt-[12px] md:pt-[16px] flex justify-center">
-                <button className="bg-primary text-white font-semibold text-[13px] md:text-[16px] px-[24px] md:px-[32px] py-[10px] md:py-[13px] rounded-full hover:bg-primary-light transition-colors cursor-pointer">
+                <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="bg-primary text-white font-semibold text-[13px] md:text-[16px] px-[24px] md:px-[32px] py-[10px] md:py-[13px] rounded-full hover:bg-primary-light transition-colors cursor-pointer inline-block text-center">
                   Kursga yozilish
-                </button>
+                </a>
               </div>
             </div>
 
@@ -523,9 +523,9 @@ export default function PricingSection() {
               </div>
 
               <div className="mt-auto pt-[12px] md:pt-[16px] flex justify-center">
-                <button className="bg-primary text-white font-semibold text-[12px] md:text-[14px] px-[20px] md:px-[24px] py-[9px] md:py-[11px] rounded-full hover:bg-primary-light transition-colors cursor-pointer">
+                <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="bg-primary text-white font-semibold text-[12px] md:text-[14px] px-[20px] md:px-[24px] py-[9px] md:py-[11px] rounded-full hover:bg-primary-light transition-colors cursor-pointer inline-block text-center">
                   Kursga yozilish
-                </button>
+                </a>
               </div>
             </div>
           </div>
