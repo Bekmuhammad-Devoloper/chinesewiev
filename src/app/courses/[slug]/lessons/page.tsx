@@ -121,11 +121,11 @@ export default function LessonsPage() {
                 </div>
 
                 {/* Card Content */}
-                <div className="px-[8px] sm:px-[10px] md:px-[12px] lg:px-[14px] xl:px-[16px] pt-[10px] sm:pt-[12px] md:pt-[14px] lg:pt-[16px] xl:pt-[18px] pb-[12px] sm:pb-[14px] md:pb-[18px] lg:pb-[22px] xl:pb-[26px]">
-                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] lg:text-[15px] xl:text-[16px] font-bold text-orange-500 leading-tight mb-[12px] sm:mb-[14px] md:mb-[16px] lg:mb-[18px] xl:mb-[20px]">
+                <div className="flex flex-col gap-[14px] px-[8px] sm:px-[10px] md:px-[12px] lg:px-[14px] xl:px-[16px] py-[12px] sm:py-[14px] md:py-[16px] lg:py-[18px] xl:py-[20px]">
+                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] lg:text-[15px] xl:text-[16px] font-bold text-orange-500 leading-tight">
                     {lesson.title}
                   </h3>
-                  <p className="text-[8px] sm:text-[9px] md:text-[11px] lg:text-[12px] xl:text-[13px] text-gray-400 leading-[1.3] mb-[14px] sm:mb-[16px] md:mb-[20px] lg:mb-[24px] xl:mb-[28px] line-clamp-1">
+                  <p className="text-[8px] sm:text-[9px] md:text-[11px] lg:text-[12px] xl:text-[13px] text-gray-400 leading-[1.3] line-clamp-1">
                     {lesson.description}
                   </p>
                   {!isLocked ? (
