@@ -769,60 +769,8 @@ export default function LessonDetailPage() {
               </div>
               );
             })() : (
-            <div className="mb-[24px] md:mb-[36px] bg-gradient-to-r from-[#fff8f4] via-[#fffaf6] to-white rounded-[16px] sm:rounded-[20px] border border-[#f5e6da]/60 p-[20px] sm:p-[24px] md:p-[30px] relative overflow-hidden">
-              {/* Decorative bg elements */}
-              <div className="absolute top-[-20px] right-[-20px] w-[120px] h-[120px] bg-[#e8632b]/[0.04] rounded-full blur-[40px] pointer-events-none" />
-              <div className="absolute bottom-[-10px] left-[-10px] w-[80px] h-[80px] bg-[#f5a623]/[0.05] rounded-full blur-[30px] pointer-events-none" />
-
-              {/* Badge row */}
-              <div className="flex items-center gap-[8px] mb-[10px] sm:mb-[12px] relative">
-                <span className="inline-flex items-center gap-[5px] px-[10px] py-[4px] rounded-full bg-[#e8632b]/10 text-[#e8632b] text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.05em]">
-                  <svg className="w-[12px] h-[12px]" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                  {activeSection === "new-words-practice"
-                    ? "Praktika"
-                    : activeSection.startsWith("dialogue-")
-                      ? "Dialoglar"
-                      : activeSection === "writing"
-                        ? "Yozuv"
-                        : activeSection.startsWith("grammar-")
-                          ? "Grammatika"
-                          : activeSection === "tasks"
-                            ? "Vazifalar"
-                            : "Yangi so\u2018zlar"}
-                </span>
-                <span className="text-gray-300 text-[12px]">&middot;</span>
-                <span className="text-gray-400 text-[12px] font-medium">{course.title}</span>
-              </div>
-
-              <h1 className="text-[24px] sm:text-[30px] md:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.025em] leading-[1.12] relative">
-                <span className="text-[#e8632b]">
-                  {lesson.title}:
-                </span>{" "}
-                <span className="text-[#1a1a2e]">
-                  {activeSection.startsWith("dialogue-")
-                    ? (getActiveDialogue()?.title || lesson.name)
-                    : activeSection.startsWith("grammar-")
-                      ? (getActiveGrammar()?.title || lesson.name)
-                      : lesson.name}
-                </span>
-              </h1>
-
-              {/* Stats row */}
-              <div className="flex items-center gap-[12px] sm:gap-[16px] mt-[12px] sm:mt-[14px] relative">
-                <span className="inline-flex items-center gap-[5px] text-[12px] sm:text-[13px] text-gray-400 font-medium">
-                  <svg className="w-[14px] h-[14px] text-[#f5a623]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
-                  {words.length} ta so&apos;z
-                </span>
-                <span className="inline-flex items-center gap-[5px] text-[12px] sm:text-[13px] text-gray-400 font-medium">
-                  <svg className="w-[14px] h-[14px] text-[#22c55e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
-                  {tasks.length} ta vazifa
-                </span>
-                <span className="inline-flex items-center gap-[5px] text-[12px] sm:text-[13px] text-gray-400 font-medium">
-                  <svg className="w-[14px] h-[14px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                  {sections.filter(s => s.id === "dialogues").flatMap(s => s.children || []).length} ta dialog
-                </span>
-              </div>
-            </div>
+            <>
+            </>
             )}
 
             {/* ══════════════════════════════════════════ */}
