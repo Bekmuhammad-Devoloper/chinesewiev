@@ -119,7 +119,7 @@ export default function LoginPage() {
 
               {/* Steps */}
               <div className="space-y-[8px] md:space-y-[10px] lg:space-y-[6px] mb-[10px] md:mb-[14px] lg:mb-[8px]">
-                <Step number={1} text="Telegram orqali biz bilan bog'lanib o'zingizga mos kurs uchun darsga yoziling." />
+                <Step number={1} text="Telegram orqali biz bilan bog'lanib o'zingizga mos kurs uchun darsga yoziling." linkText="biz bilan bog'lanib" linkHref="https://t.me/Bobur_676" />
                 <Step number={2} text="To'lov qiling va skreenshotni Telegram orqali jo'nating." />
                 <Step number={3} text="Sizga kalit paroli beriladi, shu orqali websitega kirishingiz mumkin." highlight />
               </div>
@@ -199,7 +199,7 @@ export default function LoginPage() {
 
               {/* Telegram link */}
               <div className="bg-[#f4f4f7] rounded-[8px] px-[12px] py-[6px] md:px-[16px] md:py-[8px] text-center">
-                <a href="https://t.me/chinesewave_uz" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-primary text-[10px] md:text-[12px] lg:text-[13px] transition-colors">
+                <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-primary text-[10px] md:text-[12px] lg:text-[13px] transition-colors">
                   Agar sizda kalit bo&apos;lmasa telegram orqali bog&apos;laning →
                 </a>
               </div>
@@ -245,11 +245,39 @@ function Step({
   number,
   text,
   highlight = false,
+  linkText,
+  linkHref,
 }: {
   number: number;
   text: string;
   highlight?: boolean;
+  linkText?: string;
+  linkHref?: string;
 }) {
+  const renderText = () => {
+    if (text.includes("kalit paroli")) {
+      return (
+        <>
+          Sizga <span className="text-black font-semibold">kalit paroli</span> beriladi, shu orqali
+          websitega kirishingiz mumkin.
+        </>
+      );
+    }
+    if (linkText && linkHref && text.includes(linkText)) {
+      const parts = text.split(linkText);
+      return (
+        <>
+          {parts[0]}
+          <a href={linkHref} target="_blank" rel="noopener noreferrer" className="text-primary font-semibold underline hover:text-primary/80 transition-colors">
+            {linkText}
+          </a>
+          {parts[1]}
+        </>
+      );
+    }
+    return text;
+  };
+
   return (
     <div className="flex items-start gap-[8px] md:gap-[10px]">
       <div
@@ -260,14 +288,7 @@ function Step({
         <span className={`font-bold text-[11px] md:text-[16px] lg:text-[15px] ${highlight ? "text-primary" : "text-primary/70"}`}>{number}</span>
       </div>
       <p className="text-[#444] text-[10px] md:text-[14px] lg:text-[14px] leading-[1.55] pt-[3px] md:pt-[6px] lg:pt-[5px]">
-        {text.includes("kalit paroli") ? (
-          <>
-            Sizga <span className="text-black font-semibold">kalit paroli</span> beriladi, shu orqali
-            websitega kirishingiz mumkin.
-          </>
-        ) : (
-          text
-        )}
+        {renderText()}
       </p>
     </div>
   );
