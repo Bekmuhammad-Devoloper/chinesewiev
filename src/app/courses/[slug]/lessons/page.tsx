@@ -121,11 +121,11 @@ export default function LessonsPage() {
                 </div>
 
                 {/* Card Content */}
-                <div className="px-[8px] sm:px-[10px] md:px-[12px] pt-[10px] sm:pt-[12px] md:pt-[14px] pb-[12px] sm:pb-[14px] md:pb-[18px]">
-                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] font-bold text-orange-500 leading-tight mb-[12px] sm:mb-[14px] md:mb-[16px]">
+                <div className="px-[8px] sm:px-[10px] md:px-[12px] lg:px-[14px] pt-[10px] sm:pt-[12px] md:pt-[14px] lg:pt-[16px] pb-[12px] sm:pb-[14px] md:pb-[18px] lg:pb-[22px]">
+                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] lg:text-[15px] font-bold text-orange-500 leading-tight mb-[12px] sm:mb-[14px] md:mb-[16px] lg:mb-[18px]">
                     {lesson.title}
                   </h3>
-                  <p className="text-[8px] sm:text-[9px] md:text-[11px] text-gray-400 leading-[1.3] mb-[14px] sm:mb-[16px] md:mb-[20px] line-clamp-1">
+                  <p className="text-[8px] sm:text-[9px] md:text-[11px] lg:text-[12px] text-gray-400 leading-[1.3] mb-[14px] sm:mb-[16px] md:mb-[20px] lg:mb-[24px] line-clamp-1">
                     {lesson.description}
                   </p>
                   {!isLocked ? (
