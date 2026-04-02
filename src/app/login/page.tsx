@@ -83,7 +83,7 @@ export default function LoginPage() {
               <h1 className="font-[family-name:var(--font-castoro-titling)] italic text-gold text-[28px] xl:text-[36px] leading-[1.15] mb-[16px] xl:mb-[24px] whitespace-nowrap">
                 Kalit orqali login:
               </h1>
-              <div className="w-[220px] xl:w-[280px] aspect-[626/543] relative">
+              <div className="w-[260px] xl:w-[320px] aspect-[626/543] relative">
                 <Image
                   src="/assets/logo.png"
                   alt="Chinese Wave"
@@ -101,9 +101,9 @@ export default function LoginPage() {
               <Image
                 src="/assets/logo.png"
                 alt="Chinese Wave"
-                width={280}
-                height={220}
-                className="w-[160px] md:w-[200px] h-auto object-contain"
+                width={400}
+                height={320}
+                className="w-[200px] md:w-[260px] h-auto object-contain"
               />
             </div>
 
