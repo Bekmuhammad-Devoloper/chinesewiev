@@ -121,11 +121,11 @@ export default function LessonsPage() {
                 </div>
 
                 {/* Card Content */}
-                <div className="px-[8px] sm:px-[10px] md:px-[12px] pt-[6px] sm:pt-[8px] md:pt-[10px] pb-[8px] sm:pb-[10px] md:pb-[14px]">
-                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] font-bold text-orange-500 leading-tight">
+                <div className="px-[8px] sm:px-[10px] md:px-[12px] pt-[8px] sm:pt-[10px] md:pt-[12px] pb-[10px] sm:pb-[12px] md:pb-[16px]">
+                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] font-bold text-orange-500 leading-tight mb-[4px] sm:mb-[5px] md:mb-[6px]">
                     {lesson.title}
                   </h3>
-                  <p className="text-[8px] sm:text-[9px] md:text-[11px] text-gray-400 leading-[1.3] mt-[1px] sm:mt-[2px] mb-[6px] sm:mb-[8px] line-clamp-1">
+                  <p className="text-[8px] sm:text-[9px] md:text-[11px] text-gray-400 leading-[1.3] mb-[8px] sm:mb-[10px] md:mb-[12px] line-clamp-1">
                     {lesson.description}
                   </p>
                   {!isLocked ? (
