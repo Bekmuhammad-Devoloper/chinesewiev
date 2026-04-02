@@ -80,7 +80,7 @@ export default function LoginPage() {
 
             {/* ===== LEFT: Title + Logo (Desktop) ===== */}
             <div className="hidden lg:flex flex-col items-start flex-1 max-w-[480px]">
-              <h1 className="font-[family-name:var(--font-castoro-titling)] italic text-gold text-[38px] xl:text-[48px] leading-[1.15] mb-[16px] xl:mb-[24px]">
+              <h1 className="font-[family-name:var(--font-castoro-titling)] italic text-gold text-[28px] xl:text-[36px] leading-[1.15] mb-[16px] xl:mb-[24px] whitespace-nowrap">
                 Kalit orqali login:
               </h1>
               <div className="w-[220px] xl:w-[280px] aspect-[626/543] relative">
