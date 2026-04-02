@@ -121,7 +121,7 @@ export default function LessonsPage() {
                 </div>
 
                 {/* Card Content */}
-                <div className="flex flex-col gap-[14px] px-[8px] sm:px-[10px] md:px-[12px] lg:px-[14px] xl:px-[16px] py-[12px] sm:py-[14px] md:py-[16px] lg:py-[18px] xl:py-[20px]">
+                <div className="flex flex-col gap-[10px] px-[8px] sm:px-[10px] md:px-[12px] lg:px-[14px] xl:px-[16px] py-[12px] sm:py-[14px] md:py-[16px] lg:py-[18px] xl:py-[20px]">
                   <h3 className="text-[11px] sm:text-[12px] md:text-[14px] lg:text-[15px] xl:text-[16px] font-bold text-orange-500 leading-tight">
                     {lesson.title}
                   </h3>
