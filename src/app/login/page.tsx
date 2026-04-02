@@ -94,19 +94,17 @@ export default function LoginPage() {
             </div>
 
             {/* ===== LEFT: Title + Logo (Mobile/Tablet) ===== */}
-            <div className="lg:hidden flex flex-row items-center gap-[12px] w-full">
-              <div className="flex flex-col items-start flex-1">
-                <h1 className="font-[family-name:var(--font-castoro-titling)] italic text-gold text-[18px] md:text-[32px] leading-tight">
-                  Kalit orqali login:
-                </h1>
-                <Image
-                  src="/assets/logo.png"
-                  alt="Chinese Wave"
-                  width={180}
-                  height={140}
-                  className="w-[110px] md:w-[160px] h-auto object-contain mt-[8px]"
-                />
-              </div>
+            <div className="lg:hidden flex flex-col items-center gap-[8px] w-full">
+              <h1 className="font-[family-name:var(--font-castoro-titling)] italic text-gold text-[14px] md:text-[26px] leading-tight whitespace-nowrap">
+                Kalit orqali login:
+              </h1>
+              <Image
+                src="/assets/logo.png"
+                alt="Chinese Wave"
+                width={280}
+                height={220}
+                className="w-[160px] md:w-[200px] h-auto object-contain"
+              />
             </div>
 
             {/* ===== RIGHT: Login Card ===== */}
