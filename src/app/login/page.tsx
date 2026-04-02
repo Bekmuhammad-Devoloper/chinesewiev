@@ -208,13 +208,13 @@ export default function LoginPage() {
         </section>
 
         {/* ===== FOOTER ===== */}
-        <footer className="max-w-[1920px] mx-auto w-full px-[16px] md:px-[60px] lg:px-[100px] xl:px-[132px] pt-[24px] pb-[16px] lg:pt-[10px] lg:pb-[8px]">
+        <footer className="max-w-[1920px] mx-auto w-full px-[16px] md:px-[60px] lg:px-[100px] xl:px-[132px] pt-[24px] pb-[16px] lg:pt-[14px] lg:pb-[10px]">
           <div className="flex flex-row items-end justify-between gap-[16px]">
             <div>
-              <h3 className="text-gold font-bold text-[16px] md:text-[24px] lg:text-[24px] leading-[1.2] mb-[8px] md:mb-[12px] lg:mb-[6px] text-left">
+              <h3 className="text-gold font-bold text-[16px] md:text-[24px] lg:text-[24px] leading-[1.2] mb-[12px] md:mb-[16px] lg:mb-[10px] text-left">
                 Bog&apos;lanish:
               </h3>
-              <ul className="space-y-[4px] md:space-y-[6px] lg:space-y-[3px]">
+              <ul className="space-y-[10px] md:space-y-[12px] lg:space-y-[8px]">
                 {contacts.map((c) => (
                   <li key={c.label}>
                     <a
@@ -231,10 +231,10 @@ export default function LoginPage() {
               </ul>
             </div>
             <div className="flex-shrink-0">
-              <Image src="/assets/logo.png" alt="Chinese Wave" width={300} height={240} className="w-[80px] md:w-[140px] lg:w-[150px] h-auto object-contain" />
+              <Image src="/assets/logo.png" alt="Chinese Wave" width={400} height={320} className="w-[110px] md:w-[180px] lg:w-[200px] h-auto object-contain" />
             </div>
           </div>
-          <div className="mt-[12px] lg:mt-[6px] border-t border-gold/30"></div>
+          <div className="mt-[12px] lg:mt-[8px] border-t border-gold/30"></div>
         </footer>
       </div>
     </main>
