@@ -779,41 +779,9 @@ export default function LessonDetailPage() {
             {activeSection === "new-words" && (
               <>
                 {renderMobileTrigger()}
-                {/* ── Tab switcher ── */}
-                <div className="flex items-center gap-[6px] mb-[16px] md:mb-[20px]">
-              <button
-                onClick={() => setActiveTab("list")}
-                className={`flex items-center gap-[6px] px-[14px] py-[8px] rounded-[8px] text-[12.5px] font-semibold transition-all duration-200 ${
-                  activeTab === "list"
-                    ? "bg-[#e8632b] text-white shadow-[0_2px_10px_rgba(232,99,43,0.2)]"
-                    : "bg-white text-gray-400 border border-gray-200 hover:text-gray-500"
-                }`}
-              >
-                <svg className="w-[13px] h-[13px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                  <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
-                </svg>
-                Ro&apos;yxat
-              </button>
-              <button
-                onClick={() => setActiveTab("cards")}
-                className={`flex items-center gap-[6px] px-[14px] py-[8px] rounded-[8px] text-[12.5px] font-semibold transition-all duration-200 ${
-                  activeTab === "cards"
-                    ? "bg-[#e8632b] text-white shadow-[0_2px_10px_rgba(232,99,43,0.2)]"
-                    : "bg-white text-gray-400 border border-gray-200 hover:text-gray-500"
-                }`}
-              >
-                <svg className="w-[13px] h-[13px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                  <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-                  <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-                  <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-                  <rect x="14" y="14" width="7" height="7" rx="1.5"/>
-                </svg>
-                Kartochka
-              </button>
-            </div>
 
             {/* ── LIST VIEW ── */}
-            {activeTab === "list" && (
+            {(
               <div className="bg-white rounded-[12px] sm:rounded-[14px] border border-gray-200 overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
                 {/* Table header */}
                 <div className="hidden sm:grid sm:grid-cols-[40px_1.2fr_1fr_1fr] items-center px-[16px] sm:px-[20px] md:px-[24px] py-[10px] bg-[#f8f9fb] border-b border-gray-200">
@@ -906,56 +874,6 @@ export default function LessonDetailPage() {
                         </span>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* ── CARDS VIEW ── */}
-            {activeTab === "cards" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-[10px] sm:gap-[14px] md:gap-[16px]">
-                {words.map((word, idx) => (
-                  <div
-                    key={idx}
-                    className="group bg-white rounded-[14px] sm:rounded-[16px] border border-gray-100 p-[18px] sm:p-[22px] md:p-[26px] flex flex-col items-center text-center transition-all duration-200 hover:shadow-[0_6px_24px_rgba(232,99,43,0.1)] hover:border-[#e8632b]/20 hover:-translate-y-[2px] relative overflow-hidden"
-                  >
-                    {/* Number */}
-                    <span className="absolute top-[10px] left-[10px] w-[22px] h-[22px] rounded-[6px] bg-[#f8f4f0] flex items-center justify-center text-[10px] font-bold text-[#c4a882] border border-[#efe8df]">
-                      {idx + 1}
-                    </span>
-
-                    {/* Image */}
-                    {word.image && (
-                      <div className="w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] rounded-[10px] overflow-hidden border border-gray-100 mb-[10px] group-hover:border-[#e8632b]/20 transition-colors">
-                        <img src={word.image} alt={word.translation} className="w-full h-full object-cover" />
-                      </div>
-                    )}
-
-                    {/* Hanzi */}
-                    <span className="text-[32px] sm:text-[38px] md:text-[44px] text-[#1a1a2e] font-semibold leading-none mb-[8px] sm:mb-[10px] group-hover:text-[#e8632b] transition-colors duration-300">
-                      {word.hanzi}
-                    </span>
-
-                    {/* Pinyin badge */}
-                    <span className="inline-flex items-center px-[8px] py-[3px] rounded-full bg-[#fff5ee] text-[#e8632b] text-[12px] sm:text-[13px] font-semibold italic mb-[6px] border border-[#fde8d8]">
-                      {word.pinyin}
-                    </span>
-
-                    {/* Translation */}
-                    <span className="text-[12px] sm:text-[13px] text-gray-500 font-medium leading-snug">
-                      {word.translation}
-                    </span>
-
-                    {/* Play button */}
-                    <button
-                      title={`${word.pinyin} tinglash`}
-                      onClick={() => playWordAudio(word.audio, idx + 500)}
-                      className={`mt-[12px] sm:mt-[14px] w-[32px] h-[32px] sm:w-[34px] sm:h-[34px] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110 active:scale-95 ${word.audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8632b] shadow-[0_3px_10px_rgba(245,166,35,0.3)]" : "bg-gray-200"}`}
-                    >
-                      <svg viewBox="0 0 24 24" fill="white" className="w-[11px] h-[11px] ml-[1px]">
-                        <polygon points="5 3 19 12 5 21 5 3" />
-                      </svg>
-                    </button>
                   </div>
                 ))}
               </div>
