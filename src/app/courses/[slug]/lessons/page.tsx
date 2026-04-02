@@ -122,12 +122,14 @@ export default function LessonsPage() {
 
                 {/* Card Content */}
                 <div className="px-[8px] sm:px-[10px] md:px-[12px] pt-[10px] sm:pt-[12px] md:pt-[14px] pb-[12px] sm:pb-[14px] md:pb-[18px]">
-                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] font-bold text-orange-500 leading-tight mb-[6px] sm:mb-[8px] md:mb-[10px]">
+                  <h3 className="text-[11px] sm:text-[12px] md:text-[14px] font-bold text-orange-500 leading-tight">
                     {lesson.title}
                   </h3>
-                  <p className="text-[8px] sm:text-[9px] md:text-[11px] text-gray-400 leading-[1.3] mb-[10px] sm:mb-[12px] md:mb-[14px] line-clamp-1">
+                  <br />
+                  <p className="text-[8px] sm:text-[9px] md:text-[11px] text-gray-400 leading-[1.3] line-clamp-1">
                     {lesson.description}
                   </p>
+                  <br />
                   {!isLocked ? (
                     <span className="inline-block bg-orange-500 text-white text-[9px] sm:text-[10px] md:text-[12px] font-semibold px-[12px] sm:px-[16px] md:px-[20px] py-[4px] sm:py-[5px] md:py-[6px] rounded-full group-hover:bg-orange-600 transition-colors shadow-sm group-hover:shadow-md">
                       Kirish
