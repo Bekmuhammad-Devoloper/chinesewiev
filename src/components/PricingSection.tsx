@@ -95,15 +95,15 @@ export default function PricingSection() {
                 {/* MINIMAL Card - Mobile */}
                 <div className="w-full flex-shrink-0 px-[4px]">
                   <div className={`bg-white rounded-[14px] px-[14px] py-[18px] w-full flex flex-col ${activeCard === 0 ? "" : ""}`}>
-                    <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] leading-[1.2] text-center uppercase">
+                    <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] leading-[1.2] text-center uppercase mb-[10px]">
                       Saytdan foydalanish
                     </h3>
-                    <div className="flex justify-center my-[8px]">
+                    <div className="flex justify-center mb-[14px]">
                       <span className="bg-primary text-white text-[10px] font-bold tracking-[0.15em] uppercase px-[16px] py-[4px] rounded-full">
                         MINIMAL
                       </span>
                     </div>
-                    <p className="text-primary font-bold text-[32px] leading-[1.1] text-center mb-[16px]">
+                    <p className="text-primary font-bold text-[32px] leading-[1.1] text-center mb-[20px]">
                       200.000
                     </p>
                     <div className="mb-[12px]">
@@ -156,15 +156,15 @@ export default function PricingSection() {
                 {/* OMMABOP Card - Mobile */}
                 <div className="w-full flex-shrink-0 px-[4px]">
                   <div className="bg-white rounded-[14px] px-[14px] py-[18px] w-full flex flex-col border-[3px] border-gold shadow-xl">
-                    <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[20px] leading-[1.2] text-center">
+                    <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[20px] leading-[1.2] text-center mb-[10px]">
                       Guruh darslar
                     </h3>
-                    <div className="flex justify-center my-[8px]">
+                    <div className="flex justify-center mb-[14px]">
                       <span className="bg-gold text-primary text-[10px] font-bold tracking-[0.15em] uppercase px-[16px] py-[4px] rounded-full">
                         OMMABOP
                       </span>
                     </div>
-                    <p className="text-primary font-bold text-[36px] leading-[1.1] text-center mb-[16px]">
+                    <p className="text-primary font-bold text-[36px] leading-[1.1] text-center mb-[20px]">
                       700.000
                     </p>
                     <div className="mb-[12px]">
@@ -224,15 +224,15 @@ export default function PricingSection() {
                 {/* PREMIUM Card - Mobile */}
                 <div className="w-full flex-shrink-0 px-[4px]">
                   <div className="bg-white rounded-[14px] px-[14px] py-[18px] w-full flex flex-col">
-                    <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] leading-[1.2] text-center uppercase">
+                    <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] leading-[1.2] text-center uppercase mb-[10px]">
                       Individual
                     </h3>
-                    <div className="flex justify-center my-[8px]">
+                    <div className="flex justify-center mb-[14px]">
                       <span className="bg-primary text-white text-[10px] font-bold tracking-[0.15em] uppercase px-[16px] py-[4px] rounded-full">
                         PREMIUM
                       </span>
                     </div>
-                    <p className="text-primary font-bold text-[32px] leading-[1.1] text-center mb-[16px]">
+                    <p className="text-primary font-bold text-[32px] leading-[1.1] text-center mb-[20px]">
                       1.300.000
                     </p>
                     <div className="mb-[12px]">
@@ -315,15 +315,15 @@ export default function PricingSection() {
 
             {/* MINIMAL Card */}
             <div className="bg-white rounded-[20px] px-[24px] py-[28px] w-full lg:flex-1 flex flex-col">
-              <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] md:text-[22px] lg:text-[24px] leading-[1.2] text-center uppercase">
+              <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] md:text-[22px] lg:text-[24px] leading-[1.2] text-center uppercase mb-[10px] md:mb-[14px]">
                 Saytdan foydalanish
               </h3>
-              <div className="flex justify-center my-[8px] md:my-[10px]">
+              <div className="flex justify-center mb-[14px] md:mb-[18px]">
                 <span className="bg-primary text-white text-[10px] md:text-[12px] font-bold tracking-[0.15em] uppercase px-[16px] py-[4px] md:px-[18px] md:py-[5px] rounded-full">
                   MINIMAL
                 </span>
               </div>
-              <p className="text-primary font-bold text-[32px] md:text-[40px] lg:text-[44px] leading-[1.1] text-center mb-[16px] md:mb-[20px]">
+              <p className="text-primary font-bold text-[32px] md:text-[40px] lg:text-[44px] leading-[1.1] text-center mb-[20px] md:mb-[26px]">
                 200.000
               </p>
 
@@ -381,15 +381,15 @@ export default function PricingSection() {
 
             {/* OMMABOP Card (Center - highlighted, taller) */}
             <div className="bg-white rounded-[14px] md:rounded-[20px] px-[14px] md:px-[28px] py-[18px] md:py-[32px] w-full lg:flex-1 flex flex-col border-[3px] border-gold shadow-xl lg:-mt-[20px] lg:mb-[-20px]">
-              <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[20px] md:text-[26px] lg:text-[28px] leading-[1.2] text-center">
+              <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[20px] md:text-[26px] lg:text-[28px] leading-[1.2] text-center mb-[10px] md:mb-[14px]">
                 Guruh darslar
               </h3>
-              <div className="flex justify-center my-[8px] md:my-[10px]">
+              <div className="flex justify-center mb-[14px] md:mb-[18px]">
                 <span className="bg-gold text-primary text-[10px] md:text-[13px] font-bold tracking-[0.15em] uppercase px-[16px] py-[4px] md:px-[20px] md:py-[6px] rounded-full">
                   OMMABOP
                 </span>
               </div>
-              <p className="text-primary font-bold text-[36px] md:text-[46px] lg:text-[52px] leading-[1.1] text-center mb-[16px] md:mb-[24px]">
+              <p className="text-primary font-bold text-[36px] md:text-[46px] lg:text-[52px] leading-[1.1] text-center mb-[20px] md:mb-[28px]">
                 700.000
               </p>
 
@@ -456,15 +456,15 @@ export default function PricingSection() {
 
             {/* PREMIUM Card */}
             <div className="bg-white rounded-[14px] md:rounded-[20px] px-[14px] md:px-[24px] py-[18px] md:py-[28px] w-full lg:flex-1 flex flex-col">
-              <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] md:text-[22px] lg:text-[24px] leading-[1.2] text-center uppercase">
+              <h3 className="font-[family-name:var(--font-castoro-titling)] text-primary text-[18px] md:text-[22px] lg:text-[24px] leading-[1.2] text-center uppercase mb-[10px] md:mb-[14px]">
                 Individual
               </h3>
-              <div className="flex justify-center my-[8px] md:my-[10px]">
+              <div className="flex justify-center mb-[14px] md:mb-[18px]">
                 <span className="bg-primary text-white text-[10px] md:text-[12px] font-bold tracking-[0.15em] uppercase px-[16px] py-[4px] md:px-[18px] md:py-[5px] rounded-full">
                   PREMIUM
                 </span>
               </div>
-              <p className="text-primary font-bold text-[32px] md:text-[40px] lg:text-[44px] leading-[1.1] text-center mb-[16px] md:mb-[20px]">
+              <p className="text-primary font-bold text-[32px] md:text-[40px] lg:text-[44px] leading-[1.1] text-center mb-[20px] md:mb-[26px]">
                 1.300.000
               </p>
 
