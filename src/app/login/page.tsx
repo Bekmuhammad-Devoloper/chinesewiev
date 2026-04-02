@@ -211,10 +211,10 @@ export default function LoginPage() {
         <footer className="max-w-[1920px] mx-auto w-full px-[16px] md:px-[60px] lg:px-[100px] xl:px-[132px] pt-[24px] pb-[16px] lg:pt-[14px] lg:pb-[10px]">
           <div className="flex flex-row items-end justify-between gap-[16px]">
             <div>
-              <h3 className="text-gold font-bold text-[16px] md:text-[24px] lg:text-[24px] leading-[1.2] mb-[12px] md:mb-[16px] lg:mb-[10px] text-left">
+              <h3 className="text-gold font-bold text-[16px] md:text-[24px] lg:text-[24px] leading-[1.2] mb-[16px] md:mb-[20px] lg:mb-[14px] text-left">
                 Bog&apos;lanish:
               </h3>
-              <ul className="space-y-[10px] md:space-y-[12px] lg:space-y-[8px]">
+              <ul className="space-y-[16px] md:space-y-[18px] lg:space-y-[12px]">
                 {contacts.map((c) => (
                   <li key={c.label}>
                     <a
