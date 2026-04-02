@@ -30,10 +30,10 @@ export default function Footer() {
         <div className="flex flex-row items-end justify-between gap-[16px] md:gap-0">
           {/* Contact Info */}
           <div>
-            <h3 className="text-gold font-bold text-[18px] md:text-[36px] lg:text-[44px] leading-[1.2] mb-[12px] md:mb-[24px] lg:mb-[30px] text-left">
+            <h3 className="text-gold font-bold text-[18px] md:text-[36px] lg:text-[44px] leading-[1.2] mb-[18px] md:mb-[30px] lg:mb-[36px] text-left">
               Bog&apos;lanish:
             </h3>
-            <ul className="space-y-[8px] md:space-y-[16px] lg:space-y-[18px]">
+            <ul className="space-y-[14px] md:space-y-[20px] lg:space-y-[24px]">
               {contacts.map((c) => (
                 <li key={c.label}>
                   <a
