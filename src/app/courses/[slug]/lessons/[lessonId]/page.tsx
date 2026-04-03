@@ -921,11 +921,11 @@ export default function LessonDetailPage() {
                     className="flashcard-scene mx-[24px] sm:mx-[32px] cursor-pointer"
                     onClick={() => setFlipped((f) => !f)}
                   >
-                    <div className={`flashcard-card aspect-[10/14] sm:aspect-[10/13] max-h-[calc(100vh-220px)] ${flipped ? "flipped" : ""}`}>
+                    <div className={`flashcard-card aspect-[10/15] sm:aspect-[10/14] max-h-[calc(100vh-200px)] ${flipped ? "flipped" : ""}`}>
                       {/* ── FRONT FACE: image + hanzi + pinyin + play ── */}
-                      <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center">
+                      <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center justify-evenly">
                         {/* Illustration */}
-                        <div className="w-full flex-1 max-h-[50%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[28px] sm:mb-[36px]">
+                        <div className="w-full max-h-[36%] min-h-[100px] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
@@ -941,7 +941,7 @@ export default function LessonDetailPage() {
                         <button
                           title={`${words[practiceIndex].pinyin} tinglash`}
                           onClick={(e) => { e.stopPropagation(); if (words[practiceIndex].audio) new Audio(words[practiceIndex].audio!).play(); }}
-                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 mb-[24px] sm:mb-[30px] ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
+                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 flex-shrink-0 ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
                         >
                           <svg viewBox="0 0 24 24" fill="white" className="w-[14px] h-[14px] ml-[1px]">
                             <polygon points="5 3 19 12 5 21 5 3" />
@@ -949,19 +949,19 @@ export default function LessonDetailPage() {
                         </button>
 
                         {/* Hanzi */}
-                        <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none mb-[16px] sm:mb-[20px]">
+                        <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none">
                           {words[practiceIndex].hanzi}
                         </h2>
 
                         {/* Pinyin */}
-                        <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic mb-[24px] sm:mb-[30px]">
+                        <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic">
                           {words[practiceIndex].pinyin}
                         </p>
 
                         {/* Flip hint */}
                         <button
                           onClick={(e) => { e.stopPropagation(); setFlipped(true); }}
-                          className="w-[32px] h-[32px] bg-gradient-to-br from-[#f5a623] to-[#e8932b] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.25)] hover:scale-110 active:scale-95 transition-all duration-200"
+                          className="w-[32px] h-[32px] bg-gradient-to-br from-[#f5a623] to-[#e8932b] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.25)] hover:scale-110 active:scale-95 transition-all duration-200 flex-shrink-0"
                           aria-label="Kartani aylantirish"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[14px] h-[14px]">
@@ -974,9 +974,9 @@ export default function LessonDetailPage() {
                       </div>
 
                       {/* ── BACK FACE: image + translation ── */}
-                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center justify-center">
+                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center justify-evenly">
                         {/* Illustration (same image) */}
-                        <div className="w-full flex-1 max-h-[50%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[32px] sm:mb-[40px]">
+                        <div className="w-full max-h-[36%] min-h-[100px] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
@@ -989,14 +989,14 @@ export default function LessonDetailPage() {
                         </div>
 
                         {/* Translation (big, centered) */}
-                        <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold text-[#1a1a2e] leading-tight mb-[28px] sm:mb-[36px]">
+                        <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold text-[#1a1a2e] leading-tight">
                           {words[practiceIndex].translation}
                         </h2>
 
                         {/* Flip back hint */}
                         <button
                           onClick={(e) => { e.stopPropagation(); setFlipped(false); }}
-                          className="w-[32px] h-[32px] bg-gradient-to-br from-[#f5a623] to-[#e8932b] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.25)] hover:scale-110 active:scale-95 transition-all duration-200"
+                          className="w-[32px] h-[32px] bg-gradient-to-br from-[#f5a623] to-[#e8932b] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.25)] hover:scale-110 active:scale-95 transition-all duration-200 flex-shrink-0"
                           aria-label="Kartani orqaga aylantirish"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[14px] h-[14px]">
