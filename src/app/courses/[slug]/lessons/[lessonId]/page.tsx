@@ -921,11 +921,11 @@ export default function LessonDetailPage() {
                     className="flashcard-scene mx-[24px] sm:mx-[32px] cursor-pointer"
                     onClick={() => setFlipped((f) => !f)}
                   >
-                    <div className={`flashcard-card aspect-[10/12] sm:aspect-[10/11] max-h-[calc(100vh-260px)] ${flipped ? "flipped" : ""}`}>
+                    <div className={`flashcard-card aspect-[10/14] sm:aspect-[10/13] max-h-[calc(100vh-220px)] ${flipped ? "flipped" : ""}`}>
                       {/* ── FRONT FACE: image + hanzi + pinyin + play ── */}
                       <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[20px] sm:p-[28px] md:p-[36px] flex flex-col items-center text-center">
                         {/* Illustration */}
-                        <div className="w-full flex-1 max-h-[55%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[16px] sm:mb-[20px]">
+                        <div className="w-full flex-1 max-h-[45%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[20px] sm:mb-[24px]">
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
@@ -941,7 +941,7 @@ export default function LessonDetailPage() {
                         <button
                           title={`${words[practiceIndex].pinyin} tinglash`}
                           onClick={(e) => { e.stopPropagation(); if (words[practiceIndex].audio) new Audio(words[practiceIndex].audio!).play(); }}
-                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 mb-[14px] ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
+                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 mb-[18px] sm:mb-[22px] ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
                         >
                           <svg viewBox="0 0 24 24" fill="white" className="w-[14px] h-[14px] ml-[1px]">
                             <polygon points="5 3 19 12 5 21 5 3" />
@@ -949,12 +949,12 @@ export default function LessonDetailPage() {
                         </button>
 
                         {/* Hanzi */}
-                        <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none mb-[10px]">
+                        <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none mb-[12px] sm:mb-[14px]">
                           {words[practiceIndex].hanzi}
                         </h2>
 
                         {/* Pinyin */}
-                        <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic mb-[14px]">
+                        <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic mb-[18px] sm:mb-[22px]">
                           {words[practiceIndex].pinyin}
                         </p>
 
@@ -974,9 +974,9 @@ export default function LessonDetailPage() {
                       </div>
 
                       {/* ── BACK FACE: image + translation ── */}
-                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[20px] sm:p-[28px] md:p-[36px] flex flex-col items-center text-center">
+                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[20px] sm:p-[28px] md:p-[36px] flex flex-col items-center text-center justify-center">
                         {/* Illustration (same image) */}
-                        <div className="w-full flex-1 max-h-[55%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[16px] sm:mb-[20px]">
+                        <div className="w-full flex-1 max-h-[45%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden mb-[24px] sm:mb-[32px]">
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
@@ -989,7 +989,7 @@ export default function LessonDetailPage() {
                         </div>
 
                         {/* Translation (big, centered) */}
-                        <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold text-[#1a1a2e] leading-none mb-[12px]">
+                        <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold text-[#1a1a2e] leading-tight mb-[20px] sm:mb-[24px]">
                           {words[practiceIndex].translation}
                         </h2>
 
