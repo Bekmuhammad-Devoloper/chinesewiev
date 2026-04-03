@@ -941,7 +941,7 @@ export default function LessonDetailPage() {
                         <button
                           title={`${words[practiceIndex].pinyin} tinglash`}
                           onClick={(e) => { e.stopPropagation(); if (words[practiceIndex].audio) new Audio(words[practiceIndex].audio!).play(); }}
-                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 mb-[12px] ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
+                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 mb-[20px] sm:mb-[24px] ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
                         >
                           <svg viewBox="0 0 24 24" fill="white" className="w-[14px] h-[14px] ml-[1px]">
                             <polygon points="5 3 19 12 5 21 5 3" />
@@ -949,12 +949,12 @@ export default function LessonDetailPage() {
                         </button>
 
                         {/* Hanzi */}
-                        <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none mb-[6px]">
+                        <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none mb-[12px] sm:mb-[16px]">
                           {words[practiceIndex].hanzi}
                         </h2>
 
                         {/* Pinyin */}
-                        <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic mb-[8px]">
+                        <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic mb-[20px] sm:mb-[24px]">
                           {words[practiceIndex].pinyin}
                         </p>
 
