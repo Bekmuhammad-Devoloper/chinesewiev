@@ -4,6 +4,7 @@ export interface Word {
   translation: string;
   image?: string;
   audio?: string;
+  writingSheet?: string;
 }
 
 export interface DialogueLine {

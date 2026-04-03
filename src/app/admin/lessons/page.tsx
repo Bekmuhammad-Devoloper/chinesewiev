@@ -18,9 +18,10 @@ export default function AdminLessonsPage() {
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"general" | "words" | "dialogues" | "grammar" | "tasks">("general");
-  const [uploadingWord, setUploadingWord] = useState<{ idx: number; type: "audio" | "image" } | null>(null);
+  const [uploadingWord, setUploadingWord] = useState<{ idx: number; type: "audio" | "image" | "writingSheet" } | null>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const writingSheetInputRef = useRef<HTMLInputElement>(null);
   const dialogueAudioInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadIdx, setActiveUploadIdx] = useState(-1);
   const [uploadingDialogueAudio, setUploadingDialogueAudio] = useState<{ dIdx: number; lIdx: number } | null>(null);
@@ -104,7 +105,7 @@ export default function AdminLessonsPage() {
   };
 
   /* ── Upload handler ── */
-  const handleFileUpload = async (file: File, wordIdx: number, type: "audio" | "image") => {
+  const handleFileUpload = async (file: File, wordIdx: number, type: "audio" | "image" | "writingSheet") => {
     setUploadingWord({ idx: wordIdx, type });
     try {
       const fd = new FormData();
@@ -142,6 +143,15 @@ export default function AdminLessonsPage() {
     if (file && activeUploadIdx >= 0) handleFileUpload(file, activeUploadIdx, "image");
     if (imageInputRef.current) imageInputRef.current.value = "";
   };
+  const triggerWritingSheetUpload = (idx: number) => {
+    setActiveUploadIdx(idx);
+    setTimeout(() => writingSheetInputRef.current?.click(), 50);
+  };
+  const onWritingSheetFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && activeUploadIdx >= 0) handleFileUpload(file, activeUploadIdx, "writingSheet");
+    if (writingSheetInputRef.current) writingSheetInputRef.current.value = "";
+  };
 
   /* ── Dialogue audio upload handler ── */
   const handleDialogueAudioUpload = async (file: File, dIdx: number, lIdx: number) => {
@@ -177,7 +187,7 @@ export default function AdminLessonsPage() {
 
   /* ── Word helpers ── */
   const addWord = () => {
-    const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "" }];
+    const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "", writingSheet: "" }];
     updateLesson({ words });
   };
   const updateWord = (idx: number, field: keyof Word, value: string) => {
@@ -348,6 +358,7 @@ export default function AdminLessonsPage() {
     <div className="p-[24px] sm:p-[32px] md:p-[40px]">
       <input type="file" ref={audioInputRef} accept="audio/*" className="hidden" onChange={onAudioFileChange} title="Audio fayl tanlash" />
       <input type="file" ref={imageInputRef} accept="image/*" className="hidden" onChange={onImageFileChange} title="Rasm fayl tanlash" />
+      <input type="file" ref={writingSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onWritingSheetFileChange} title="Husnihat varaqasi tanlash" />
       <input type="file" ref={dialogueAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueAudioFileChange} title="Dialog audio fayl tanlash" />
 
       {/* Header */}
@@ -452,6 +463,7 @@ export default function AdminLessonsPage() {
                     {(editLesson.words || []).map((w, i) => {
                       const isUA = uploadingWord?.idx === i && uploadingWord?.type === "audio";
                       const isUI = uploadingWord?.idx === i && uploadingWord?.type === "image";
+                      const isUW = uploadingWord?.idx === i && uploadingWord?.type === "writingSheet";
                       return (
                         <div key={i} className="bg-white border border-gray-100 rounded-[12px] shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all">
                           {/* Text fields */}
@@ -500,6 +512,21 @@ export default function AdminLessonsPage() {
                                 <button onClick={() => triggerImageUpload(i)} disabled={isUI}
                                   className="flex items-center gap-[5px] bg-purple-50 hover:bg-purple-100 text-purple-600 px-[12px] py-[7px] rounded-[8px] text-[11px] font-semibold transition-all disabled:opacity-50 flex-shrink-0">
                                   {isUI ? <Loader2 size={13} className="animate-spin" /> : <ImagePlus size={13} />} Rasm
+                                </button>
+                              )}
+                            </div>
+                            {/* Writing Sheet */}
+                            <div className="flex items-center gap-[6px]">
+                              {w.writingSheet ? (
+                                <div className="flex items-center gap-[6px] bg-amber-50 rounded-[8px] px-[8px] py-[4px]">
+                                  <span className="text-[11px] font-semibold text-amber-700 flex items-center gap-[3px]"><Pencil size={10} /> Husnihat ✓</span>
+                                  <button onClick={() => triggerWritingSheetUpload(i)} className="text-[10px] text-amber-600 font-semibold hover:underline flex items-center gap-[2px]" title="Almashtirish"><Pencil size={10} /></button>
+                                  <button onClick={() => updateWord(i, "writingSheet", "")} className="w-[22px] h-[22px] bg-amber-100 text-amber-600 rounded-full flex items-center justify-center hover:bg-amber-200 flex-shrink-0" title="O'chirish"><X size={11} /></button>
+                                </div>
+                              ) : (
+                                <button onClick={() => triggerWritingSheetUpload(i)} disabled={isUW}
+                                  className="flex items-center gap-[5px] bg-amber-50 hover:bg-amber-100 text-amber-600 px-[12px] py-[7px] rounded-[8px] text-[11px] font-semibold transition-all disabled:opacity-50 flex-shrink-0">
+                                  {isUW ? <Loader2 size={13} className="animate-spin" /> : <Pencil size={13} />} Husnihat
                                 </button>
                               )}
                             </div>

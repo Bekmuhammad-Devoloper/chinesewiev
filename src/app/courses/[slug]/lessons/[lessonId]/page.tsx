@@ -1117,37 +1117,76 @@ export default function LessonDetailPage() {
             {activeSection === "writing" && words.length > 0 && (
               <div>
                 {renderMobileTrigger()}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-[12px] sm:gap-[16px] md:gap-[20px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[12px] sm:gap-[16px] md:gap-[20px]">
                 {words.map((word, idx) => (
                   <div
                     key={idx}
                     className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col group hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:border-[#e8632b]/20 transition-all duration-200"
                   >
-                    {/* Hanzi display area */}
-                    <div className="flex-1 flex flex-col items-center justify-center p-[16px] sm:p-[20px] md:p-[28px] min-h-[120px] sm:min-h-[150px] md:min-h-[180px]">
-                      <span className="text-[48px] sm:text-[56px] md:text-[68px] lg:text-[80px] text-[#1a1a2e] font-medium leading-none mb-[8px]">
-                        {word.hanzi}
-                      </span>
-                      <span className="text-[12px] sm:text-[13px] text-[#e8632b] italic font-medium">
-                        {word.pinyin}
-                      </span>
-                      <span className="text-[11px] sm:text-[12px] text-gray-400 mt-[2px]">
-                        {word.translation}
-                      </span>
-                    </div>
+                    {/* Husnihat varaqasi yoki Hanzi ko'rsatish */}
+                    {word.writingSheet ? (
+                      <div className="flex flex-col">
+                        {/* A4 husnihat rasm */}
+                        <div className="w-full bg-[#f9fafb] border-b border-gray-100">
+                          <img
+                            src={word.writingSheet}
+                            alt={`${word.hanzi} husnihat`}
+                            className="w-full h-auto object-contain"
+                          />
+                        </div>
+                        {/* So'z nomi */}
+                        <div className="flex items-center justify-between px-[14px] sm:px-[18px] py-[10px] sm:py-[12px]">
+                          <div className="flex items-center gap-[8px]">
+                            <span className="text-[24px] sm:text-[28px] font-bold text-[#1a1a2e]">{word.hanzi}</span>
+                            <span className="text-[12px] sm:text-[13px] text-[#e8632b] italic font-medium">{word.pinyin}</span>
+                            <span className="text-[11px] sm:text-[12px] text-gray-400">{word.translation}</span>
+                          </div>
+                        </div>
+                        {/* Yuklab olish tugmasi */}
+                        <div className="px-[12px] sm:px-[16px] pb-[12px] sm:pb-[16px]">
+                          <a
+                            href={word.writingSheet}
+                            download={`${word.hanzi}-husnihat`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-[10px] sm:py-[12px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[12px] sm:text-[13px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-[6px]"
+                          >
+                            <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Yuklab olish (A4)
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Hanzi display area — husnihat yuklanmagan */}
+                        <div className="flex-1 flex flex-col items-center justify-center p-[16px] sm:p-[20px] md:p-[28px] min-h-[120px] sm:min-h-[150px] md:min-h-[180px]">
+                          <span className="text-[48px] sm:text-[56px] md:text-[68px] lg:text-[80px] text-[#1a1a2e] font-medium leading-none mb-[8px]">
+                            {word.hanzi}
+                          </span>
+                          <span className="text-[12px] sm:text-[13px] text-[#e8632b] italic font-medium">
+                            {word.pinyin}
+                          </span>
+                          <span className="text-[11px] sm:text-[12px] text-gray-400 mt-[2px]">
+                            {word.translation}
+                          </span>
+                        </div>
 
-                    {/* Action button */}
-                    <div className="px-[12px] sm:px-[16px] pb-[12px] sm:pb-[16px]">
-                      <button
-                        className="w-full py-[8px] sm:py-[10px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[11px] sm:text-[12px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center justify-center gap-[5px]"
-                      >
-                        <svg className="w-[13px] h-[13px] sm:w-[14px] sm:h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 20h9" />
-                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                        </svg>
-                        Yozish amal →
-                      </button>
-                    </div>
+                        {/* Hali yuklanmagan holat */}
+                        <div className="px-[12px] sm:px-[16px] pb-[12px] sm:pb-[16px]">
+                          <div className="w-full py-[8px] sm:py-[10px] bg-gray-100 text-gray-400 text-[11px] sm:text-[12px] font-medium rounded-full flex items-center justify-center gap-[5px]">
+                            <svg className="w-[13px] h-[13px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 20h9" />
+                              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                            </svg>
+                            Husnihat hali yuklanmagan
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
