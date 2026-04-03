@@ -921,11 +921,11 @@ export default function LessonDetailPage() {
                     className="flashcard-scene mx-[24px] sm:mx-[32px] cursor-pointer"
                     onClick={() => setFlipped((f) => !f)}
                   >
-                    <div className={`flashcard-card aspect-[10/15] sm:aspect-[10/14] max-h-[calc(100vh-200px)] ${flipped ? "flipped" : ""}`}>
+                    <div className={`flashcard-card aspect-[10/14] sm:aspect-[10/13] max-h-[calc(100vh-220px)] ${flipped ? "flipped" : ""}`}>
                       {/* ── FRONT FACE: image + hanzi + pinyin + play ── */}
-                      <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center justify-evenly">
+                      <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px]">
                         {/* Illustration */}
-                        <div className="w-full max-h-[36%] min-h-[100px] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
@@ -974,9 +974,9 @@ export default function LessonDetailPage() {
                       </div>
 
                       {/* ── BACK FACE: image + translation ── */}
-                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center justify-evenly">
+                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] justify-center">
                         {/* Illustration (same image) */}
-                        <div className="w-full max-h-[36%] min-h-[100px] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
