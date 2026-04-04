@@ -1135,7 +1135,7 @@ export default function LessonDetailPage() {
                           download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="shrink-0 mt-[10px] inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
+                          className="shrink-0 mt-[18px] inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
                         >
                           Yuklab olish
                           <svg className="w-[11px] h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
