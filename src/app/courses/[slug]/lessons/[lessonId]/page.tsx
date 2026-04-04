@@ -585,41 +585,6 @@ export default function LessonDetailPage() {
 
                 {/* ── Integrated Audio Player ── */}
                 <div ref={playerRef} className="relative">
-                  {/* Disc + title row */}
-                  <div className="flex items-center gap-[14px] sm:gap-[16px] mb-[16px] sm:mb-[20px]">
-                    {/* Spinning vinyl disc */}
-                    <div className={`w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] rounded-full bg-gradient-to-br from-[#333] to-[#111] flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] flex-shrink-0 ${isPlaying ? 'disc-spin' : 'disc-paused'}`}>
-                      <div className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] rounded-full bg-gradient-to-br from-[#e8632b] to-[#f5a623]">
-                        <div className="w-full h-full rounded-full flex items-center justify-center">
-                          <div className="w-[6px] h-[6px] rounded-full bg-[#1a1a2e]" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-[8px]">
-                        {/* Equalizer bars */}
-                        <div className="flex items-end gap-[2px] h-[16px] sm:h-[18px]">
-                          {[1,2,3,4].map((i) => (
-                            <div
-                              key={i}
-                              className={`w-[3px] rounded-full bg-[#f5a623] ${isPlaying ? `eq-bar eq-bar-${i}` : ''}`}
-                              style={!isPlaying ? { height: `${4 + i * 2}px` } : undefined}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-white text-[13px] sm:text-[14px] font-semibold truncate">
-                          {dlg?.title || "Audio"}
-                        </span>
-                      </div>
-                      <span className="text-white/30 text-[10px] sm:text-[11px] font-medium truncate block max-w-[280px] sm:max-w-[400px]">
-                        {getDialogueLinesAll()[currentLineIdx]
-                          ? `${getDialogueLinesAll()[currentLineIdx].speaker}: ${getDialogueLinesAll()[currentLineIdx].text}`
-                          : `${lesson.name} · Dialog audio`
-                        }
-                      </span>
-                    </div>
-                  </div>
 
                   {/* Waveform progress bar */}
                   <div
