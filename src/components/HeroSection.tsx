@@ -7,7 +7,7 @@ export default function HeroSection() {
       <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:pt-[90px]">
 
         {/* Content fills the remaining space */}
-        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[2px] md:gap-[4px] lg:gap-[6px] py-[4px] md:py-[8px] lg:py-[12px] pb-[20px] md:pb-[24px] lg:pb-[28px]">
+        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[12px] lg:gap-[16px] py-[4px] md:py-[8px] lg:py-[12px] pb-[20px] md:pb-[24px] lg:pb-[28px]">
           {/* Logo */}
           <Image
             src="/assets/logo.png"
@@ -24,7 +24,7 @@ export default function HeroSection() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-gold-warm text-[13px] md:text-[15px] lg:text-[19px] font-light leading-[1.5] text-center max-w-[320px] md:max-w-[640px] lg:max-w-[920px] px-[4px] md:px-0 tracking-[0.02em]">
+          <p className="mb-[16px] md:mb-[20px] lg:mb-[24px] text-gold-warm text-[13px] md:text-[15px] lg:text-[19px] font-light leading-[1.5] text-center max-w-[320px] md:max-w-[640px] lg:max-w-[920px] px-[4px] md:px-0 tracking-[0.02em]">
             Zamonaviy metodika va amaliy mashg&apos;ulotlar orqali xitoy tilini oson, tez va samarali o&apos;rganing. Birinchi darsdanoq natijani his qiling!
           </p>
 
