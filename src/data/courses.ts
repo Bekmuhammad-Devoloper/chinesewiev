@@ -85,6 +85,7 @@ export interface Course {
   grammarCount: string;
   price: string;
   priceNote: string;
+  published?: boolean;
   lessons: Lesson[];
 }
 

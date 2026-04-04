@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import type { Course } from "@/data/courses";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -9,7 +10,19 @@ export default function CourseDetailPage() {
   const slug = params.slug as string;
 
   useEffect(() => {
-    router.replace(`/courses/${slug}/lessons`);
+    // Kurs nashr qilinganligini tekshirish
+    fetch("/api/courses")
+      .then((r) => r.json())
+      .then((data) => {
+        const courses: Course[] = Array.isArray(data) ? data : [];
+        const course = courses.find((c) => c.slug === slug);
+        if (course?.published === false) {
+          router.replace("/");
+        } else {
+          router.replace(`/courses/${slug}/lessons`);
+        }
+      })
+      .catch(() => router.replace(`/courses/${slug}/lessons`));
   }, [slug, router]);
 
   return (

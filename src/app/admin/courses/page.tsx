@@ -90,6 +90,7 @@ export default function AdminCoursesPage() {
       grammarCount: "0 mavzu",
       price: "0",
       priceNote: "so'm / oyiga",
+      published: false,
       lessons: [],
     });
   };
@@ -235,6 +236,19 @@ export default function AdminCoursesPage() {
                   placeholder="Har bir xususiyat yangi qatorda..."
                 />
               </div>
+              {/* Nashr holati */}
+              <label className="flex items-center gap-[10px] cursor-pointer py-[4px]">
+                <input
+                  type="checkbox"
+                  checked={editCourse.published !== false}
+                  onChange={(e) => setEditCourse({ ...editCourse, published: e.target.checked } as Course)}
+                  className="w-[20px] h-[20px] accent-green-600"
+                />
+                <span className="text-[14px] font-medium text-gray-700">Nashr qilingan</span>
+                {editCourse.published === false && (
+                  <span className="text-[11px] text-amber-500 bg-amber-50 px-[10px] py-[3px] rounded-full font-semibold">Tez kunda</span>
+                )}
+              </label>
             </div>
             {/* Footer */}
             <div className="px-[24px] py-[16px] border-t border-gray-100 flex items-center justify-end gap-[10px] sticky bottom-0 bg-white rounded-b-[16px]">
@@ -270,6 +284,9 @@ export default function AdminCoursesPage() {
                 <div className="absolute top-[10px] left-[10px] flex items-center gap-[6px]">
                   <span className="px-[8px] py-[3px] bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-[#063087] shadow-sm">{c.slug}</span>
                   <span className="px-[8px] py-[3px] bg-[#063087]/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-sm">{c.level}</span>
+                  {c.published === false && (
+                    <span className="px-[8px] py-[3px] bg-amber-500/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-sm">Tez kunda</span>
+                  )}
                 </div>
               </div>
               {/* Course Info */}

@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import type { Course } from "@/data/courses";
 import LessonsClient from "@/components/LessonsClient";
 
 export default function LessonsPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
   const [course, setCourse] = useState<Course | null>(null);
@@ -32,11 +33,15 @@ export default function LessonsPage() {
       .then((r) => r.json())
       .then((courses: Course[]) => {
         const c = courses.find((x) => x.slug === slug) || null;
+        if (c?.published === false) {
+          router.replace("/");
+          return;
+        }
         setCourse(c);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [slug]);
+  }, [slug, router]);
 
   if (loading) {
     return (
