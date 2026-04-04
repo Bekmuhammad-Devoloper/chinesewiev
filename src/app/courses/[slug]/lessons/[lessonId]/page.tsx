@@ -1118,11 +1118,11 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-x-[14px] gap-y-[14px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
+                  <div className="grid grid-cols-3 gap-x-[14px] gap-y-[10px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
-                      <div key={sIdx} className="flex flex-col items-center gap-[14px] min-h-0">
+                      <div key={sIdx} className="flex flex-col items-center min-h-0">
                         {/* Kartochka */}
-                        <div className="min-h-0 flex-1 aspect-[3/4] w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden">
+                        <div className="min-h-0 w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden" style={{ height: 'calc(100% - 40px)' }}>
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
@@ -1130,20 +1130,22 @@ export default function LessonDetailPage() {
                           />
                         </div>
                         {/* Yuklab olish tugmasi */}
-                        <a
-                          href={sheet}
-                          download={`${lesson!.title}-husnihat-${sIdx + 1}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="shrink-0 inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
-                        >
-                          Yuklab olish
-                          <svg className="w-[11px] h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="7 10 12 15 17 10" />
-                            <line x1="12" y1="15" x2="12" y2="3" />
-                          </svg>
-                        </a>
+                        <div className="h-[40px] flex items-end justify-center w-full">
+                          <a
+                            href={sheet}
+                            download={`${lesson!.title}-husnihat-${sIdx + 1}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
+                          >
+                            Yuklab olish
+                            <svg className="w-[11px] h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                          </a>
+                        </div>
                       </div>
                     ))}
                   </div>
