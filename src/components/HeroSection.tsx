@@ -31,7 +31,7 @@ export default function HeroSection() {
           {/* CTA Button */}
           <a
             href="#contact"
-            className="mt-[2px] md:mt-[4px] lg:mt-[6px] inline-flex items-center justify-center border-[2.5px] border-gold rounded-full px-[28px] py-[10px] md:px-[42px] md:py-[12px] lg:px-[50px] lg:py-[14px] text-gold font-light text-[13px] md:text-[16px] lg:text-[20px] leading-[1.5] hover:bg-gold hover:text-primary transition-colors tracking-[0.04em]"
+            className="mt-[12px] md:mt-[16px] lg:mt-[20px] inline-flex items-center justify-center border-[2.5px] border-gold rounded-full px-[28px] py-[10px] md:px-[42px] md:py-[12px] lg:px-[50px] lg:py-[14px] text-gold font-light text-[13px] md:text-[16px] lg:text-[20px] leading-[1.5] hover:bg-gold hover:text-primary transition-colors tracking-[0.04em]"
           >
             Biz bilan bog&apos;laning
           </a>
