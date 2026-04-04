@@ -1118,11 +1118,11 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-x-[14px] gap-y-[10px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
+                  <div className="grid grid-cols-3 gap-x-[14px] gap-y-[6px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center min-h-0">
                         {/* Kartochka */}
-                        <div className="min-h-0 w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden" style={{ height: 'calc(100% - 40px)' }}>
+                        <div className="flex-1 min-h-0 aspect-[3/4] bg-white rounded-[10px] border border-gray-800 overflow-hidden">
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
@@ -1130,7 +1130,7 @@ export default function LessonDetailPage() {
                           />
                         </div>
                         {/* Yuklab olish tugmasi */}
-                        <div className="h-[40px] flex items-end justify-center w-full">
+                        <div className="shrink-0 pt-[10px] pb-[2px]">
                           <a
                             href={sheet}
                             download={`${lesson!.title}-husnihat-${sIdx + 1}`}
