@@ -55,7 +55,7 @@ export interface LessonSection {
   id: string;
   title: string;
   type: "words" | "writing" | "dialogue" | "grammar" | "tasks";
-  children?: { id: string; title: string; dialogueLines?: DialogueLine[]; grammarRules?: GrammarRule[] }[];
+  children?: { id: string; title: string; audio?: string; dialogueLines?: DialogueLine[]; grammarRules?: GrammarRule[] }[];
 }
 
 export interface Lesson {

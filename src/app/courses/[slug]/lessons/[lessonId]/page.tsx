@@ -120,9 +120,18 @@ export default function LessonDetailPage() {
     return child?.dialogueLines || [];
   }, [lesson, activeSection]);
 
+  /* Helper: get dialogue-level audio URL */
+  const getDialogueAudio = useCallback(() => {
+    const secs = lesson?.sections || [];
+    const dialogueSection = secs.find((s) => s.id === "dialogues");
+    if (!dialogueSection?.children) return "";
+    const child = dialogueSection.children.find((c) => c.id === activeSection);
+    return child?.audio || "";
+  }, [lesson, activeSection]);
+
   const hasDialogueData = useCallback(() => {
-    return getDialogueLinesAll().length > 0;
-  }, [getDialogueLinesAll]);
+    return getDialogueLinesAll().length > 0 || !!getDialogueAudio();
+  }, [getDialogueLinesAll, getDialogueAudio]);
 
   /* Stop and cleanup current audio */
   const stopAudio = useCallback(() => {
@@ -153,6 +162,8 @@ export default function LessonDetailPage() {
   /* Play a specific dialogue line by index (among ALL lines) */
   const playLineByIndex = useCallback((idx: number) => {
     const allLines = getDialogueLinesAll();
+    const groupAudio = getDialogueAudio();
+
     if (idx < 0 || idx >= allLines.length) {
       // Barcha liniyalar tugadi
       stopAudio();
@@ -171,6 +182,41 @@ export default function LessonDetailPage() {
     }
 
     setCurrentLineIdx(idx);
+
+    // Agar dialog umumiy audio bo'lsa — faqat birinchi marta play qilish
+    if (groupAudio && idx === 0) {
+      const audio = new Audio(groupAudio);
+      dialogueAudioRef.current = audio;
+
+      audio.addEventListener("loadedmetadata", () => {
+        setAudioDuration(audio.duration);
+      });
+
+      audio.addEventListener("ended", () => {
+        stopAudio();
+        setAudioProgress(100);
+        setCurrentLineIdx(0);
+      });
+
+      audio.addEventListener("error", () => {
+        stopAudio();
+      });
+
+      audio.play().then(() => {
+        setIsPlaying(true);
+        progressAnimRef.current = requestAnimationFrame(updateProgress);
+      }).catch(() => {
+        stopAudio();
+      });
+      return;
+    }
+
+    // Agar dialog umumiy audio bo'lsa va idx > 0 — hech nima qilmaslik (audio allaqachon play bo'lyapti)
+    if (groupAudio) {
+      return;
+    }
+
+    // Aks holda har bir qator uchun alohida audio (eski logika)
     const line = allLines[idx];
 
     if (!line.audio) {
@@ -179,7 +225,6 @@ export default function LessonDetailPage() {
       setAudioProgress(0);
       setAudioCurrent(0);
       setAudioDuration(0);
-      // 1.5 sekunddan keyin isPlaying ni o'chirish (vizual effekt sifatida)
       setTimeout(() => {
         setIsPlaying(false);
       }, 1500);
@@ -209,7 +254,7 @@ export default function LessonDetailPage() {
     }).catch(() => {
       playLineByIndex(idx + 1);
     });
-  }, [getDialogueLinesAll, stopAudio, updateProgress]);
+  }, [getDialogueLinesAll, getDialogueAudio, stopAudio, updateProgress]);
 
   /* Toggle play/pause */
   const togglePlay = useCallback(() => {

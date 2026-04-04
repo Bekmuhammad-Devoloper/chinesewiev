@@ -5,9 +5,9 @@ import Image from "next/image";
 import {
   Plus, X, Pencil, Trash2, Lock, Unlock, Loader2,
   BookOpen, MessageSquare, Languages,
-  ClipboardCheck, Settings, Play, Music, FileAudio, ImagePlus,
+  Settings, Play, Music, FileAudio, ImagePlus,
 } from "lucide-react";
-import type { Course, Lesson, Word, DialogueLine, GrammarRule, GrammarExample, Task } from "@/data/courses";
+import type { Course, Lesson, Word, DialogueLine, GrammarRule, GrammarExample } from "@/data/courses";
 
 /* ── Shared input — OUTSIDE component to avoid re-mount on each keystroke ── */
 const Input = ({ value, onChange, placeholder, className = "" }: { value: string; onChange: (v: string) => void; placeholder?: string; className?: string }) => (
@@ -23,7 +23,7 @@ export default function AdminLessonsPage() {
   const [editLesson, setEditLesson] = useState<Lesson | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<"general" | "words" | "dialogues" | "grammar" | "tasks">("general");
+  const [activeTab, setActiveTab] = useState<"general" | "words" | "dialogues" | "grammar">("general");
   const [uploadingWord, setUploadingWord] = useState<{ idx: number; type: "audio" | "image" | "writingSheet" } | null>(null);
   const [uploadingLessonSheet, setUploadingLessonSheet] = useState(false);
   const audioInputRef = useRef<HTMLInputElement>(null);
@@ -31,9 +31,12 @@ export default function AdminLessonsPage() {
   const writingSheetInputRef = useRef<HTMLInputElement>(null);
   const lessonSheetInputRef = useRef<HTMLInputElement>(null);
   const dialogueAudioInputRef = useRef<HTMLInputElement>(null);
+  const dialogueGroupAudioInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadIdx, setActiveUploadIdx] = useState(-1);
   const [uploadingDialogueAudio, setUploadingDialogueAudio] = useState<{ dIdx: number; lIdx: number } | null>(null);
   const [activeDialogueUpload, setActiveDialogueUpload] = useState<{ dIdx: number; lIdx: number } | null>(null);
+  const [uploadingDialogueGroupAudio, setUploadingDialogueGroupAudio] = useState<number | null>(null);
+  const [activeDialogueGroupUpload, setActiveDialogueGroupUpload] = useState<number | null>(null);
 
   useEffect(() => {
     fetch("/api/courses")
@@ -222,6 +225,41 @@ export default function AdminLessonsPage() {
     if (dialogueAudioInputRef.current) dialogueAudioInputRef.current.value = "";
   };
 
+  /* ── Dialogue GROUP audio upload handler (one audio per dialogue) ── */
+  const handleDialogueGroupAudioUpload = async (file: File, dIdx: number) => {
+    setUploadingDialogueGroupAudio(dIdx);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) {
+        const children = [...(getDialogueSection()?.children || [])];
+        children[dIdx] = { ...children[dIdx], audio: data.url };
+        updateDialogueChildren(children);
+      } else {
+        alert(data.error || "Yuklashda xatolik");
+      }
+    } catch {
+      alert("Fayl yuklashda xatolik yuz berdi");
+    }
+    setUploadingDialogueGroupAudio(null);
+  };
+  const triggerDialogueGroupAudioUpload = (dIdx: number) => {
+    setActiveDialogueGroupUpload(dIdx);
+    setTimeout(() => dialogueGroupAudioInputRef.current?.click(), 50);
+  };
+  const onDialogueGroupAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && activeDialogueGroupUpload !== null) handleDialogueGroupAudioUpload(file, activeDialogueGroupUpload);
+    if (dialogueGroupAudioInputRef.current) dialogueGroupAudioInputRef.current.value = "";
+  };
+  const removeDialogueGroupAudio = (dIdx: number) => {
+    const children = [...(getDialogueSection()?.children || [])];
+    children[dIdx] = { ...children[dIdx], audio: undefined };
+    updateDialogueChildren(children);
+  };
+
   /* ── Word helpers ── */
   const addWord = () => {
     const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "" }];
@@ -348,33 +386,6 @@ export default function AdminLessonsPage() {
     updateGrammarChildren(children);
   };
 
-  /* ── Task helpers ── */
-  const addTask = () => {
-    const tasks: Task[] = [
-      ...(editLesson?.tasks || []),
-      { id: `task-${Date.now()}`, type: "multiple-choice", question: "", options: [
-        { id: "a", text: "" }, { id: "b", text: "" }, { id: "c", text: "" }, { id: "d", text: "" },
-      ], correctAnswer: "" },
-    ];
-    updateLesson({ tasks });
-  };
-  const updateTask = (idx: number, updates: Partial<Task>) => {
-    const tasks = [...(editLesson?.tasks || [])];
-    tasks[idx] = { ...tasks[idx], ...updates };
-    updateLesson({ tasks });
-  };
-  const removeTask = (idx: number) => {
-    const tasks = (editLesson?.tasks || []).filter((_, i) => i !== idx);
-    updateLesson({ tasks });
-  };
-  const updateTaskOption = (tIdx: number, oIdx: number, text: string) => {
-    const tasks = [...(editLesson?.tasks || [])];
-    const options = [...(tasks[tIdx].options || [])];
-    options[oIdx] = { ...options[oIdx], text };
-    tasks[tIdx] = { ...tasks[tIdx], options };
-    updateLesson({ tasks });
-  };
-
   const tabs = [
     { key: "general" as const, label: "Umumiy", Icon: Settings },
     { key: "words" as const, label: "So'zlar", Icon: BookOpen },
@@ -391,6 +402,7 @@ export default function AdminLessonsPage() {
       <input type="file" ref={writingSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onWritingSheetFileChange} title="Husnihat varaqasi tanlash" />
       <input type="file" ref={lessonSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onLessonSheetFileChange} title="Dars husnihat varaqasi" />
       <input type="file" ref={dialogueAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueAudioFileChange} title="Dialog audio fayl tanlash" />
+      <input type="file" ref={dialogueGroupAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueGroupAudioFileChange} title="Dialog umumiy audio" />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-[28px] flex-wrap gap-[12px]">
@@ -600,11 +612,33 @@ export default function AdminLessonsPage() {
                   <div className="flex flex-col gap-[16px]">
                     {(getDialogueSection()?.children || []).map((d, dIdx) => (
                       <div key={d.id} className="border border-gray-200 rounded-[10px] overflow-hidden">
-                        <div className="bg-[#f1f5f9] px-[14px] py-[10px] flex items-center justify-between">
-                          <Input value={d.title} onChange={(v) => updateDialogueTitle(dIdx, v)} placeholder="Dialog nomi" className="flex-1 mr-[8px]" />
-                          <div className="flex gap-[6px] flex-shrink-0">
-                            <button onClick={() => addDialogueLine(dIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qator</button>
-                            <button onClick={() => removeDialogue(dIdx)} className="px-[8px] py-[5px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /></button>
+                        <div className="bg-[#f1f5f9] px-[14px] py-[10px] flex flex-col gap-[8px]">
+                          <div className="flex items-center justify-between">
+                            <Input value={d.title} onChange={(v) => updateDialogueTitle(dIdx, v)} placeholder="Dialog nomi" className="flex-1 mr-[8px]" />
+                            <div className="flex gap-[6px] flex-shrink-0">
+                              <button onClick={() => addDialogueLine(dIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qator</button>
+                              <button onClick={() => removeDialogue(dIdx)} className="px-[8px] py-[5px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /></button>
+                            </div>
+                          </div>
+                          {/* Dialog umumiy audio */}
+                          <div className="flex items-center gap-[6px]">
+                            {d.audio ? (
+                              <div className="flex items-center gap-[6px] bg-emerald-50 rounded-[8px] px-[10px] py-[6px] flex-1 min-w-0">
+                                <button onClick={() => playAudioPreview(d.audio!)} className="w-[24px] h-[24px] bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-emerald-600 transition-colors" title="Tinglash">
+                                  <Play size={10} className="text-white ml-[1px]" />
+                                </button>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[10px] font-semibold text-emerald-700 truncate flex items-center gap-[2px]"><Music size={9} /> Dialog audio yuklangan</p>
+                                  <p className="text-[9px] text-emerald-500 truncate">{d.audio.split("/").pop()}</p>
+                                </div>
+                                <button onClick={() => removeDialogueGroupAudio(dIdx)} className="w-[20px] h-[20px] bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200 flex-shrink-0" title="Audioni o'chirish"><X size={10} /></button>
+                              </div>
+                            ) : (
+                              <button onClick={() => triggerDialogueGroupAudioUpload(dIdx)} disabled={uploadingDialogueGroupAudio === dIdx}
+                                className="flex items-center gap-[5px] bg-blue-50 hover:bg-blue-100 text-blue-600 px-[10px] py-[5px] rounded-[7px] text-[11px] font-semibold transition-all disabled:opacity-50">
+                                {uploadingDialogueGroupAudio === dIdx ? <Loader2 size={12} className="animate-spin" /> : <FileAudio size={12} />} Dialog audio yuklash
+                              </button>
+                            )}
                           </div>
                         </div>
                         <div className="p-[12px] flex flex-col gap-[6px]">
@@ -705,61 +739,13 @@ export default function AdminLessonsPage() {
                 </div>
               )}
 
-              {/* ── TASKS TAB ── */}
-              {activeTab === "tasks" && (
-                <div>
-                  <div className="flex items-center justify-between mb-[14px]">
-                    <div className="flex items-center gap-[8px]"><ClipboardCheck size={18} className="text-[#e8632b]" /><p className="text-[15px] font-bold text-gray-700">{(editLesson.tasks || []).length} ta vazifa</p></div>
-                    <button onClick={addTask} className="px-[14px] py-[8px] bg-[#e8632b] text-white text-[12px] font-bold rounded-[8px] hover:bg-[#d55a25] flex items-center gap-[5px] active:scale-[0.97]"><Plus size={14} /> Vazifa qo&apos;shish</button>
-                  </div>
-                  <div className="flex flex-col gap-[12px]">
-                    {(editLesson.tasks || []).map((task, tIdx) => (
-                      <div key={task.id} className="border border-gray-200 rounded-[10px] p-[14px]">
-                        <div className="flex items-center justify-between mb-[10px]">
-                          <div className="flex items-center gap-[8px]">
-                            <span className="text-[12px] font-bold text-gray-400">#{tIdx + 1}</span>
-                            <select value={task.type} onChange={(e) => updateTask(tIdx, { type: e.target.value as Task["type"] })} title="Vazifa turi"
-                              className="px-[10px] py-[5px] rounded-[6px] border border-gray-200 text-[12px] text-gray-600 bg-white outline-none">
-                              <option value="multiple-choice">Test (tanlash)</option>
-                              <option value="fill-blank">Bo&apos;sh joy to&apos;ldirish</option>
-                              <option value="true-false">To&apos;g&apos;ri/Noto&apos;g&apos;ri</option>
-                              <option value="translate">Tarjima</option>
-                            </select>
-                          </div>
-                          <button onClick={() => removeTask(tIdx)} className="text-[11px] text-red-400 hover:text-red-500 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /> O&apos;chirish</button>
-                        </div>
-                        <textarea value={task.question} onChange={(e) => updateTask(tIdx, { question: e.target.value })} placeholder="Savol matni..." title="Savol" rows={2}
-                          className="w-full px-[12px] py-[8px] rounded-[6px] border border-gray-200 text-[13px] text-gray-800 focus:border-[#e8632b] outline-none resize-none mb-[8px]" />
-                        {(task.type === "multiple-choice" || task.type === "true-false") && (
-                          <div className="flex flex-col gap-[4px] mb-[8px]">
-                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Variantlar:</span>
-                            {(task.options || []).map((opt, oIdx) => (
-                              <div key={opt.id} className="flex items-center gap-[6px]">
-                                <span className="text-[12px] font-bold text-gray-400 w-[18px]">{opt.id.toUpperCase()}</span>
-                                <Input value={opt.text} onChange={(v) => updateTaskOption(tIdx, oIdx, v)} placeholder={`Variant ${opt.id}`} className="flex-1" />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {(task.type === "fill-blank" || task.type === "translate") && (
-                          <Input value={task.hint || ""} onChange={(v) => updateTask(tIdx, { hint: v })} placeholder="Maslahat (hint)" className="w-full mb-[8px]" />
-                        )}
-                        <div className="flex items-center gap-[8px]">
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider flex-shrink-0">To&apos;g&apos;ri javob:</span>
-                          <Input value={task.correctAnswer} onChange={(v) => updateTask(tIdx, { correctAnswer: v })} placeholder="a, b, c, d yoki matn" className="flex-1" />
-                        </div>
-                        <div className="mt-[8px]"><Input value={task.explanation || ""} onChange={(v) => updateTask(tIdx, { explanation: v })} placeholder="Tushuntirish..." className="w-full" /></div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* ── TASKS TAB REMOVED ── */}
             </div>
 
             {/* Modal Footer */}
             <div className="px-[24px] py-[14px] border-t border-gray-100 flex items-center justify-between flex-shrink-0">
               <p className="text-[12px] text-gray-300">
-                {(editLesson.words || []).length} so&apos;z · {(editLesson.tasks || []).length} vazifa · {(getDialogueSection()?.children || []).length} dialog · {(getGrammarSection()?.children || []).length} grammatika
+                {(editLesson.words || []).length} so&apos;z · {(getDialogueSection()?.children || []).length} dialog · {(getGrammarSection()?.children || []).length} grammatika
               </p>
               <div className="flex gap-[8px]">
                 <button onClick={() => { setEditLesson(null); setIsNew(false); }} className="px-[16px] py-[9px] rounded-[8px] border border-gray-200 text-[13px] font-medium text-gray-600 hover:bg-gray-50">Bekor</button>
@@ -785,7 +771,6 @@ export default function AdminLessonsPage() {
                   <th className="px-[16px] py-[12px]">Sarlavha</th>
                   <th className="px-[16px] py-[12px]">Nomi</th>
                   <th className="px-[16px] py-[12px] w-[70px]">So&apos;zlar</th>
-                  <th className="px-[16px] py-[12px] w-[70px]">Vazifa</th>
                   <th className="px-[16px] py-[12px] w-[80px]">Holat</th>
                   <th className="px-[16px] py-[12px] w-[140px]">Amallar</th>
                 </tr>
@@ -797,7 +782,6 @@ export default function AdminLessonsPage() {
                     <td className="px-[16px] py-[12px] text-[13px] font-semibold text-[#1a1a2e]">{l.title}</td>
                     <td className="px-[16px] py-[12px] text-[13px] text-gray-600">{l.name}</td>
                     <td className="px-[16px] py-[12px] text-[13px] text-gray-500">{l.words?.length || 0}</td>
-                    <td className="px-[16px] py-[12px] text-[13px] text-gray-500">{l.tasks?.length || 0}</td>
                     <td className="px-[16px] py-[12px]">
                       <span className={`text-[11px] font-bold px-[8px] py-[3px] rounded-full flex items-center gap-[3px] w-fit ${l.locked ? "bg-red-50 text-red-400" : "bg-green-50 text-green-600"}`}>
                         {l.locked ? <><Lock size={11} /> Qulf</> : <><Unlock size={11} /> Ochiq</>}
@@ -813,7 +797,7 @@ export default function AdminLessonsPage() {
                     </td>
                   </tr>
                 ))}
-                {lessons.length === 0 && <tr><td colSpan={7} className="text-center py-[32px] text-[14px] text-gray-300">Hali darslik yo&apos;q</td></tr>}
+                {lessons.length === 0 && <tr><td colSpan={6} className="text-center py-[32px] text-[14px] text-gray-300">Hali darslik yo&apos;q</td></tr>}
               </tbody>
             </table>
           </div>
