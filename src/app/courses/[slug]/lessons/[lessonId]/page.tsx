@@ -1027,41 +1027,12 @@ export default function LessonDetailPage() {
                           return (
                           <div key={idx} className={`group transition-all duration-300 rounded-[10px] px-[12px] py-[10px] -mx-[12px] ${isCurrentlyPlaying ? "bg-gradient-to-r from-[#e8632b]/10 to-[#f5a623]/10 ring-1 ring-[#e8632b]/20" : ""}`}>
                             {/* Xitoycha matni */}
-                            <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7] flex items-start gap-[8px]">
-                              <span className="flex-1">
-                                <span className={`font-extrabold ${isCurrentlyPlaying ? "text-[#e8632b]" : "text-[#1a1a2e]"} transition-colors duration-300`}>
-                                  {line.speaker}
-                                </span>
-                                <span className="text-gray-300 mx-[2px]">:</span>
-                                <span className={`font-medium ml-[4px] ${isCurrentlyPlaying ? "text-[#1a1a2e]" : "text-[#333]"} transition-colors duration-300`}>{line.text}</span>
+                            <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7]">
+                              <span className={`font-extrabold ${isCurrentlyPlaying ? "text-[#e8632b]" : "text-[#1a1a2e]"} transition-colors duration-300`}>
+                                {line.speaker}
                               </span>
-                              <button
-                                onClick={() => {
-                                  /* Scroll the content container to top where the player is */
-                                  if (scrollContainerRef.current) {
-                                    scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-                                  }
-                                  /* Flash animation on player */
-                                  if (playerRef.current) {
-                                    playerRef.current.classList.remove("player-flash");
-                                    void playerRef.current.offsetWidth;
-                                    playerRef.current.classList.add("player-flash");
-                                  }
-                                  setTimeout(() => {
-                                    playLineByIndex(idx);
-                                  }, 400);
-                                }}
-                                className={`flex-shrink-0 mt-[2px] w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(232,99,43,0.3)] hover:shadow-[0_3px_12px_rgba(232,99,43,0.4)] hover:scale-105 active:scale-95 transition-all ${isCurrentlyPlaying ? "bg-gradient-to-br from-[#c0392b] to-[#e74c3c] animate-pulse" : "bg-gradient-to-br from-[#e8632b] to-[#f5a623]"}`}
-                                title={isCurrentlyPlaying ? "Ijro etilmoqda..." : "Tinglash"}
-                              >
-                                <svg className="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] text-white ml-[1px]" viewBox="0 0 24 24" fill="currentColor">
-                                  {isCurrentlyPlaying ? (
-                                    <><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></>
-                                  ) : (
-                                    <polygon points="5 3 19 12 5 21 5 3"/>
-                                  )}
-                                </svg>
-                              </button>
+                              <span className="text-gray-300 mx-[2px]">:</span>
+                              <span className={`font-medium ml-[4px] ${isCurrentlyPlaying ? "text-[#1a1a2e]" : "text-[#333]"} transition-colors duration-300`}>{line.text}</span>
                             </p>
                             {/* Pinyin */}
                             <p className={`text-[13px] sm:text-[14px] italic mt-[3px] ml-[2px] transition-colors duration-300 ${isCurrentlyPlaying ? "text-[#e8632b] font-semibold" : "text-[#e8632b]"}`}>
