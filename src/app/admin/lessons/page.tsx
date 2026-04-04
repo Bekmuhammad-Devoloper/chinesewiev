@@ -453,59 +453,75 @@ export default function AdminLessonsPage() {
 
       {/* ── EDITOR MODAL ── */}
       {editLesson && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-[8px] sm:p-[16px]" onClick={() => { setEditLesson(null); setIsNew(false); }}>
-          <div className="bg-white rounded-[16px] shadow-2xl w-full max-w-[960px] h-[92vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-[8px] sm:p-[16px]" onClick={() => { setEditLesson(null); setIsNew(false); }}>
+          <div className="bg-[#f8f9fb] rounded-[20px] shadow-[0_24px_80px_rgba(0,0,0,0.2)] w-full max-w-[1060px] h-[92vh] flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
-            <div className="px-[24px] py-[16px] border-b border-gray-100 flex items-center justify-between flex-shrink-0">
-              <h2 className="text-[18px] font-bold text-[#1a1a2e]">{isNew ? "Yangi darslik" : `Tahrirlash: ${editLesson.title}`}</h2>
-              <button onClick={() => { setEditLesson(null); setIsNew(false); }} className="w-[32px] h-[32px] rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200" title="Yopish"><X size={16} className="text-gray-500" /></button>
+            <div className="px-[28px] py-[20px] bg-white border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-[12px]">
+                <div className="w-[40px] h-[40px] rounded-[10px] bg-gradient-to-br from-[#e8632b] to-[#d55a25] flex items-center justify-center shadow-[0_4px_12px_rgba(232,99,43,0.25)]">
+                  <Pencil size={18} className="text-white" />
+                </div>
+                <div>
+                  <h2 className="text-[18px] font-bold text-[#1a1a2e]">{isNew ? "Yangi darslik" : `Tahrirlash: ${editLesson.title}`}</h2>
+                  <p className="text-[12px] text-gray-400 mt-[1px]">{isNew ? "Yangi darslik yarating" : "Darslik ma'lumotlarini tahrirlash"}</p>
+                </div>
+              </div>
+              <button onClick={() => { setEditLesson(null); setIsNew(false); }} className="w-[36px] h-[36px] rounded-[10px] bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors" title="Yopish"><X size={18} className="text-gray-500" /></button>
             </div>
 
             {/* Tabs */}
-            <div className="px-[24px] pt-[12px] border-b border-gray-100 flex gap-[4px] flex-shrink-0 overflow-x-auto">
+            <div className="px-[28px] pt-[16px] pb-0 bg-white border-b border-gray-100 flex gap-[6px] flex-shrink-0 overflow-x-auto">
               {tabs.map((t) => (
                 <button key={t.key} onClick={() => setActiveTab(t.key)}
-                  className={`px-[14px] py-[10px] rounded-t-[8px] text-[12px] sm:text-[13px] font-semibold transition-all whitespace-nowrap flex items-center gap-[6px] ${
-                    activeTab === t.key ? "bg-[#e8632b] text-white" : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
+                  className={`px-[18px] py-[11px] rounded-t-[10px] text-[13px] font-semibold transition-all whitespace-nowrap flex items-center gap-[7px] ${
+                    activeTab === t.key ? "bg-[#e8632b] text-white shadow-[0_2px_8px_rgba(232,99,43,0.3)]" : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                   }`}>
-                  <t.Icon size={14} /> {t.label}
+                  <t.Icon size={15} /> {t.label}
                 </button>
               ))}
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto px-[24px] py-[20px]">
+            <div className="flex-1 overflow-y-auto px-[28px] py-[24px]">
 
               {/* ── GENERAL TAB ── */}
               {activeTab === "general" && (
-                <div className="flex flex-col gap-[14px] max-w-[600px]">
-                  <div className="grid grid-cols-2 gap-[12px]">
+                <div className="flex flex-col gap-[20px]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
                     <div>
-                      <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Sarlavha</label>
-                      <Input value={editLesson.title} onChange={(v) => updateLesson({ title: v })} placeholder="Darslik 1" className="w-full" />
+                      <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[6px]">Sarlavha</label>
+                      <Input value={editLesson.title} onChange={(v) => updateLesson({ title: v })} placeholder="Darslik 1" className="w-full !py-[10px] !px-[14px] !rounded-[10px] !text-[14px]" />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Nomi</label>
-                      <Input value={editLesson.name} onChange={(v) => updateLesson({ name: v })} placeholder="Salomlashuv" className="w-full" />
+                      <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[6px]">Nomi</label>
+                      <Input value={editLesson.name} onChange={(v) => updateLesson({ name: v })} placeholder="Salomlashuv" className="w-full !py-[10px] !px-[14px] !rounded-[10px] !text-[14px]" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Tavsif</label>
-                    <Input value={editLesson.description} onChange={(v) => updateLesson({ description: v })} placeholder="Greetings / Salomlashlar" className="w-full" />
+                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[6px]">Tavsif</label>
+                    <Input value={editLesson.description} onChange={(v) => updateLesson({ description: v })} placeholder="Greetings / Salomlashlar" className="w-full !py-[10px] !px-[14px] !rounded-[10px] !text-[14px]" />
                   </div>
-                  <label className="flex items-center gap-[8px] cursor-pointer">
-                    <input type="checkbox" checked={!editLesson.locked} onChange={(e) => updateLesson({ locked: !e.target.checked })} className="w-[18px] h-[18px] accent-[#e8632b]" />
-                    <span className="text-[13px] font-medium text-gray-700">Ochiq (qulflanmagan)</span>
-                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
+                    {/* Ochiq/Qulflanmagan */}
+                    <label className="flex items-center gap-[10px] cursor-pointer bg-white rounded-[12px] border border-gray-100 p-[14px] hover:border-gray-200 transition-colors">
+                      <input type="checkbox" checked={!editLesson.locked} onChange={(e) => updateLesson({ locked: !e.target.checked })} className="w-[18px] h-[18px] accent-[#e8632b] flex-shrink-0" />
+                      <div>
+                        <span className="text-[13px] font-semibold text-gray-700 block">Ochiq (qulflanmagan)</span>
+                        <span className="text-[11px] text-gray-400">Foydalanuvchilar kirishiga ruxsat</span>
+                      </div>
+                    </label>
+                  </div>
+
                   {/* Nashr holati */}
-                  <div className={`rounded-[10px] border-2 p-[12px] transition-all duration-300 ${
+                  <div className={`rounded-[12px] border-2 p-[14px] transition-all duration-300 ${
                     editLesson.published !== false
                       ? "border-green-200 bg-gradient-to-r from-green-50/80 to-emerald-50/50"
                       : "border-amber-200 bg-gradient-to-r from-amber-50/80 to-orange-50/50"
                   }`}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-[10px]">
-                        <div className={`w-[34px] h-[34px] rounded-[8px] flex items-center justify-center ${
+                      <div className="flex items-center gap-[12px]">
+                        <div className={`w-[38px] h-[38px] rounded-[10px] flex items-center justify-center flex-shrink-0 ${
                           editLesson.published !== false
                             ? "bg-green-100"
                             : "bg-amber-100"
@@ -537,6 +553,7 @@ export default function AdminLessonsPage() {
                       </div>
                       <button
                         type="button"
+                        title={editLesson.published !== false ? "Nashrdan olish" : "Nashr qilish"}
                         onClick={() => updateLesson({ published: editLesson.published === false ? true : false })}
                         className={`relative w-[46px] h-[24px] rounded-full transition-all duration-300 flex-shrink-0 ${
                           editLesson.published !== false
@@ -552,8 +569,8 @@ export default function AdminLessonsPage() {
                   </div>
 
                   {/* ── Husnihat (A4 yozuv varaqasi) ── */}
-                  <div className="mt-[8px]">
-                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[8px]">Husnihat varaqalari (A4) — {(editLesson.writingSheets || []).length} ta</label>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[10px]">Husnihat varaqalari (A4) — {(editLesson.writingSheets || []).length} ta</label>
                     
                     {/* Yuklangan varaqalar ro'yxati */}
                     {(editLesson.writingSheets || []).length > 0 && (
@@ -813,13 +830,15 @@ export default function AdminLessonsPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-[24px] py-[14px] border-t border-gray-100 flex items-center justify-between flex-shrink-0">
-              <p className="text-[12px] text-gray-300">
-                {(editLesson.words || []).length} so&apos;z · {(getDialogueSection()?.children || []).length} dialog · {(getGrammarSection()?.children || []).length} grammatika
+            <div className="px-[28px] py-[16px] bg-white border-t border-gray-100 flex items-center justify-between flex-shrink-0">
+              <p className="text-[12px] text-gray-400 flex items-center gap-[6px]">
+                <span className="inline-flex items-center gap-[3px] bg-gray-50 px-[8px] py-[3px] rounded-[6px]"><BookOpen size={11} /> {(editLesson.words || []).length} so&apos;z</span>
+                <span className="inline-flex items-center gap-[3px] bg-gray-50 px-[8px] py-[3px] rounded-[6px]"><MessageSquare size={11} /> {(getDialogueSection()?.children || []).length} dialog</span>
+                <span className="inline-flex items-center gap-[3px] bg-gray-50 px-[8px] py-[3px] rounded-[6px]"><Languages size={11} /> {(getGrammarSection()?.children || []).length} grammatika</span>
               </p>
-              <div className="flex gap-[8px]">
-                <button onClick={() => { setEditLesson(null); setIsNew(false); }} className="px-[16px] py-[9px] rounded-[8px] border border-gray-200 text-[13px] font-medium text-gray-600 hover:bg-gray-50">Bekor</button>
-                <button onClick={handleSave} disabled={saving} className="px-[20px] py-[9px] bg-[#e8632b] text-white text-[13px] font-bold rounded-[8px] hover:bg-[#d55a25] disabled:opacity-50 transition-all flex items-center gap-[5px]">
+              <div className="flex gap-[10px]">
+                <button onClick={() => { setEditLesson(null); setIsNew(false); }} className="px-[20px] py-[10px] rounded-[10px] border border-gray-200 text-[13px] font-semibold text-gray-600 hover:bg-gray-50 transition-colors">Bekor</button>
+                <button onClick={handleSave} disabled={saving} className="px-[24px] py-[10px] bg-gradient-to-r from-[#e8632b] to-[#d55a25] text-white text-[13px] font-bold rounded-[10px] hover:from-[#d55a25] hover:to-[#c04f20] disabled:opacity-50 transition-all flex items-center gap-[6px] shadow-[0_4px_16px_rgba(232,99,43,0.3)]">
                   {saving ? <><Loader2 size={14} className="animate-spin" /> Saqlanmoqda...</> : "Saqlash"}
                 </button>
               </div>
