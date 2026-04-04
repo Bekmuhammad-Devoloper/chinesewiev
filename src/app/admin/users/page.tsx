@@ -5,6 +5,15 @@ import { Users, UserCheck, UserX, Plus, X, Pencil, Trash2, KeyRound, Copy, Check
 import type { UserRecord } from "@/app/api/users/route";
 import type { Course } from "@/data/courses";
 
+/* ── Shared input — OUTSIDE component to avoid focus loss ── */
+const Input = ({ value, onChange, placeholder, className = "", type = "text" }: {
+  value: string; onChange: (v: string) => void; placeholder?: string; className?: string; type?: string;
+}) => (
+  <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} title={placeholder}
+    className={`px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[13px] text-gray-800 focus:border-[#063087] focus:ring-2 focus:ring-[#063087]/10 outline-none transition-all bg-[#f9fafb] focus:bg-white ${className}`}
+  />
+);
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -80,14 +89,6 @@ export default function AdminUsersPage() {
 
   const activeCount = users.filter((u) => u.active).length;
   const blockedCount = users.filter((u) => !u.active).length;
-
-  const Input = ({ value, onChange, placeholder, className = "", type = "text" }: {
-    value: string; onChange: (v: string) => void; placeholder?: string; className?: string; type?: string;
-  }) => (
-    <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} title={placeholder}
-      className={`px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[13px] text-gray-800 focus:border-[#063087] focus:ring-2 focus:ring-[#063087]/10 outline-none transition-all bg-[#f9fafb] focus:bg-white ${className}`}
-    />
-  );
 
   return (
     <div className="p-[20px] sm:p-[28px] md:p-[36px]">

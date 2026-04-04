@@ -9,6 +9,12 @@ import {
 } from "lucide-react";
 import type { Course, Lesson, Word, DialogueLine, GrammarRule, GrammarExample, Task } from "@/data/courses";
 
+/* ── Shared input — OUTSIDE component to avoid re-mount on each keystroke ── */
+const Input = ({ value, onChange, placeholder, className = "" }: { value: string; onChange: (v: string) => void; placeholder?: string; className?: string }) => (
+  <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} title={placeholder}
+    className={`px-[12px] py-[8px] rounded-[6px] border border-gray-200 text-[13px] text-gray-800 focus:border-[#e8632b] outline-none ${className}`} />
+);
+
 export default function AdminLessonsPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedSlug, setSelectedSlug] = useState("");
@@ -368,12 +374,6 @@ export default function AdminLessonsPage() {
     tasks[tIdx] = { ...tasks[tIdx], options };
     updateLesson({ tasks });
   };
-
-  /* ── Shared input ── */
-  const Input = ({ value, onChange, placeholder, className = "" }: { value: string; onChange: (v: string) => void; placeholder?: string; className?: string }) => (
-    <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} title={placeholder}
-      className={`px-[12px] py-[8px] rounded-[6px] border border-gray-200 text-[13px] text-gray-800 focus:border-[#e8632b] outline-none ${className}`} />
-  );
 
   const tabs = [
     { key: "general" as const, label: "Umumiy", Icon: Settings },
