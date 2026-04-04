@@ -1118,11 +1118,11 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-x-[14px] gap-y-[6px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
+                  <div className="grid grid-cols-3 gap-x-[14px] gap-y-[24px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center min-h-0">
-                        {/* Kartochka - balandlikdan aspect 3/4 bilan kenglik chiqadi */}
-                        <div className="flex-1 min-h-0 aspect-[3/4] bg-white rounded-[10px] border border-gray-800 overflow-hidden">
+                        {/* Kartochka */}
+                        <div className="min-h-0 aspect-[3/4] bg-white rounded-[10px] border border-gray-800 overflow-hidden" style={{ height: 'calc(100% - 44px)' }}>
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
@@ -1135,7 +1135,7 @@ export default function LessonDetailPage() {
                           download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="shrink-0 mt-[18px] inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
+                          className="shrink-0 mt-auto inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
                         >
                           Yuklab olish
                           <svg className="w-[11px] h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
