@@ -1118,27 +1118,27 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-[8px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
+                  <div className="grid grid-cols-3 gap-x-[12px] gap-y-[8px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
-                      <div key={sIdx} className="flex flex-col bg-white rounded-[8px] border border-gray-400 overflow-hidden min-h-0">
-                        {/* Rasm */}
-                        <div className="flex-1 min-h-0 overflow-hidden">
+                      <div key={sIdx} className="flex flex-col items-center min-h-0">
+                        {/* Kartochka */}
+                        <div className="flex-1 min-h-0 w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden">
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
                             className="w-full h-full object-contain"
                           />
                         </div>
-                        {/* Yuklab olish tugmasi - karta ichida pastda */}
+                        {/* Yuklab olish tugmasi */}
                         <a
                           href={sheet}
                           download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="shrink-0 mx-auto my-[4px] inline-flex items-center gap-[3px] px-[10px] py-[3px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[10px] font-medium rounded-full active:scale-[0.97] transition-all duration-200"
+                          className="shrink-0 mt-[5px] inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[11px] font-medium rounded-[50px] active:scale-[0.97] transition-all duration-200"
                         >
                           Yuklab olish
-                          <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <svg className="w-[11px] h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
