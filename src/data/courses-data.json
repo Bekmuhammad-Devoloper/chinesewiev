@@ -340,11 +340,6 @@
                 ]
               }
             ]
-          },
-          {
-            "id": "tasks",
-            "title": "Vazifalar",
-            "type": "tasks"
           }
         ],
         "tasks": [
@@ -746,11 +741,6 @@
                 ]
               }
             ]
-          },
-          {
-            "id": "tasks",
-            "title": "Vazifalar",
-            "type": "tasks"
           }
         ],
         "tasks": [

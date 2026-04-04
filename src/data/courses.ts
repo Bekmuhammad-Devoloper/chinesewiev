@@ -267,7 +267,6 @@ export const courses: Course[] = [
               },
             ],
           },
-          { id: "tasks", title: "Vazifalar", type: "tasks" },
         ],
         tasks: [
           {
@@ -479,7 +478,6 @@ export const courses: Course[] = [
               },
             ],
           },
-          { id: "tasks", title: "Vazifalar", type: "tasks" },
         ],
         tasks: [
           {

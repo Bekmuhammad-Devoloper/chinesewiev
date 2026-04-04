@@ -56,7 +56,6 @@ export async function POST(req: NextRequest) {
       { id: "writing", title: "So'z yozilishi", type: "writing" },
       { id: "dialogues", title: "Dialoglar", type: "dialogue", children: [] },
       { id: "grammar", title: "Grammatika", type: "grammar", children: [] },
-      { id: "tasks", title: "Vazifalar", type: "tasks" },
     ],
     tasks: body.tasks || [],
   };

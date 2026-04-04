@@ -95,7 +95,6 @@ export default function AdminLessonsPage() {
         { id: "writing", title: "So'z yozilishi", type: "writing" },
         { id: "dialogues", title: "Dialoglar", type: "dialogue", children: [] },
         { id: "grammar", title: "Grammatika", type: "grammar", children: [] },
-        { id: "tasks", title: "Vazifalar", type: "tasks" },
       ],
       tasks: [],
     });
@@ -381,7 +380,6 @@ export default function AdminLessonsPage() {
     { key: "words" as const, label: "So'zlar", Icon: BookOpen },
     { key: "dialogues" as const, label: "Dialoglar", Icon: MessageSquare },
     { key: "grammar" as const, label: "Grammatika", Icon: Languages },
-    { key: "tasks" as const, label: "Vazifalar", Icon: ClipboardCheck },
   ];
 
   const playAudioPreview = (url: string) => { const a = new Audio(url); a.play().catch(() => {}); };
