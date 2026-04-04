@@ -1114,16 +1114,25 @@ export default function LessonDetailPage() {
             {/* ══════════════════════════════════════════ */}
             {/* ── WRITING VIEW (So'z yozilishi)        ── */}
             {/* ══════════════════════════════════════════ */}
-            {activeSection === "writing" && (
+            {activeSection === "writing" && (() => {
+              const sheets = lesson?.writingSheets || [];
+              const rowCount = Math.ceil(sheets.length / 3);
+              // 6ta yoki kamroq (2 qator) = scrollsiz, viewport ga sig'adi
+              // 7+ = oddiy scroll
+              const fitsOnScreen = sheets.length <= 6;
+              return (
               <div>
                 {renderMobileTrigger()}
-                {(lesson?.writingSheets || []).length > 0 ? (
+                {sheets.length > 0 ? (
                   <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] p-[6px] sm:p-[10px] md:p-[14px]">
-                    <div className="grid grid-cols-3 gap-[6px] sm:gap-[8px] md:gap-[10px]">
-                      {(lesson!.writingSheets!).map((sheet, sIdx) => (
-                        <div key={sIdx} className="flex flex-col items-center gap-[3px] sm:gap-[4px]">
+                    <div
+                      className="grid grid-cols-3 gap-[6px] sm:gap-[8px] md:gap-[10px]"
+                      style={fitsOnScreen ? { height: 'calc(100vh - 160px)' } : undefined}
+                    >
+                      {sheets.map((sheet, sIdx) => (
+                        <div key={sIdx} className="flex flex-col items-center gap-[3px] sm:gap-[4px]" style={fitsOnScreen ? { height: `calc((100% - ${(rowCount - 1) * 6}px) / ${rowCount})` } : undefined}>
                           {/* Kartochka rasm */}
-                          <div className="w-full aspect-[5/7] rounded-[6px] sm:rounded-[8px] border border-gray-200 bg-white overflow-hidden flex items-center justify-center p-[1px] sm:p-[2px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow duration-200">
+                          <div className={`w-full rounded-[6px] sm:rounded-[8px] border border-gray-200 bg-white overflow-hidden flex items-center justify-center p-[1px] sm:p-[2px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow duration-200 ${fitsOnScreen ? 'flex-1 min-h-0' : 'aspect-[3/4]'}`}>
                             <img
                               src={sheet}
                               alt={`Husnihat ${sIdx + 1}`}
@@ -1136,7 +1145,7 @@ export default function LessonDetailPage() {
                             download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-[7px] sm:px-[10px] md:px-[12px] py-[2px] sm:py-[3px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[7px] sm:text-[8px] md:text-[9px] font-bold rounded-full shadow-[0_2px_6px_rgba(245,166,35,0.25)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[2px]"
+                            className="shrink-0 px-[7px] sm:px-[10px] md:px-[12px] py-[2px] sm:py-[3px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[7px] sm:text-[8px] md:text-[9px] font-bold rounded-full shadow-[0_2px_6px_rgba(245,166,35,0.25)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[2px]"
                           >
                             Yuklab olish
                             <svg className="w-[8px] h-[8px] sm:w-[9px] sm:h-[9px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1162,7 +1171,8 @@ export default function LessonDetailPage() {
                   </div>
                 )}
               </div>
-            )}
+              );
+            })()}
 
             {/* ══════════════════════════════════════════ */}
             {activeSection.startsWith("grammar-") && (() => {
