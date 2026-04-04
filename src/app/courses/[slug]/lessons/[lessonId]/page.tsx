@@ -1118,24 +1118,22 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-x-[10px] gap-y-[6px]">
+                  <div className="max-w-[680px] mx-auto grid grid-cols-3 gap-x-[10px] gap-y-[6px]">
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center">
-                        {/* Kartochka - Figma: 280x395 = aspect 5/7 */}
-                        <div className="w-full aspect-[280/395] bg-white rounded-[8px] border border-gray-400 overflow-hidden">
+                        <div className="w-full aspect-[5/7] bg-white rounded-[8px] border border-gray-400 overflow-hidden">
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
                             className="w-full h-full object-contain"
                           />
                         </div>
-                        {/* Yuklab olish tugmasi */}
                         <a
                           href={sheet}
                           download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-[5px] shrink-0 inline-flex items-center gap-[3px] px-[10px] py-[3px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[10px] font-medium rounded-full active:scale-[0.97] transition-all duration-200"
+                          className="mt-[4px] shrink-0 inline-flex items-center gap-[3px] px-[10px] py-[3px] bg-[#ffb520] hover:bg-[#e8a41c] text-white text-[10px] font-medium rounded-full active:scale-[0.97] transition-all duration-200"
                         >
                           Yuklab olish
                           <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
