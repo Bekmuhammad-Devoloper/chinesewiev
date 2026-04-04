@@ -4,10 +4,10 @@ export default function HeroSection() {
   return (
     <section id="hero" className="bg-primary">
       {/* First screen: Content = exactly 100vh */}
-      <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[52px] md:pt-[80px] lg:pt-[100px]">
+      <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:pt-[90px]">
 
         {/* Content fills the remaining space */}
-        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[4px] md:gap-[6px] lg:gap-[8px] py-[8px] md:py-[12px] lg:py-[16px]">
+        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[2px] md:gap-[4px] lg:gap-[6px] py-[4px] md:py-[8px] lg:py-[12px] pb-[20px] md:pb-[24px] lg:pb-[28px]">
           {/* Logo */}
           <Image
             src="/assets/logo.png"
