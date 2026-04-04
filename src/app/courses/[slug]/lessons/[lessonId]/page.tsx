@@ -1118,10 +1118,10 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-x-[10px] gap-y-[4px]">
+                  <div className="grid grid-cols-3 gap-x-[10px] gap-y-[2px]">
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center">
-                        <div className="w-full aspect-[4/5] bg-white rounded-[8px] border border-gray-400 overflow-hidden">
+                        <div className="w-full aspect-[3/3.5] bg-white rounded-[8px] border border-gray-400 overflow-hidden">
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
