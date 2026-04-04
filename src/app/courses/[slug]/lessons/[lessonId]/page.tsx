@@ -594,7 +594,6 @@ export default function LessonDetailPage() {
                 </div>
 
                 <h1 className="text-[24px] sm:text-[30px] md:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.025em] leading-[1.12] relative">
-                  <span className="text-[#e8632b]">{lesson.title}:</span>{" "}
                   <span className="text-white">{dlg?.title || lesson.name}</span>
                 </h1>
 
