@@ -1118,36 +1118,36 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-[12px] sm:gap-[16px]">
-                    {(lesson!.writingSheets!).map((sheet, sIdx) => (
-                      <div key={sIdx} className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200">
-                        {/* Rasm preview */}
-                        <div className="aspect-[3/4] bg-[#f9fafb] border-b border-gray-100 overflow-hidden flex items-center justify-center p-[8px]">
-                          <img
-                            src={sheet}
-                            alt={`Husnihat ${sIdx + 1}`}
-                            className="w-full h-full object-contain rounded-[6px]"
-                          />
-                        </div>
-                        {/* Yuklab olish tugmasi */}
-                        <div className="p-[10px] sm:p-[12px] flex items-center justify-center">
+                  <div className="bg-white rounded-[18px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] p-[16px] sm:p-[24px] md:p-[32px]">
+                    <div className="grid grid-cols-3 gap-[14px] sm:gap-[20px] md:gap-[28px]">
+                      {(lesson!.writingSheets!).map((sheet, sIdx) => (
+                        <div key={sIdx} className="flex flex-col items-center gap-[10px] sm:gap-[14px]">
+                          {/* Kartochka rasm */}
+                          <div className="w-full aspect-[3/4] rounded-[10px] sm:rounded-[14px] border border-gray-200 bg-white overflow-hidden flex items-center justify-center p-[4px] sm:p-[6px] hover:shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-shadow duration-200">
+                            <img
+                              src={sheet}
+                              alt={`Husnihat ${sIdx + 1}`}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          {/* Yuklab olish tugmasi */}
                           <a
                             href={sheet}
                             download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-[16px] sm:px-[20px] py-[8px] sm:py-[10px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[11px] sm:text-[12px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[5px]"
+                            className="px-[14px] sm:px-[20px] md:px-[24px] py-[7px] sm:py-[9px] md:py-[10px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[10px] sm:text-[11px] md:text-[12px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.25)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[4px] sm:gap-[5px]"
                           >
                             Yuklab olish
-                            <svg className="w-[12px] h-[12px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <svg className="w-[11px] h-[11px] sm:w-[12px] sm:h-[12px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                               <polyline points="7 10 12 15 17 10" />
                               <line x1="12" y1="15" x2="12" y2="3" />
                             </svg>
                           </a>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   <div className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.06)] p-[40px] sm:p-[60px] text-center max-w-[520px] mx-auto">
