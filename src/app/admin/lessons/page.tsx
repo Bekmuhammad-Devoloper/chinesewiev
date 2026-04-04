@@ -497,13 +497,51 @@ export default function AdminLessonsPage() {
                     <input type="checkbox" checked={!editLesson.locked} onChange={(e) => updateLesson({ locked: !e.target.checked })} className="w-[18px] h-[18px] accent-[#e8632b]" />
                     <span className="text-[13px] font-medium text-gray-700">Ochiq (qulflanmagan)</span>
                   </label>
-                  <label className="flex items-center gap-[8px] cursor-pointer">
-                    <input type="checkbox" checked={editLesson.published !== false} onChange={(e) => updateLesson({ published: e.target.checked })} className="w-[18px] h-[18px] accent-green-600" />
-                    <span className="text-[13px] font-medium text-gray-700">Nashr qilingan</span>
-                    {editLesson.published === false && (
-                      <span className="text-[11px] text-amber-500 bg-amber-50 px-[8px] py-[2px] rounded-full">Tez kunda</span>
-                    )}
-                  </label>
+                  {/* Nashr holati */}
+                  <div className={`rounded-[10px] border-2 p-[12px] transition-all duration-300 ${
+                    editLesson.published !== false
+                      ? "border-green-200 bg-gradient-to-r from-green-50/80 to-emerald-50/50"
+                      : "border-amber-200 bg-gradient-to-r from-amber-50/80 to-orange-50/50"
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-[10px]">
+                        <div className={`w-[34px] h-[34px] rounded-[8px] flex items-center justify-center text-[15px] ${
+                          editLesson.published !== false
+                            ? "bg-green-100 text-green-600"
+                            : "bg-amber-100 text-amber-600"
+                        }`}>
+                          {editLesson.published !== false ? "🌐" : "🕐"}
+                        </div>
+                        <div>
+                          <p className={`text-[13px] font-bold ${
+                            editLesson.published !== false ? "text-green-700" : "text-amber-700"
+                          }`}>
+                            {editLesson.published !== false ? "Nashr qilingan" : "Tez kunda"}
+                          </p>
+                          <p className={`text-[10px] mt-[1px] ${
+                            editLesson.published !== false ? "text-green-500" : "text-amber-500"
+                          }`}>
+                            {editLesson.published !== false
+                              ? "Dars foydalanuvchilarga ko'rinadi"
+                              : "Dars hali foydalanuvchilarga ko'rinmaydi"}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updateLesson({ published: editLesson.published === false ? true : false })}
+                        className={`relative w-[46px] h-[24px] rounded-full transition-all duration-300 flex-shrink-0 ${
+                          editLesson.published !== false
+                            ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)]"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        <span className={`absolute top-[2px] w-[20px] h-[20px] bg-white rounded-full shadow-md transition-all duration-300 ${
+                          editLesson.published !== false ? "left-[24px]" : "left-[2px]"
+                        }`} />
+                      </button>
+                    </div>
+                  </div>
 
                   {/* ── Husnihat (A4 yozuv varaqasi) ── */}
                   <div className="mt-[8px]">
@@ -813,8 +851,8 @@ export default function AdminLessonsPage() {
                       </span>
                     </td>
                     <td className="px-[16px] py-[12px]">
-                      <span className={`text-[11px] font-bold px-[8px] py-[3px] rounded-full w-fit ${l.published === false ? "bg-amber-50 text-amber-500" : "bg-green-50 text-green-600"}`}>
-                        {l.published === false ? "Tez kunda" : "Nashr ✓"}
+                      <span className={`text-[11px] font-bold px-[8px] py-[3px] rounded-full flex items-center gap-[3px] w-fit ${l.published === false ? "bg-amber-50 text-amber-500 border border-amber-200" : "bg-green-50 text-green-600 border border-green-200"}`}>
+                        {l.published === false ? <>🕐 Tez kunda</> : <>✓ Nashr</>}
                       </span>
                     </td>
                     <td className="px-[16px] py-[12px]">

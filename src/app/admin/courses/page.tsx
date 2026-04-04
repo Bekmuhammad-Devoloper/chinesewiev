@@ -237,18 +237,51 @@ export default function AdminCoursesPage() {
                 />
               </div>
               {/* Nashr holati */}
-              <label className="flex items-center gap-[10px] cursor-pointer py-[4px]">
-                <input
-                  type="checkbox"
-                  checked={editCourse.published !== false}
-                  onChange={(e) => setEditCourse({ ...editCourse, published: e.target.checked } as Course)}
-                  className="w-[20px] h-[20px] accent-green-600"
-                />
-                <span className="text-[14px] font-medium text-gray-700">Nashr qilingan</span>
-                {editCourse.published === false && (
-                  <span className="text-[11px] text-amber-500 bg-amber-50 px-[10px] py-[3px] rounded-full font-semibold">Tez kunda</span>
-                )}
-              </label>
+              <div className={`rounded-[12px] border-2 p-[16px] transition-all duration-300 ${
+                editCourse.published !== false
+                  ? "border-green-200 bg-gradient-to-r from-green-50/80 to-emerald-50/50"
+                  : "border-amber-200 bg-gradient-to-r from-amber-50/80 to-orange-50/50"
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-[12px]">
+                    <div className={`w-[40px] h-[40px] rounded-[10px] flex items-center justify-center text-[18px] ${
+                      editCourse.published !== false
+                        ? "bg-green-100 text-green-600"
+                        : "bg-amber-100 text-amber-600"
+                    }`}>
+                      {editCourse.published !== false ? "🌐" : "🕐"}
+                    </div>
+                    <div>
+                      <p className={`text-[14px] font-bold ${
+                        editCourse.published !== false ? "text-green-700" : "text-amber-700"
+                      }`}>
+                        {editCourse.published !== false ? "Nashr qilingan" : "Tez kunda"}
+                      </p>
+                      <p className={`text-[11px] mt-[2px] ${
+                        editCourse.published !== false ? "text-green-500" : "text-amber-500"
+                      }`}>
+                        {editCourse.published !== false
+                          ? "Kurs foydalanuvchilarga ko'rinadi"
+                          : "Kurs hali foydalanuvchilarga ko'rinmaydi"}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Toggle Switch */}
+                  <button
+                    type="button"
+                    onClick={() => setEditCourse({ ...editCourse, published: editCourse.published === false ? true : false } as Course)}
+                    className={`relative w-[52px] h-[28px] rounded-full transition-all duration-300 flex-shrink-0 ${
+                      editCourse.published !== false
+                        ? "bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.4)]"
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    <span className={`absolute top-[3px] w-[22px] h-[22px] bg-white rounded-full shadow-md transition-all duration-300 ${
+                      editCourse.published !== false ? "left-[27px]" : "left-[3px]"
+                    }`} />
+                  </button>
+                </div>
+              </div>
             </div>
             {/* Footer */}
             <div className="px-[24px] py-[16px] border-t border-gray-100 flex items-center justify-end gap-[10px] sticky bottom-0 bg-white rounded-b-[16px]">
@@ -271,21 +304,37 @@ export default function AdminCoursesPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px]">
           {courses.map((c) => (
-            <div key={c.slug} className="group bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-[2px]">
+            <div key={c.slug} className={`group bg-white rounded-[16px] border overflow-hidden transition-all duration-300 hover:-translate-y-[2px] ${
+              c.published === false
+                ? "border-amber-200 shadow-[0_2px_12px_rgba(245,158,11,0.08)] hover:shadow-[0_8px_30px_rgba(245,158,11,0.12)]"
+                : "border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+            }`}>
               {/* Course Image */}
               <div className="relative h-[180px] bg-gradient-to-br from-[#063087]/5 to-[#063087]/10 overflow-hidden">
+                {c.published === false && (
+                  <div className="absolute inset-0 z-10 bg-black/10" />
+                )}
                 <Image
                   src={c.image || "/assets/course-1.png"}
                   alt={c.title}
                   fill
-                  className="object-contain p-[16px] group-hover:scale-105 transition-transform duration-500"
+                  className={`object-contain p-[16px] group-hover:scale-105 transition-transform duration-500 ${c.published === false ? "opacity-60" : ""}`}
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
                 <div className="absolute top-[10px] left-[10px] flex items-center gap-[6px]">
                   <span className="px-[8px] py-[3px] bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-[#063087] shadow-sm">{c.slug}</span>
                   <span className="px-[8px] py-[3px] bg-[#063087]/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-sm">{c.level}</span>
-                  {c.published === false && (
-                    <span className="px-[8px] py-[3px] bg-amber-500/90 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-sm">Tez kunda</span>
+                </div>
+                {/* Nashr holat badge — o'ng yuqori burchak */}
+                <div className="absolute top-[10px] right-[10px]">
+                  {c.published === false ? (
+                    <span className="px-[10px] py-[4px] bg-amber-500 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-lg flex items-center gap-[4px]">
+                      🕐 Tez kunda
+                    </span>
+                  ) : (
+                    <span className="px-[10px] py-[4px] bg-green-500 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-lg flex items-center gap-[4px]">
+                      ✓ Nashr
+                    </span>
                   )}
                 </div>
               </div>
