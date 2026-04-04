@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   Plus, X, Pencil, Trash2, Lock, Unlock, Loader2,
   BookOpen, MessageSquare, Languages,
-  Settings, Play, Music, FileAudio, ImagePlus,
+  Settings, Play, Music, FileAudio, ImagePlus, FileText,
 } from "lucide-react";
 import type { Course, Lesson, Word, DialogueLine, GrammarRule, GrammarExample } from "@/data/courses";
 
@@ -34,6 +34,10 @@ export default function AdminLessonsPage() {
   const [activeUploadIdx, setActiveUploadIdx] = useState(-1);
   const [uploadingDialogueGroupAudio, setUploadingDialogueGroupAudio] = useState<number | null>(null);
   const [activeDialogueGroupUpload, setActiveDialogueGroupUpload] = useState<number | null>(null);
+  const dialogueDocxInputRef = useRef<HTMLInputElement>(null);
+  const grammarDocxInputRef = useRef<HTMLInputElement>(null);
+  const [parsingDialogueDocx, setParsingDialogueDocx] = useState(false);
+  const [parsingGrammarDocx, setParsingGrammarDocx] = useState(false);
 
   useEffect(() => {
     fetch("/api/courses")
@@ -225,6 +229,55 @@ export default function AdminLessonsPage() {
     updateDialogueChildren(children);
   };
 
+  /* ── Word (.docx) file upload handlers ── */
+  const handleDialogueDocxUpload = async (file: File) => {
+    setParsingDialogueDocx(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/parse-docx?type=dialogue", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.dialogues && data.dialogues.length > 0) {
+        const existing = [...(getDialogueSection()?.children || [])];
+        const newChildren = data.dialogues.map((d: { title: string; dialogueLines: DialogueLine[] }, i: number) => ({
+          id: `dialogue-${Date.now()}-${i}`,
+          title: d.title,
+          dialogueLines: d.dialogueLines,
+        }));
+        updateDialogueChildren([...existing, ...newChildren]);
+      } else {
+        alert("Word fayldan dialog topilmadi. Format:\n\nSpeaker: Xitoycha matn\nPinyin\nTarjima");
+      }
+    } catch {
+      alert("Word faylni o'qishda xatolik yuz berdi");
+    }
+    setParsingDialogueDocx(false);
+  };
+
+  const handleGrammarDocxUpload = async (file: File) => {
+    setParsingGrammarDocx(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/parse-docx?type=grammar", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.grammar && data.grammar.length > 0) {
+        const existing = [...(getGrammarSection()?.children || [])];
+        const newChildren = data.grammar.map((g: { title: string; grammarRules: GrammarRule[] }) => ({
+          id: `grammar-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          title: g.title,
+          grammarRules: g.grammarRules,
+        }));
+        updateGrammarChildren([...existing, ...newChildren]);
+      } else {
+        alert("Word fayldan grammatika topilmadi");
+      }
+    } catch {
+      alert("Word faylni o'qishda xatolik yuz berdi");
+    }
+    setParsingGrammarDocx(false);
+  };
+
   /* ── Word helpers ── */
   const addWord = () => {
     const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "" }];
@@ -367,6 +420,8 @@ export default function AdminLessonsPage() {
       <input type="file" ref={writingSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onWritingSheetFileChange} title="Husnihat varaqasi tanlash" />
       <input type="file" ref={lessonSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onLessonSheetFileChange} title="Dars husnihat varaqasi" />
       <input type="file" ref={dialogueGroupAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueGroupAudioFileChange} title="Dialog umumiy audio" />
+      <input type="file" ref={dialogueDocxInputRef} accept=".docx,.doc" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleDialogueDocxUpload(f); if (dialogueDocxInputRef.current) dialogueDocxInputRef.current.value = ""; }} title="Dialog Word fayl" />
+      <input type="file" ref={grammarDocxInputRef} accept=".docx,.doc" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleGrammarDocxUpload(f); if (grammarDocxInputRef.current) grammarDocxInputRef.current.value = ""; }} title="Grammatika Word fayl" />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-[28px] flex-wrap gap-[12px]">
@@ -571,7 +626,13 @@ export default function AdminLessonsPage() {
                 <div>
                   <div className="flex items-center justify-between mb-[14px]">
                     <div className="flex items-center gap-[8px]"><MessageSquare size={18} className="text-[#e8632b]" /><p className="text-[15px] font-bold text-gray-700">{(getDialogueSection()?.children || []).length} ta dialog</p></div>
-                    <button onClick={addDialogue} className="px-[14px] py-[8px] bg-[#e8632b] text-white text-[12px] font-bold rounded-[8px] hover:bg-[#d55a25] flex items-center gap-[5px] active:scale-[0.97]"><Plus size={14} /> Dialog qo&apos;shish</button>
+                    <div className="flex gap-[6px]">
+                      <button onClick={() => dialogueDocxInputRef.current?.click()} disabled={parsingDialogueDocx}
+                        className="px-[14px] py-[8px] bg-blue-50 text-blue-600 text-[12px] font-bold rounded-[8px] hover:bg-blue-100 flex items-center gap-[5px] active:scale-[0.97] transition-all disabled:opacity-50">
+                        {parsingDialogueDocx ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />} Word yuklash
+                      </button>
+                      <button onClick={addDialogue} className="px-[14px] py-[8px] bg-[#e8632b] text-white text-[12px] font-bold rounded-[8px] hover:bg-[#d55a25] flex items-center gap-[5px] active:scale-[0.97]"><Plus size={14} /> Dialog qo&apos;shish</button>
+                    </div>
                   </div>
                   <div className="flex flex-col gap-[16px]">
                     {(getDialogueSection()?.children || []).map((d, dIdx) => (
@@ -633,7 +694,13 @@ export default function AdminLessonsPage() {
                 <div>
                   <div className="flex items-center justify-between mb-[14px]">
                     <div className="flex items-center gap-[8px]"><Languages size={18} className="text-[#e8632b]" /><p className="text-[15px] font-bold text-gray-700">{(getGrammarSection()?.children || []).length} ta mavzu</p></div>
-                    <button onClick={addGrammarTopic} className="px-[14px] py-[8px] bg-[#e8632b] text-white text-[12px] font-bold rounded-[8px] hover:bg-[#d55a25] flex items-center gap-[5px] active:scale-[0.97]"><Plus size={14} /> Mavzu qo&apos;shish</button>
+                    <div className="flex gap-[6px]">
+                      <button onClick={() => grammarDocxInputRef.current?.click()} disabled={parsingGrammarDocx}
+                        className="px-[14px] py-[8px] bg-blue-50 text-blue-600 text-[12px] font-bold rounded-[8px] hover:bg-blue-100 flex items-center gap-[5px] active:scale-[0.97] transition-all disabled:opacity-50">
+                        {parsingGrammarDocx ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />} Word yuklash
+                      </button>
+                      <button onClick={addGrammarTopic} className="px-[14px] py-[8px] bg-[#e8632b] text-white text-[12px] font-bold rounded-[8px] hover:bg-[#d55a25] flex items-center gap-[5px] active:scale-[0.97]"><Plus size={14} /> Mavzu qo&apos;shish</button>
+                    </div>
                   </div>
                   <div className="flex flex-col gap-[20px]">
                     {(getGrammarSection()?.children || []).map((topic, tIdx) => (
