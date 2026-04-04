@@ -1118,36 +1118,32 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="flex flex-col gap-[16px] sm:gap-[20px] max-w-[720px] mx-auto">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-[12px] sm:gap-[16px]">
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
-                      <div key={sIdx} className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.06)] overflow-hidden">
-                        {/* A4 husnihat rasmi */}
-                        <div className="w-full bg-[#f9fafb]">
+                      <div key={sIdx} className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200">
+                        {/* Rasm preview */}
+                        <div className="aspect-[3/4] bg-[#f9fafb] border-b border-gray-100 overflow-hidden flex items-center justify-center p-[8px]">
                           <img
                             src={sheet}
-                            alt={`Husnihat varaqasi ${sIdx + 1}`}
-                            className="w-full h-auto object-contain"
+                            alt={`Husnihat ${sIdx + 1}`}
+                            className="w-full h-full object-contain rounded-[6px]"
                           />
                         </div>
-                        {/* Yuklab olish qismi */}
-                        <div className="p-[12px] sm:p-[16px] md:p-[20px] border-t border-gray-100 flex items-center gap-[12px] sm:gap-[16px]">
-                          <div className="flex-1">
-                            <p className="text-[14px] sm:text-[15px] font-bold text-[#1a1a2e]">Varaq #{sIdx + 1}</p>
-                            <p className="text-[11px] sm:text-[12px] text-gray-400">A4 formatda yuklab oling va chop eting</p>
-                          </div>
+                        {/* Yuklab olish tugmasi */}
+                        <div className="p-[10px] sm:p-[12px] flex items-center justify-center">
                           <a
                             href={sheet}
                             download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-[18px] sm:px-[24px] py-[10px] sm:py-[12px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[12px] sm:text-[13px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[6px] flex-shrink-0"
+                            className="px-[16px] sm:px-[20px] py-[8px] sm:py-[10px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[11px] sm:text-[12px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[5px]"
                           >
-                            <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            Yuklab olish
+                            <svg className="w-[12px] h-[12px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                               <polyline points="7 10 12 15 17 10" />
                               <line x1="12" y1="15" x2="12" y2="3" />
                             </svg>
-                            Yuklab olish
                           </a>
                         </div>
                       </div>
