@@ -7,7 +7,7 @@ export default function HeroSection() {
       <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:pt-[90px]">
 
         {/* Content fills the remaining space */}
-        <div className="flex-1 flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[12px] lg:gap-[16px] py-[4px] md:py-[8px] lg:py-[12px] pb-[20px] md:pb-[24px] lg:pb-[28px]">
+        <div className="flex-1 flex flex-col items-center justify-end px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[12px] lg:gap-[16px] py-[4px] md:py-[8px] lg:py-[12px] pb-[40px] md:pb-[60px] lg:pb-[80px]">
           {/* Logo */}
           <Image
             src="/assets/logo.png"
