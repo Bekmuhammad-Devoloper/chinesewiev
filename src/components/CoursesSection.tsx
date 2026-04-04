@@ -35,8 +35,9 @@ export default function CoursesSection() {
                 <div className="h-[180px] md:h-[280px] lg:h-[340px] w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden bg-white">
                   {isComingSoon && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 rounded-[10px] md:rounded-[16px]">
-                      <span className="bg-amber-500 text-white text-[14px] md:text-[18px] font-bold px-[20px] py-[8px] rounded-full shadow-lg">
-                        🕐 Tez kunda
+                      <span className="bg-amber-500 text-white text-[14px] md:text-[18px] font-bold px-[20px] py-[8px] rounded-full shadow-lg flex items-center gap-[6px]">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[16px] md:w-[20px] h-[16px] md:h-[20px]"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                        Tez kunda
                       </span>
                     </div>
                   )}

@@ -505,12 +505,20 @@ export default function AdminLessonsPage() {
                   }`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-[10px]">
-                        <div className={`w-[34px] h-[34px] rounded-[8px] flex items-center justify-center text-[15px] ${
+                        <div className={`w-[34px] h-[34px] rounded-[8px] flex items-center justify-center ${
                           editLesson.published !== false
-                            ? "bg-green-100 text-green-600"
-                            : "bg-amber-100 text-amber-600"
+                            ? "bg-green-100"
+                            : "bg-amber-100"
                         }`}>
-                          {editLesson.published !== false ? "🌐" : "🕐"}
+                          {editLesson.published !== false ? (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] text-green-600">
+                              <circle cx="12" cy="12" r="10" /><polyline points="9 12 12 12 12 9" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /><line x1="2" y1="12" x2="22" y2="12" />
+                            </svg>
+                          ) : (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] text-amber-600">
+                              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                            </svg>
+                          )}
                         </div>
                         <div>
                           <p className={`text-[13px] font-bold ${
@@ -852,7 +860,11 @@ export default function AdminLessonsPage() {
                     </td>
                     <td className="px-[16px] py-[12px]">
                       <span className={`text-[11px] font-bold px-[8px] py-[3px] rounded-full flex items-center gap-[3px] w-fit ${l.published === false ? "bg-amber-50 text-amber-500 border border-amber-200" : "bg-green-50 text-green-600 border border-green-200"}`}>
-                        {l.published === false ? <>🕐 Tez kunda</> : <>✓ Nashr</>}
+                        {l.published === false ? (
+                          <><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[11px] h-[11px]"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg> Tez kunda</>
+                        ) : (
+                          <><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[11px] h-[11px]"><polyline points="20 6 9 17 4 12" /></svg> Nashr</>
+                        )}
                       </span>
                     </td>
                     <td className="px-[16px] py-[12px]">

@@ -244,12 +244,20 @@ export default function AdminCoursesPage() {
               }`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-[12px]">
-                    <div className={`w-[40px] h-[40px] rounded-[10px] flex items-center justify-center text-[18px] ${
+                    <div className={`w-[40px] h-[40px] rounded-[10px] flex items-center justify-center ${
                       editCourse.published !== false
-                        ? "bg-green-100 text-green-600"
-                        : "bg-amber-100 text-amber-600"
+                        ? "bg-green-100"
+                        : "bg-amber-100"
                     }`}>
-                      {editCourse.published !== false ? "🌐" : "🕐"}
+                      {editCourse.published !== false ? (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[20px] h-[20px] text-green-600">
+                          <circle cx="12" cy="12" r="10" /><polyline points="9 12 12 12 12 9" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /><line x1="2" y1="12" x2="22" y2="12" />
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[20px] h-[20px] text-amber-600">
+                          <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                        </svg>
+                      )}
                     </div>
                     <div>
                       <p className={`text-[14px] font-bold ${
@@ -329,11 +337,13 @@ export default function AdminCoursesPage() {
                 <div className="absolute top-[10px] right-[10px]">
                   {c.published === false ? (
                     <span className="px-[10px] py-[4px] bg-amber-500 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-lg flex items-center gap-[4px]">
-                      🕐 Tez kunda
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[12px] h-[12px]"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                      Tez kunda
                     </span>
                   ) : (
                     <span className="px-[10px] py-[4px] bg-green-500 backdrop-blur-sm rounded-full text-[10px] font-bold text-white shadow-lg flex items-center gap-[4px]">
-                      ✓ Nashr
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[12px] h-[12px]"><polyline points="20 6 9 17 4 12" /></svg>
+                      Nashr
                     </span>
                   )}
                 </div>
