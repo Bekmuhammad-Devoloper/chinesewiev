@@ -583,21 +583,6 @@ export default function LessonDetailPage() {
                 <div className="absolute top-[-30px] right-[20%] w-[180px] h-[100px] bg-[#e8632b]/8 rounded-full blur-[50px] pointer-events-none" />
                 <div className="absolute bottom-[-20px] left-[10%] w-[140px] h-[80px] bg-[#f5a623]/6 rounded-full blur-[40px] pointer-events-none" />
 
-                {/* Badge row */}
-                <div className="flex items-center gap-[8px] mb-[10px] sm:mb-[12px] relative">
-                  <span className="inline-flex items-center gap-[5px] px-[10px] py-[4px] rounded-full bg-[#e8632b]/20 text-[#f5a623] text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.05em]">
-                    <svg className="w-[12px] h-[12px]" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                    Dialoglar
-                  </span>
-                </div>
-
-                <h1 className="text-[24px] sm:text-[30px] md:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.025em] leading-[1.12] relative">
-                  <span className="text-white">{dlg?.title || lesson.name}</span>
-                </h1>
-
-                {/* ── Divider ── */}
-                <div className="h-[1px] bg-white/10 my-[18px] sm:my-[22px]" />
-
                 {/* ── Integrated Audio Player ── */}
                 <div ref={playerRef} className="relative">
                   {/* Disc + title row */}
