@@ -56,19 +56,19 @@ export default function CoursesSection() {
                 <h3 className="text-gold font-bold text-[18px] md:text-[24px] lg:text-[30px] leading-[1.2] mb-[20px] md:mb-[26px] lg:mb-[30px] text-center">
                   {course.title}
                 </h3>
-                <ul className="space-y-[4px] md:space-y-[6px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[26px] md:mb-[30px]">
+                <ul className="space-y-[8px] md:space-y-[10px] lg:space-y-[12px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[26px] md:mb-[30px]">
                   {course.features.map((feature, i) => (
                     <li key={i}>&bull; {feature}</li>
                   ))}
                 </ul>
                 {isComingSoon ? (
-                  <div className="mt-[14px] md:mt-[18px] w-full bg-gray-400/60 text-white/80 font-bold text-[13px] md:text-[15px] lg:text-[16px] px-[20px] py-[10px] md:py-[12px] rounded-[10px] text-center cursor-default">
+                  <div className="mt-[18px] md:mt-[22px] w-full bg-gray-400/60 text-white/80 font-bold text-[13px] md:text-[15px] lg:text-[16px] px-[20px] py-[10px] md:py-[12px] rounded-[10px] text-center cursor-default">
                     Tez kunda
                   </div>
                 ) : (
                   <Link
                     href={`/courses/${course.slug}/lessons`}
-                    className="mt-[14px] md:mt-[18px] w-full bg-gold text-primary font-bold text-[13px] md:text-[15px] lg:text-[16px] px-[20px] py-[10px] md:py-[12px] rounded-[10px] hover:bg-gold-light transition-colors cursor-pointer text-center block"
+                    className="mt-[18px] md:mt-[22px] w-full bg-gold text-primary font-bold text-[13px] md:text-[15px] lg:text-[16px] px-[20px] py-[10px] md:py-[12px] rounded-[10px] hover:bg-gold-light transition-colors cursor-pointer text-center block"
                   >
                     Batafsil &rarr;
                   </Link>
