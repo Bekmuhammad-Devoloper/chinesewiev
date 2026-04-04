@@ -1118,37 +1118,44 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="grid grid-cols-3 gap-[10px] sm:gap-[14px]" style={{ height: (lesson!.writingSheets!.length <= 6) ? 'calc(100vh - 130px)' : undefined }}>
+                  <div
+                    className="grid grid-cols-3 gap-x-[16px] gap-y-[12px]"
+                    style={(lesson!.writingSheets!.length <= 6) ? { height: 'calc(100vh - 130px)' } : undefined}
+                  >
                     {(lesson!.writingSheets!).map((sheet, sIdx) => {
-                      const rows = Math.ceil(lesson!.writingSheets!.length / 3);
-                      const fitScreen = lesson!.writingSheets!.length <= 6;
+                      const total = lesson!.writingSheets!.length;
+                      const rows = Math.ceil(total / 3);
+                      const fitScreen = total <= 6;
                       return (
-                        <a
+                        <div
                           key={sIdx}
-                          href={sheet}
-                          download={`${lesson!.title}-husnihat-${sIdx + 1}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group relative bg-white rounded-[10px] border border-gray-200/80 overflow-hidden cursor-pointer hover:border-amber-300 hover:shadow-lg transition-all duration-300"
-                          style={fitScreen ? { height: `calc((100% - ${(rows - 1) * 10}px) / ${rows})` } : { aspectRatio: '4/5' }}
+                          className="flex flex-col items-center"
+                          style={fitScreen ? { height: `calc((100% - ${(rows - 1) * 12}px) / ${rows})` } : undefined}
                         >
-                          <img
-                            src={sheet}
-                            alt={`Husnihat ${sIdx + 1}`}
-                            className="w-full h-full object-contain p-[6px]"
-                          />
-                          {/* Hover overlay */}
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-end justify-center pb-[8px] opacity-0 group-hover:opacity-100">
-                            <span className="px-[10px] py-[4px] bg-white/90 backdrop-blur-sm text-[10px] sm:text-[11px] font-semibold text-gray-700 rounded-full shadow-sm flex items-center gap-[4px]">
-                              <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                              </svg>
-                              Yuklab olish
-                            </span>
+                          {/* Kartochka */}
+                          <div className={`w-full bg-white rounded-[12px] border-[1.5px] border-gray-300 overflow-hidden ${fitScreen ? 'flex-1 min-h-0' : 'aspect-[3/4]'}`}>
+                            <img
+                              src={sheet}
+                              alt={`Husnihat ${sIdx + 1}`}
+                              className="w-full h-full object-contain"
+                            />
                           </div>
-                        </a>
+                          {/* Yuklab olish tugmasi */}
+                          <a
+                            href={sheet}
+                            download={`${lesson!.title}-husnihat-${sIdx + 1}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-[6px] shrink-0 inline-flex items-center gap-[4px] px-[14px] py-[5px] bg-[#f5a623] hover:bg-[#e89620] text-white text-[11px] font-bold rounded-full active:scale-[0.97] transition-all duration-200"
+                          >
+                            Yuklab olish
+                            <svg className="w-[11px] h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                          </a>
+                        </div>
                       );
                     })}
                   </div>
