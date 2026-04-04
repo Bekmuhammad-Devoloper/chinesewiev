@@ -98,7 +98,7 @@ export default function AdminLessonsPage() {
     setIsNew(true);
     setActiveTab("general");
     setEditLesson({
-      id: 0, title: "", name: "", description: "", image: "", locked: true,
+      id: 0, title: "", name: "", description: "", image: "", locked: true, published: false,
       words: [],
       sections: [
         { id: "new-words", title: "Yangi so'zlar", type: "words" },
@@ -497,6 +497,13 @@ export default function AdminLessonsPage() {
                     <input type="checkbox" checked={!editLesson.locked} onChange={(e) => updateLesson({ locked: !e.target.checked })} className="w-[18px] h-[18px] accent-[#e8632b]" />
                     <span className="text-[13px] font-medium text-gray-700">Ochiq (qulflanmagan)</span>
                   </label>
+                  <label className="flex items-center gap-[8px] cursor-pointer">
+                    <input type="checkbox" checked={editLesson.published !== false} onChange={(e) => updateLesson({ published: e.target.checked })} className="w-[18px] h-[18px] accent-green-600" />
+                    <span className="text-[13px] font-medium text-gray-700">Nashr qilingan</span>
+                    {editLesson.published === false && (
+                      <span className="text-[11px] text-amber-500 bg-amber-50 px-[8px] py-[2px] rounded-full">Tez kunda</span>
+                    )}
+                  </label>
 
                   {/* ── Husnihat (A4 yozuv varaqasi) ── */}
                   <div className="mt-[8px]">
@@ -789,6 +796,7 @@ export default function AdminLessonsPage() {
                   <th className="px-[16px] py-[12px]">Nomi</th>
                   <th className="px-[16px] py-[12px] w-[70px]">So&apos;zlar</th>
                   <th className="px-[16px] py-[12px] w-[80px]">Holat</th>
+                  <th className="px-[16px] py-[12px] w-[80px]">Nashr</th>
                   <th className="px-[16px] py-[12px] w-[140px]">Amallar</th>
                 </tr>
               </thead>
@@ -805,6 +813,11 @@ export default function AdminLessonsPage() {
                       </span>
                     </td>
                     <td className="px-[16px] py-[12px]">
+                      <span className={`text-[11px] font-bold px-[8px] py-[3px] rounded-full w-fit ${l.published === false ? "bg-amber-50 text-amber-500" : "bg-green-50 text-green-600"}`}>
+                        {l.published === false ? "Tez kunda" : "Nashr ✓"}
+                      </span>
+                    </td>
+                    <td className="px-[16px] py-[12px]">
                       <div className="flex gap-[6px]">
                         <button onClick={() => { setEditLesson(l); setIsNew(false); setActiveTab("general"); }}
                           className="px-[12px] py-[6px] bg-[#f1f5f9] text-[11px] font-semibold text-[#1a1a2e] rounded-[6px] hover:bg-[#e2e8f0] flex items-center gap-[4px]"><Pencil size={12} /> Tahrir</button>
@@ -814,7 +827,7 @@ export default function AdminLessonsPage() {
                     </td>
                   </tr>
                 ))}
-                {lessons.length === 0 && <tr><td colSpan={6} className="text-center py-[32px] text-[14px] text-gray-300">Hali darslik yo&apos;q</td></tr>}
+                {lessons.length === 0 && <tr><td colSpan={7} className="text-center py-[32px] text-[14px] text-gray-300">Hali darslik yo&apos;q</td></tr>}
               </tbody>
             </table>
           </div>

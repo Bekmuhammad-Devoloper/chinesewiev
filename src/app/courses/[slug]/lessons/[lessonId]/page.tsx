@@ -41,6 +41,11 @@ export default function LessonDetailPage() {
         setCourse(c);
         const les = lessonData?.id ? lessonData : null;
         setLesson(les);
+        // Agar dars nashr qilinmagan bo'lsa — kirish mumkin emas
+        if (les?.published === false) {
+          router.replace(`/courses/${slug}/lessons`);
+          return;
+        }
         // Agar dars locked va foydalanuvchi login qilmagan bo'lsa
         if (les?.locked && !isAuth) {
           router.replace("/login");

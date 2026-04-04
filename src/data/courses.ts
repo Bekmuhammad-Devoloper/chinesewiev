@@ -65,6 +65,7 @@ export interface Lesson {
   description: string;
   image?: string;
   locked: boolean;
+  published?: boolean;
   words?: Word[];
   sections?: LessonSection[];
   tasks?: Task[];

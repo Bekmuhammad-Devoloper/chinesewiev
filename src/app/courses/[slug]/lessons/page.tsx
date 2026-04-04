@@ -80,21 +80,29 @@ export default function LessonsPage() {
         {/* Lessons Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[20px]">
           {course.lessons.map((lesson) => {
-            // Agar foydalanuvchi login qilgan bo'lsa, barcha darslar ochiq
-            const isLocked = isAuthenticated ? false : lesson.locked;
-            const href = isLocked
-              ? "/login"
-              : `/courses/${slug}/lessons/${lesson.id}`;
+            const isPublished = lesson.published !== false; // eski darsliklar default published
+            const isLocked = isPublished ? (isAuthenticated ? false : lesson.locked) : true;
+            const isComingSoon = !isPublished;
+            const href = isLocked ? "/login" : `/courses/${slug}/lessons/${lesson.id}`;
 
-            return (
-              <Link
-                key={lesson.id}
-                href={href}
-                className="group bg-white rounded-[10px] sm:rounded-[12px] md:rounded-[14px] overflow-hidden border border-gray-100 shadow-[0_1px_6px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:border-gray-200 transition-all duration-200 block cursor-pointer"
-              >
+            const cardClassName = `group bg-white rounded-[10px] sm:rounded-[12px] md:rounded-[14px] overflow-hidden border border-gray-100 shadow-[0_1px_6px_rgba(0,0,0,0.04)] transition-all duration-200 block ${
+              isComingSoon
+                ? "opacity-70 cursor-default"
+                : "hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:border-gray-200 cursor-pointer"
+            }`;
+
+            const cardContent = (
+              <>
                 {/* Card Image / Lock Area */}
                 <div className="relative w-full aspect-[5/4] bg-[#f7f7f7] flex items-center justify-center overflow-hidden">
-                  {isLocked ? (
+                  {isComingSoon ? (
+                    <div className="flex flex-col items-center gap-[6px]">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-[28px] sm:w-[36px] md:w-[44px] lg:w-[50px] h-auto opacity-60">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                    </div>
+                  ) : isLocked ? (
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -128,7 +136,15 @@ export default function LessonsPage() {
                   <p className="text-[8px] sm:text-[9px] md:text-[11px] lg:text-[12px] xl:text-[13px] text-gray-400 leading-[1.3] line-clamp-1">
                     {lesson.description}
                   </p>
-                  {!isLocked ? (
+                  {isComingSoon ? (
+                    <span className="inline-flex items-center gap-[6px] bg-gray-100 text-gray-400 text-[8px] sm:text-[9px] md:text-[11px] font-semibold px-[10px] sm:px-[14px] md:px-[18px] py-[3px] sm:py-[4px] md:py-[5px] rounded-full">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-[10px] sm:w-[12px] h-auto">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                      Tez kunda
+                    </span>
+                  ) : !isLocked ? (
                     <span className="inline-block bg-orange-500 text-white text-[9px] sm:text-[10px] md:text-[12px] font-semibold px-[12px] sm:px-[16px] md:px-[20px] py-[4px] sm:py-[5px] md:py-[6px] rounded-full group-hover:bg-orange-600 transition-colors shadow-sm group-hover:shadow-md">
                       Kirish
                     </span>
@@ -142,6 +158,16 @@ export default function LessonsPage() {
                     </span>
                   )}
                 </div>
+              </>
+            );
+
+            return isComingSoon ? (
+              <div key={lesson.id} className={cardClassName}>
+                {cardContent}
+              </div>
+            ) : (
+              <Link key={lesson.id} href={href} className={cardClassName}>
+                {cardContent}
               </Link>
             );
           })}
