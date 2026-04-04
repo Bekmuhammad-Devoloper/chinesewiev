@@ -3,11 +3,11 @@ import Image from "next/image";
 export default function HeroSection() {
   return (
     <section id="hero" className="bg-primary">
-      {/* First screen: Content = exactly 100vh */}
-      <div className="min-h-screen flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:pt-[90px]">
+      {/* First screen */}
+      <div className="flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:pt-[90px]">
 
-        {/* Content fills the remaining space */}
-        <div className="flex-1 flex flex-col items-center justify-end px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[12px] lg:gap-[16px] py-[4px] md:py-[8px] lg:py-[12px] pb-[40px] md:pb-[60px] lg:pb-[80px]">
+        {/* Content */}
+        <div className="flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[12px] lg:gap-[16px] pt-[20px] md:pt-[40px] lg:pt-[60px] pb-[40px] md:pb-[60px] lg:pb-[80px]">
           {/* Logo */}
           <Image
             src="/assets/logo.png"
