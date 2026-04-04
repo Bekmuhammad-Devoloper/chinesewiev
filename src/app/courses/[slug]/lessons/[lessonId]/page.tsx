@@ -589,29 +589,11 @@ export default function LessonDetailPage() {
                     <svg className="w-[12px] h-[12px]" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
                     Dialoglar
                   </span>
-                  <span className="text-white/20 text-[12px]">&middot;</span>
-                  <span className="text-white/40 text-[12px] font-medium">{course.title}</span>
                 </div>
 
                 <h1 className="text-[24px] sm:text-[30px] md:text-[36px] lg:text-[42px] font-extrabold tracking-[-0.025em] leading-[1.12] relative">
                   <span className="text-white">{dlg?.title || lesson.name}</span>
                 </h1>
-
-                {/* Stats row */}
-                <div className="flex items-center gap-[12px] sm:gap-[16px] mt-[10px] sm:mt-[12px] relative">
-                  <span className="inline-flex items-center gap-[5px] text-[12px] sm:text-[13px] text-white/40 font-medium">
-                    <svg className="w-[14px] h-[14px] text-[#f5a623]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
-                    {words.length} ta so&apos;z
-                  </span>
-                  <span className="inline-flex items-center gap-[5px] text-[12px] sm:text-[13px] text-white/40 font-medium">
-                    <svg className="w-[14px] h-[14px] text-[#22c55e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
-                    {tasks.length} ta vazifa
-                  </span>
-                  <span className="inline-flex items-center gap-[5px] text-[12px] sm:text-[13px] text-white/40 font-medium">
-                    <svg className="w-[14px] h-[14px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                    {sections.filter(s => s.id === "dialogues").flatMap(s => s.children || []).length} ta dialog
-                  </span>
-                </div>
 
                 {/* ── Divider ── */}
                 <div className="h-[1px] bg-white/10 my-[18px] sm:my-[22px]" />
