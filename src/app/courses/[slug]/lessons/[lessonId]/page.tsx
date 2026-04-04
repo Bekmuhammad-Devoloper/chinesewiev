@@ -1118,12 +1118,12 @@ export default function LessonDetailPage() {
               <div>
                 {renderMobileTrigger()}
                 {(lesson?.writingSheets || []).length > 0 ? (
-                  <div className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] p-[12px] sm:p-[16px] md:p-[20px]">
-                    <div className="grid grid-cols-3 gap-[10px] sm:gap-[14px] md:gap-[18px]">
+                  <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] p-[10px] sm:p-[14px] md:p-[18px]">
+                    <div className="grid grid-cols-3 gap-[8px] sm:gap-[12px] md:gap-[14px]">
                       {(lesson!.writingSheets!).map((sheet, sIdx) => (
-                        <div key={sIdx} className="flex flex-col items-center gap-[6px] sm:gap-[8px]">
+                        <div key={sIdx} className="flex flex-col items-center gap-[5px] sm:gap-[6px]">
                           {/* Kartochka rasm */}
-                          <div className="w-full aspect-[3/4] rounded-[8px] sm:rounded-[10px] border border-gray-200 bg-white overflow-hidden flex items-center justify-center p-[3px] sm:p-[4px] hover:shadow-[0_2px_10px_rgba(0,0,0,0.08)] transition-shadow duration-200">
+                          <div className="w-full aspect-[5/6] rounded-[6px] sm:rounded-[8px] border border-gray-200 bg-white overflow-hidden flex items-center justify-center p-[2px] sm:p-[3px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow duration-200">
                             <img
                               src={sheet}
                               alt={`Husnihat ${sIdx + 1}`}
@@ -1136,10 +1136,10 @@ export default function LessonDetailPage() {
                             download={`${lesson!.title}-husnihat-${sIdx + 1}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-[10px] sm:px-[14px] md:px-[18px] py-[5px] sm:py-[7px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[9px] sm:text-[10px] md:text-[11px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.25)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[3px] sm:gap-[4px]"
+                            className="px-[8px] sm:px-[12px] md:px-[14px] py-[4px] sm:py-[5px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[8px] sm:text-[9px] md:text-[10px] font-bold rounded-full shadow-[0_2px_6px_rgba(245,166,35,0.25)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[3px]"
                           >
                             Yuklab olish
-                            <svg className="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <svg className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                               <polyline points="7 10 12 15 17 10" />
                               <line x1="12" y1="15" x2="12" y2="3" />
