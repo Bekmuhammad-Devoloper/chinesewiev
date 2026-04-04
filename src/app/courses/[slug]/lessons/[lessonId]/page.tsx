@@ -1121,8 +1121,8 @@ export default function LessonDetailPage() {
                   <div className="grid grid-cols-3 gap-x-[14px] gap-y-[6px] h-[calc(100vh-130px)]" style={{ gridTemplateRows: `repeat(${Math.ceil(lesson!.writingSheets!.length / 3)}, 1fr)` }}>
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center min-h-0">
-                        {/* Kartochka */}
-                        <div className="flex-1 min-h-0 w-full max-w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden">
+                        {/* Kartochka - balandlikdan aspect 3/4 bilan kenglik chiqadi */}
+                        <div className="flex-1 min-h-0 aspect-[3/4] bg-white rounded-[10px] border border-gray-800 overflow-hidden">
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
