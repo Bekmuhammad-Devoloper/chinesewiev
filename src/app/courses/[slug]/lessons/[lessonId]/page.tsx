@@ -76,6 +76,9 @@ export default function LessonDetailPage() {
   const [playingWordIdx, setPlayingWordIdx] = useState<number | null>(null);
   const wordAudioRef = useRef<HTMLAudioElement | null>(null);
 
+  /* Lightbox state for writing sheets */
+  const [lightboxImg, setLightboxImg] = useState<string | null>(null);
+
   const playWordAudio = useCallback((audioSrc: string | undefined, idx: number) => {
     if (!audioSrc) return;
     // Stop current
@@ -1122,7 +1125,7 @@ export default function LessonDetailPage() {
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center min-h-0">
                         {/* Kartochka */}
-                        <div className="flex-1 min-h-0 aspect-[3/4] bg-white rounded-[10px] border border-gray-800 overflow-hidden">
+                        <div className="flex-1 min-h-0 aspect-[3/4] bg-white rounded-[10px] border border-gray-800 overflow-hidden cursor-pointer" onClick={() => setLightboxImg(sheet)}>
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
@@ -1159,6 +1162,19 @@ export default function LessonDetailPage() {
                     </div>
                     <p className="text-[16px] sm:text-[18px] font-bold text-gray-700">Husnihat varaqasi</p>
                     <p className="text-[13px] sm:text-[14px] text-gray-400 mt-[6px]">Hali yuklanmagan. Tez orada qo&apos;shiladi!</p>
+                  </div>
+                )}
+
+                {/* Lightbox Modal */}
+                {lightboxImg && (
+                  <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4" onClick={() => setLightboxImg(null)}>
+                    <button className="absolute top-4 right-4 w-[40px] h-[40px] bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white text-[24px] transition-colors" onClick={() => setLightboxImg(null)}>✕</button>
+                    <img
+                      src={lightboxImg}
+                      alt="Husnihat"
+                      className="max-w-[90vw] max-h-[90vh] object-contain rounded-[12px] shadow-2xl"
+                      onClick={(e) => e.stopPropagation()}
+                    />
                   </div>
                 )}
               </div>
