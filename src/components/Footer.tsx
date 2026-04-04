@@ -33,14 +33,14 @@ export default function Footer() {
             <h3 className="text-gold font-bold text-[18px] md:text-[36px] lg:text-[44px] leading-[1.2] mb-[18px] md:mb-[30px] lg:mb-[36px] text-left">
               Bog&apos;lanish:
             </h3>
-            <ul className="space-y-[14px] md:space-y-[20px] lg:space-y-[24px]">
+            <ul className="space-y-[18px] md:space-y-[24px] lg:space-y-[28px]">
               {contacts.map((c) => (
                 <li key={c.label}>
                   <a
                     href={c.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-[8px] md:gap-[14px] text-gold text-[11px] md:text-[20px] lg:text-[24px] font-normal leading-[1.5] hover:text-gold-light transition-colors"
+                    className="flex items-center gap-[10px] md:gap-[14px] text-gold text-[13px] md:text-[20px] lg:text-[24px] font-normal leading-[1.5] hover:text-gold-light transition-colors"
                   >
                     <Image
                       src={c.icon}
