@@ -7,10 +7,12 @@ import PricingSection from "@/components/PricingSection";
 import OutcomesSection from "@/components/OutcomesSection";
 import ResultSection from "@/components/ResultSection";
 import Footer from "@/components/Footer";
+import PageViewTracker from "@/components/PageViewTracker";
 
 export default function Home() {
   return (
     <main className="bg-primary">
+      <PageViewTracker page="/" />
       <HeroSection />
       <AboutSection />
       <LessonsSection />

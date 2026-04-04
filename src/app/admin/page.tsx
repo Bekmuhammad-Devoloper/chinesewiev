@@ -19,6 +19,7 @@ import {
   BarChart3,
   PieChart as PieChartIcon,
   Activity,
+  Eye,
 } from "lucide-react";
 import {
   BarChart,
@@ -40,14 +41,17 @@ export default function AdminDashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewsData, setViewsData] = useState<{ daily: { date: string; count: number }[]; total: number }>({ daily: [], total: 0 });
 
   useEffect(() => {
     Promise.all([
       fetch("/api/seed", { method: "POST" }).then(() => fetch("/api/courses").then((r) => r.json())),
       fetch("/api/users").then((r) => r.json()).catch(() => []),
-    ]).then(([coursesData, usersData]) => {
+      fetch("/api/views").then((r) => r.json()).catch(() => ({ daily: [], total: 0 })),
+    ]).then(([coursesData, usersData, views]) => {
       setCourses(Array.isArray(coursesData) ? coursesData : []);
       setUsers(Array.isArray(usersData) ? usersData : []);
+      setViewsData(views && views.daily ? views : { daily: [], total: 0 });
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -111,7 +115,25 @@ export default function AdminDashboard() {
     { label: "Vazifalar", value: totalTasks, icon: ClipboardCheck, color: "text-amber-600", iconBg: "bg-amber-50 text-amber-500", href: "/admin/lessons" },
     { label: "Foydalanuvchilar", value: activeUsers, icon: Users, color: "text-cyan-600", iconBg: "bg-cyan-50 text-cyan-500", href: "/admin/users" },
     { label: "Kalitlar", value: totalKeys, icon: KeyRound, color: "text-pink-600", iconBg: "bg-pink-50 text-pink-500", href: "/admin/keys" },
+    { label: "Ko'rishlar", value: viewsData.total, icon: Eye, color: "text-indigo-600", iconBg: "bg-indigo-50 text-indigo-500", href: "/admin" },
   ];
+
+  /* ── Views chart data — oxirgi 30 kun ── */
+  const viewsChartData = (() => {
+    const days: { date: string; label: string; views: number }[] = [];
+    const now = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      const label = `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const found = viewsData.daily.find((v) => v.date === dateStr);
+      days.push({ date: dateStr, label, views: found?.count || 0 });
+    }
+    return days;
+  })();
+  const todayViews = viewsChartData[viewsChartData.length - 1]?.views || 0;
+  const yesterdayViews = viewsChartData[viewsChartData.length - 2]?.views || 0;
 
   const quickActions = [
     { label: "Yangi kurs", desc: "Kurs qo\u2018shish", icon: BookOpen, href: "/admin/courses", gradient: "from-blue-500 to-blue-600" },
@@ -198,6 +220,65 @@ export default function AdminDashboard() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              {/* ── Landing ko'rishlar — full width ── */}
+              <div className="lg:col-span-2 bg-white rounded-[16px] border border-gray-100/80 p-[22px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                <div className="flex items-center justify-between mb-[18px]">
+                  <div className="flex items-center gap-[8px]">
+                    <div className="w-[32px] h-[32px] bg-indigo-50 rounded-[9px] flex items-center justify-center">
+                      <Eye size={17} className="text-indigo-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-[14px] font-bold text-[#1a1a2e]">Landing sahifa ko&apos;rishlar</h3>
+                      <p className="text-[11px] text-gray-400">Oxirgi 30 kun</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-[16px]">
+                    <div className="text-right">
+                      <p className="text-[20px] font-bold text-indigo-600 leading-none">{todayViews}</p>
+                      <p className="text-[10px] text-gray-400 mt-[2px]">Bugun</p>
+                    </div>
+                    <div className="w-[1px] h-[28px] bg-gray-100" />
+                    <div className="text-right">
+                      <p className="text-[20px] font-bold text-gray-400 leading-none">{yesterdayViews}</p>
+                      <p className="text-[10px] text-gray-400 mt-[2px]">Kecha</p>
+                    </div>
+                    <div className="w-[1px] h-[28px] bg-gray-100" />
+                    <div className="text-right">
+                      <p className="text-[20px] font-bold text-[#1a1a2e] leading-none">{viewsData.total}</p>
+                      <p className="text-[10px] text-gray-400 mt-[2px]">Jami</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-[260px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={viewsChartData}>
+                      <defs>
+                        <linearGradient id="gradViews" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#6366f1" stopOpacity={0.3} />
+                          <stop offset="100%" stopColor="#6366f1" stopOpacity={0.02} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                      <XAxis dataKey="label" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} interval={2} />
+                      <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} width={35} allowDecimals={false} />
+                      <Tooltip
+                        contentStyle={{
+                          background: "#fff",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "12px",
+                          boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                          fontSize: "12px",
+                          padding: "10px 14px",
+                        }}
+                        formatter={(value: unknown) => [`${value} ko'rish`, "Ko'rishlar"]}
+                        labelFormatter={(label: unknown) => `📅 ${String(label)}`}
+                      />
+                      <Area type="monotone" dataKey="views" stroke="#6366f1" strokeWidth={2.5} fill="url(#gradViews)" name="Ko'rishlar" dot={false} activeDot={{ r: 5, fill: "#6366f1", stroke: "#fff", strokeWidth: 2 }} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
               {/* Bar Chart — Kurs bo'yicha kontent */}
               <div className="bg-white rounded-[16px] border border-gray-100/80 p-[22px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                 <div className="flex items-center justify-between mb-[18px]">
