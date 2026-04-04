@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   Plus, X, Pencil, Trash2, Lock, Unlock, Loader2,
   BookOpen, MessageSquare, Languages,
-  Settings, Play, Music, FileAudio, ImagePlus, FileText,
+  Settings, Play, Music, FileAudio, ImagePlus, FileText, Download,
 } from "lucide-react";
 import type { Course, Lesson, Word, DialogueLine, GrammarRule, GrammarExample } from "@/data/courses";
 
@@ -627,6 +627,9 @@ export default function AdminLessonsPage() {
                   <div className="flex items-center justify-between mb-[14px]">
                     <div className="flex items-center gap-[8px]"><MessageSquare size={18} className="text-[#e8632b]" /><p className="text-[15px] font-bold text-gray-700">{(getDialogueSection()?.children || []).length} ta dialog</p></div>
                     <div className="flex gap-[6px]">
+                      <a href="/assets/dialog-shablon.docx" download className="px-[12px] py-[8px] bg-gray-50 text-gray-500 text-[12px] font-bold rounded-[8px] hover:bg-gray-100 flex items-center gap-[5px] transition-all no-underline">
+                        <Download size={14} /> Shablon
+                      </a>
                       <button onClick={() => dialogueDocxInputRef.current?.click()} disabled={parsingDialogueDocx}
                         className="px-[14px] py-[8px] bg-blue-50 text-blue-600 text-[12px] font-bold rounded-[8px] hover:bg-blue-100 flex items-center gap-[5px] active:scale-[0.97] transition-all disabled:opacity-50">
                         {parsingDialogueDocx ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />} Word yuklash
@@ -695,6 +698,9 @@ export default function AdminLessonsPage() {
                   <div className="flex items-center justify-between mb-[14px]">
                     <div className="flex items-center gap-[8px]"><Languages size={18} className="text-[#e8632b]" /><p className="text-[15px] font-bold text-gray-700">{(getGrammarSection()?.children || []).length} ta mavzu</p></div>
                     <div className="flex gap-[6px]">
+                      <a href="/assets/grammatika-shablon.docx" download className="px-[12px] py-[8px] bg-gray-50 text-gray-500 text-[12px] font-bold rounded-[8px] hover:bg-gray-100 flex items-center gap-[5px] transition-all no-underline">
+                        <Download size={14} /> Shablon
+                      </a>
                       <button onClick={() => grammarDocxInputRef.current?.click()} disabled={parsingGrammarDocx}
                         className="px-[14px] py-[8px] bg-blue-50 text-blue-600 text-[12px] font-bold rounded-[8px] hover:bg-blue-100 flex items-center gap-[5px] active:scale-[0.97] transition-all disabled:opacity-50">
                         {parsingGrammarDocx ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />} Word yuklash
