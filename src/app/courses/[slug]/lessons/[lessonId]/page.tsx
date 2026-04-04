@@ -810,7 +810,7 @@ export default function LessonDetailPage() {
                     className="group border-b border-gray-100 last:border-b-0 hover:bg-[#fefaf7] transition-colors duration-150"
                   >
                     {/* ── Desktop: notebook-style row ── */}
-                    <div className="hidden sm:grid sm:grid-cols-[40px_1.2fr_1fr_1fr] items-center px-[16px] sm:px-[20px] md:px-[24px] py-[14px] sm:py-[16px] gap-x-[12px] sm:gap-x-[16px]">
+                    <div className="hidden sm:grid sm:grid-cols-[40px_1.2fr_1fr_1fr] items-center px-[16px] sm:px-[20px] md:px-[24px] py-[14px] sm:py-[16px] gap-x-[12px] sm:gap-x-[16px] overflow-hidden">
                       {/* Play button */}
                       <button
                         title={`${word.pinyin} tinglash`}
@@ -836,19 +836,19 @@ export default function LessonDetailPage() {
                       </button>
 
                       {/* Hanzi */}
-                      <div className="flex items-center gap-[8px]">
-                        <span className="text-[28px] sm:text-[30px] md:text-[34px] text-[#1a1a2e] font-semibold leading-none group-hover:text-[#e8632b] transition-colors duration-200">
+                      <div className="flex items-center gap-[8px] min-w-0">
+                        <span className="text-[28px] sm:text-[30px] md:text-[34px] text-[#1a1a2e] font-semibold leading-none group-hover:text-[#e8632b] transition-colors duration-200 truncate">
                           {word.hanzi}
                         </span>
                       </div>
 
                       {/* Pinyin */}
-                      <span className="text-[14px] sm:text-[15px] md:text-[16px] text-[#e8632b] font-medium italic leading-snug">
+                      <span className="text-[14px] sm:text-[15px] md:text-[16px] text-[#e8632b] font-medium italic leading-snug truncate min-w-0">
                         {word.pinyin}
                       </span>
 
                       {/* Translation */}
-                      <span className="text-[14px] sm:text-[15px] md:text-[16px] text-[#333] font-semibold leading-snug">
+                      <span className="text-[14px] sm:text-[15px] md:text-[16px] text-[#333] font-semibold leading-snug truncate min-w-0">
                         {word.translation}
                       </span>
                     </div>
@@ -879,7 +879,7 @@ export default function LessonDetailPage() {
 
                       {/* Pinyin + Translation */}
                       <div className="flex-1 flex flex-col gap-[2px] min-w-0">
-                        <span className="text-[13px] text-[#e8632b] font-medium italic leading-snug">
+                        <span className="text-[13px] text-[#e8632b] font-medium italic leading-snug truncate">
                           {word.pinyin}
                         </span>
                         <span className="text-[13px] text-[#333] font-semibold leading-snug truncate">
