@@ -1114,49 +1114,43 @@ export default function LessonDetailPage() {
             {/* ══════════════════════════════════════════ */}
             {/* ── WRITING VIEW (So'z yozilishi)        ── */}
             {/* ══════════════════════════════════════════ */}
-            {activeSection === "writing" && (() => {
-              const sheets = lesson?.writingSheets || [];
-              const rowCount = Math.ceil(sheets.length / 3);
-              // 6ta yoki kamroq (2 qator) = scrollsiz, viewport ga sig'adi
-              // 7+ = oddiy scroll
-              const fitsOnScreen = sheets.length <= 6;
-              return (
+            {activeSection === "writing" && (
               <div>
                 {renderMobileTrigger()}
-                {sheets.length > 0 ? (
-                  <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] p-[6px] sm:p-[10px] md:p-[14px]">
-                    <div
-                      className="grid grid-cols-3 gap-[6px] sm:gap-[8px] md:gap-[10px]"
-                      style={fitsOnScreen ? { height: 'calc(100vh - 160px)' } : undefined}
-                    >
-                      {sheets.map((sheet, sIdx) => (
-                        <div key={sIdx} className="flex flex-col items-center gap-[3px] sm:gap-[4px]" style={fitsOnScreen ? { height: `calc((100% - ${(rowCount - 1) * 6}px) / ${rowCount})` } : undefined}>
-                          {/* Kartochka rasm */}
-                          <div className={`w-full rounded-[6px] sm:rounded-[8px] border border-gray-200 bg-white overflow-hidden flex items-center justify-center p-[1px] sm:p-[2px] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow duration-200 ${fitsOnScreen ? 'flex-1 min-h-0' : 'aspect-[3/4]'}`}>
-                            <img
-                              src={sheet}
-                              alt={`Husnihat ${sIdx + 1}`}
-                              className="w-full h-full object-contain"
-                            />
+                {(lesson?.writingSheets || []).length > 0 ? (
+                  <div className="grid grid-cols-3 gap-[10px] sm:gap-[14px]" style={{ height: (lesson!.writingSheets!.length <= 6) ? 'calc(100vh - 130px)' : undefined }}>
+                    {(lesson!.writingSheets!).map((sheet, sIdx) => {
+                      const rows = Math.ceil(lesson!.writingSheets!.length / 3);
+                      const fitScreen = lesson!.writingSheets!.length <= 6;
+                      return (
+                        <a
+                          key={sIdx}
+                          href={sheet}
+                          download={`${lesson!.title}-husnihat-${sIdx + 1}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative bg-white rounded-[10px] border border-gray-200/80 overflow-hidden cursor-pointer hover:border-amber-300 hover:shadow-lg transition-all duration-300"
+                          style={fitScreen ? { height: `calc((100% - ${(rows - 1) * 10}px) / ${rows})` } : { aspectRatio: '4/5' }}
+                        >
+                          <img
+                            src={sheet}
+                            alt={`Husnihat ${sIdx + 1}`}
+                            className="w-full h-full object-contain p-[6px]"
+                          />
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-end justify-center pb-[8px] opacity-0 group-hover:opacity-100">
+                            <span className="px-[10px] py-[4px] bg-white/90 backdrop-blur-sm text-[10px] sm:text-[11px] font-semibold text-gray-700 rounded-full shadow-sm flex items-center gap-[4px]">
+                              <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                              </svg>
+                              Yuklab olish
+                            </span>
                           </div>
-                          {/* Yuklab olish tugmasi */}
-                          <a
-                            href={sheet}
-                            download={`${lesson!.title}-husnihat-${sIdx + 1}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="shrink-0 px-[7px] sm:px-[10px] md:px-[12px] py-[2px] sm:py-[3px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[7px] sm:text-[8px] md:text-[9px] font-bold rounded-full shadow-[0_2px_6px_rgba(245,166,35,0.25)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[2px]"
-                          >
-                            Yuklab olish
-                            <svg className="w-[8px] h-[8px] sm:w-[9px] sm:h-[9px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                              <polyline points="7 10 12 15 17 10" />
-                              <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                          </a>
-                        </div>
-                      ))}
-                    </div>
+                        </a>
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.06)] p-[40px] sm:p-[60px] text-center max-w-[520px] mx-auto">
@@ -1171,8 +1165,7 @@ export default function LessonDetailPage() {
                   </div>
                 )}
               </div>
-              );
-            })()}
+            )}
 
             {/* ══════════════════════════════════════════ */}
             {activeSection.startsWith("grammar-") && (() => {
