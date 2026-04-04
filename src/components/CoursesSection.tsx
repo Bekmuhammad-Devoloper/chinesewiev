@@ -56,7 +56,7 @@ export default function CoursesSection() {
                 <h3 className="text-gold font-bold text-[18px] md:text-[24px] lg:text-[30px] leading-[1.2] mb-[20px] md:mb-[26px] lg:mb-[30px] text-center">
                   {course.title}
                 </h3>
-                <ul className="space-y-[8px] md:space-y-[10px] lg:space-y-[12px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[26px] md:mb-[30px]">
+                <ul className="space-y-[8px] md:space-y-[10px] lg:space-y-[12px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[40px] md:mb-[44px]">
                   {course.features.map((feature, i) => (
                     <li key={i}>&bull; {feature}</li>
                   ))}
