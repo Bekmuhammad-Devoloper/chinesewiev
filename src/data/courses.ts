@@ -4,7 +4,6 @@ export interface Word {
   translation: string;
   image?: string;
   audio?: string;
-  writingSheet?: string;
 }
 
 export interface DialogueLine {
@@ -69,7 +68,7 @@ export interface Lesson {
   words?: Word[];
   sections?: LessonSection[];
   tasks?: Task[];
-  writingSheet?: string;
+  writingSheets?: string[];
 }
 
 export interface Course {

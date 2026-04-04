@@ -164,7 +164,8 @@ export default function AdminLessonsPage() {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json();
       if (data.url) {
-        updateLesson({ writingSheet: data.url });
+        const sheets = [...(editLesson?.writingSheets || []), data.url];
+        updateLesson({ writingSheets: sheets });
       } else {
         alert(data.error || "Yuklashda xatolik");
       }
@@ -172,6 +173,11 @@ export default function AdminLessonsPage() {
       alert("Fayl yuklashda xatolik yuz berdi");
     }
     setUploadingLessonSheet(false);
+  };
+  const removeLessonSheet = (idx: number) => {
+    const sheets = [...(editLesson?.writingSheets || [])];
+    sheets.splice(idx, 1);
+    updateLesson({ writingSheets: sheets });
   };
   const onLessonSheetFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -213,7 +219,7 @@ export default function AdminLessonsPage() {
 
   /* ── Word helpers ── */
   const addWord = () => {
-    const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "", writingSheet: "" }];
+    const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "" }];
     updateLesson({ words });
   };
   const updateWord = (idx: number, field: keyof Word, value: string) => {
@@ -465,41 +471,39 @@ export default function AdminLessonsPage() {
 
                   {/* ── Husnihat (A4 yozuv varaqasi) ── */}
                   <div className="mt-[8px]">
-                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[8px]">Husnihat varaqasi (A4)</label>
-                    {editLesson.writingSheet ? (
-                      <div className="border border-amber-200 bg-amber-50/50 rounded-[12px] p-[14px]">
-                        <div className="flex items-start gap-[14px]">
-                          <div className="w-[80px] h-[110px] rounded-[8px] overflow-hidden border border-amber-200 bg-white flex-shrink-0 relative">
-                            <Image src={editLesson.writingSheet} alt="Husnihat" fill className="object-contain p-[2px]" sizes="80px" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[13px] font-semibold text-amber-800 flex items-center gap-[4px]">
-                              <Pencil size={13} /> Husnihat yuklangan ✓
-                            </p>
-                            <p className="text-[11px] text-amber-600 mt-[2px] truncate">{editLesson.writingSheet.split("/").pop()}</p>
-                            <div className="flex items-center gap-[8px] mt-[10px]">
-                              <button onClick={() => lessonSheetInputRef.current?.click()} className="px-[12px] py-[6px] bg-amber-100 hover:bg-amber-200 text-amber-700 text-[11px] font-semibold rounded-[6px] flex items-center gap-[4px] transition-all">
-                                <Pencil size={11} /> Almashtirish
-                              </button>
-                              <button onClick={() => updateLesson({ writingSheet: "" })} className="px-[12px] py-[6px] bg-red-50 hover:bg-red-100 text-red-500 text-[11px] font-semibold rounded-[6px] flex items-center gap-[4px] transition-all">
-                                <X size={11} /> O&apos;chirish
-                              </button>
+                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[8px]">Husnihat varaqalari (A4) — {(editLesson.writingSheets || []).length} ta</label>
+                    
+                    {/* Yuklangan varaqalar ro'yxati */}
+                    {(editLesson.writingSheets || []).length > 0 && (
+                      <div className="flex flex-col gap-[8px] mb-[12px]">
+                        {(editLesson.writingSheets || []).map((sheet, sIdx) => (
+                          <div key={sIdx} className="border border-amber-200 bg-amber-50/50 rounded-[10px] p-[10px] flex items-center gap-[12px]">
+                            <div className="w-[56px] h-[76px] rounded-[6px] overflow-hidden border border-amber-200 bg-white flex-shrink-0 relative">
+                              <Image src={sheet} alt={`Husnihat ${sIdx + 1}`} fill className="object-contain p-[2px]" sizes="56px" />
                             </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[12px] font-semibold text-amber-800">Varaq #{sIdx + 1}</p>
+                              <p className="text-[10px] text-amber-500 truncate">{sheet.split("/").pop()}</p>
+                            </div>
+                            <button onClick={() => removeLessonSheet(sIdx)} className="w-[28px] h-[28px] bg-red-50 hover:bg-red-100 text-red-400 rounded-[6px] flex items-center justify-center flex-shrink-0" title="O'chirish">
+                              <X size={13} />
+                            </button>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ) : (
-                      <button onClick={() => lessonSheetInputRef.current?.click()} disabled={uploadingLessonSheet}
-                        className="w-full py-[20px] border-2 border-dashed border-amber-200 rounded-[12px] bg-amber-50/30 hover:bg-amber-50 text-amber-600 flex flex-col items-center gap-[6px] transition-all disabled:opacity-50">
-                        {uploadingLessonSheet ? (
-                          <Loader2 size={24} className="animate-spin" />
-                        ) : (
-                          <Pencil size={24} />
-                        )}
-                        <span className="text-[13px] font-semibold">{uploadingLessonSheet ? "Yuklanmoqda..." : "Husnihat varaqasini yuklash"}</span>
-                        <span className="text-[11px] text-amber-400">A4 formatda rasm yoki PDF</span>
-                      </button>
                     )}
+
+                    {/* Yangi varaq yuklash tugmasi */}
+                    <button onClick={() => lessonSheetInputRef.current?.click()} disabled={uploadingLessonSheet}
+                      className="w-full py-[16px] border-2 border-dashed border-amber-200 rounded-[12px] bg-amber-50/30 hover:bg-amber-50 text-amber-600 flex flex-col items-center gap-[4px] transition-all disabled:opacity-50">
+                      {uploadingLessonSheet ? (
+                        <Loader2 size={20} className="animate-spin" />
+                      ) : (
+                        <Plus size={20} />
+                      )}
+                      <span className="text-[12px] font-semibold">{uploadingLessonSheet ? "Yuklanmoqda..." : "+ Husnihat varaqasi qo'shish"}</span>
+                      <span className="text-[10px] text-amber-400">A4 formatda rasm yoki PDF</span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -529,7 +533,6 @@ export default function AdminLessonsPage() {
                     {(editLesson.words || []).map((w, i) => {
                       const isUA = uploadingWord?.idx === i && uploadingWord?.type === "audio";
                       const isUI = uploadingWord?.idx === i && uploadingWord?.type === "image";
-                      const isUW = uploadingWord?.idx === i && uploadingWord?.type === "writingSheet";
                       return (
                         <div key={i} className="bg-white border border-gray-100 rounded-[12px] shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all">
                           {/* Text fields */}
@@ -578,21 +581,6 @@ export default function AdminLessonsPage() {
                                 <button onClick={() => triggerImageUpload(i)} disabled={isUI}
                                   className="flex items-center gap-[5px] bg-purple-50 hover:bg-purple-100 text-purple-600 px-[12px] py-[7px] rounded-[8px] text-[11px] font-semibold transition-all disabled:opacity-50 flex-shrink-0">
                                   {isUI ? <Loader2 size={13} className="animate-spin" /> : <ImagePlus size={13} />} Rasm
-                                </button>
-                              )}
-                            </div>
-                            {/* Writing Sheet */}
-                            <div className="flex items-center gap-[6px]">
-                              {w.writingSheet ? (
-                                <div className="flex items-center gap-[6px] bg-amber-50 rounded-[8px] px-[8px] py-[4px]">
-                                  <span className="text-[11px] font-semibold text-amber-700 flex items-center gap-[3px]"><Pencil size={10} /> Husnihat ✓</span>
-                                  <button onClick={() => triggerWritingSheetUpload(i)} className="text-[10px] text-amber-600 font-semibold hover:underline flex items-center gap-[2px]" title="Almashtirish"><Pencil size={10} /></button>
-                                  <button onClick={() => updateWord(i, "writingSheet", "")} className="w-[22px] h-[22px] bg-amber-100 text-amber-600 rounded-full flex items-center justify-center hover:bg-amber-200 flex-shrink-0" title="O'chirish"><X size={11} /></button>
-                                </div>
-                              ) : (
-                                <button onClick={() => triggerWritingSheetUpload(i)} disabled={isUW}
-                                  className="flex items-center gap-[5px] bg-amber-50 hover:bg-amber-100 text-amber-600 px-[12px] py-[7px] rounded-[8px] text-[11px] font-semibold transition-all disabled:opacity-50 flex-shrink-0">
-                                  {isUW ? <Loader2 size={13} className="animate-spin" /> : <Pencil size={13} />} Husnihat
                                 </button>
                               )}
                             </div>

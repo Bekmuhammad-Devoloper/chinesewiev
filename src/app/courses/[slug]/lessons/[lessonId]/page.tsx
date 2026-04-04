@@ -1117,37 +1117,41 @@ export default function LessonDetailPage() {
             {activeSection === "writing" && (
               <div>
                 {renderMobileTrigger()}
-                {lesson?.writingSheet ? (
-                  <div className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.06)] overflow-hidden max-w-[720px] mx-auto">
-                    {/* A4 husnihat rasmi */}
-                    <div className="w-full bg-[#f9fafb]">
-                      <img
-                        src={lesson.writingSheet}
-                        alt="Husnihat varaqasi"
-                        className="w-full h-auto object-contain"
-                      />
-                    </div>
-                    {/* Yuklab olish qismi */}
-                    <div className="p-[16px] sm:p-[20px] md:p-[24px] border-t border-gray-100 flex flex-col sm:flex-row items-center gap-[12px] sm:gap-[16px]">
-                      <div className="flex-1 text-center sm:text-left">
-                        <p className="text-[15px] sm:text-[16px] font-bold text-[#1a1a2e]">Husnihat varaqasi</p>
-                        <p className="text-[12px] sm:text-[13px] text-gray-400 mt-[2px]">A4 formatda yuklab oling va chop eting</p>
+                {(lesson?.writingSheets || []).length > 0 ? (
+                  <div className="flex flex-col gap-[16px] sm:gap-[20px] max-w-[720px] mx-auto">
+                    {(lesson!.writingSheets!).map((sheet, sIdx) => (
+                      <div key={sIdx} className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.06)] overflow-hidden">
+                        {/* A4 husnihat rasmi */}
+                        <div className="w-full bg-[#f9fafb]">
+                          <img
+                            src={sheet}
+                            alt={`Husnihat varaqasi ${sIdx + 1}`}
+                            className="w-full h-auto object-contain"
+                          />
+                        </div>
+                        {/* Yuklab olish qismi */}
+                        <div className="p-[12px] sm:p-[16px] md:p-[20px] border-t border-gray-100 flex items-center gap-[12px] sm:gap-[16px]">
+                          <div className="flex-1">
+                            <p className="text-[14px] sm:text-[15px] font-bold text-[#1a1a2e]">Varaq #{sIdx + 1}</p>
+                            <p className="text-[11px] sm:text-[12px] text-gray-400">A4 formatda yuklab oling va chop eting</p>
+                          </div>
+                          <a
+                            href={sheet}
+                            download={`${lesson!.title}-husnihat-${sIdx + 1}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-[18px] sm:px-[24px] py-[10px] sm:py-[12px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[12px] sm:text-[13px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[6px] flex-shrink-0"
+                          >
+                            <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Yuklab olish
+                          </a>
+                        </div>
                       </div>
-                      <a
-                        href={lesson.writingSheet}
-                        download={`${lesson.title}-husnihat`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-[24px] sm:px-[32px] py-[12px] sm:py-[14px] bg-gradient-to-r from-[#f5a623] to-[#e8932b] hover:from-[#e89620] hover:to-[#d68325] text-white text-[13px] sm:text-[14px] font-bold rounded-full shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:shadow-[0_3px_12px_rgba(245,166,35,0.4)] active:scale-[0.97] transition-all duration-200 flex items-center gap-[8px] flex-shrink-0"
-                      >
-                        <svg className="w-[16px] h-[16px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        Yuklab olish (A4)
-                      </a>
-                    </div>
+                    ))}
                   </div>
                 ) : (
                   <div className="bg-white rounded-[16px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.06)] p-[40px] sm:p-[60px] text-center max-w-[520px] mx-auto">
