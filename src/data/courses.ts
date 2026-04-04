@@ -69,6 +69,7 @@ export interface Lesson {
   words?: Word[];
   sections?: LessonSection[];
   tasks?: Task[];
+  writingSheet?: string;
 }
 
 export interface Course {

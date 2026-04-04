@@ -19,9 +19,11 @@ export default function AdminLessonsPage() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"general" | "words" | "dialogues" | "grammar" | "tasks">("general");
   const [uploadingWord, setUploadingWord] = useState<{ idx: number; type: "audio" | "image" | "writingSheet" } | null>(null);
+  const [uploadingLessonSheet, setUploadingLessonSheet] = useState(false);
   const audioInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const writingSheetInputRef = useRef<HTMLInputElement>(null);
+  const lessonSheetInputRef = useRef<HTMLInputElement>(null);
   const dialogueAudioInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadIdx, setActiveUploadIdx] = useState(-1);
   const [uploadingDialogueAudio, setUploadingDialogueAudio] = useState<{ dIdx: number; lIdx: number } | null>(null);
@@ -151,6 +153,30 @@ export default function AdminLessonsPage() {
     const file = e.target.files?.[0];
     if (file && activeUploadIdx >= 0) handleFileUpload(file, activeUploadIdx, "writingSheet");
     if (writingSheetInputRef.current) writingSheetInputRef.current.value = "";
+  };
+
+  /* ── Lesson-level writing sheet upload ── */
+  const handleLessonSheetUpload = async (file: File) => {
+    setUploadingLessonSheet(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) {
+        updateLesson({ writingSheet: data.url });
+      } else {
+        alert(data.error || "Yuklashda xatolik");
+      }
+    } catch {
+      alert("Fayl yuklashda xatolik yuz berdi");
+    }
+    setUploadingLessonSheet(false);
+  };
+  const onLessonSheetFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleLessonSheetUpload(file);
+    if (lessonSheetInputRef.current) lessonSheetInputRef.current.value = "";
   };
 
   /* ── Dialogue audio upload handler ── */
@@ -359,6 +385,7 @@ export default function AdminLessonsPage() {
       <input type="file" ref={audioInputRef} accept="audio/*" className="hidden" onChange={onAudioFileChange} title="Audio fayl tanlash" />
       <input type="file" ref={imageInputRef} accept="image/*" className="hidden" onChange={onImageFileChange} title="Rasm fayl tanlash" />
       <input type="file" ref={writingSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onWritingSheetFileChange} title="Husnihat varaqasi tanlash" />
+      <input type="file" ref={lessonSheetInputRef} accept="image/*,.pdf" className="hidden" onChange={onLessonSheetFileChange} title="Dars husnihat varaqasi" />
       <input type="file" ref={dialogueAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueAudioFileChange} title="Dialog audio fayl tanlash" />
 
       {/* Header */}
@@ -435,6 +462,45 @@ export default function AdminLessonsPage() {
                     <input type="checkbox" checked={!editLesson.locked} onChange={(e) => updateLesson({ locked: !e.target.checked })} className="w-[18px] h-[18px] accent-[#e8632b]" />
                     <span className="text-[13px] font-medium text-gray-700">Ochiq (qulflanmagan)</span>
                   </label>
+
+                  {/* ── Husnihat (A4 yozuv varaqasi) ── */}
+                  <div className="mt-[8px]">
+                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[8px]">Husnihat varaqasi (A4)</label>
+                    {editLesson.writingSheet ? (
+                      <div className="border border-amber-200 bg-amber-50/50 rounded-[12px] p-[14px]">
+                        <div className="flex items-start gap-[14px]">
+                          <div className="w-[80px] h-[110px] rounded-[8px] overflow-hidden border border-amber-200 bg-white flex-shrink-0 relative">
+                            <Image src={editLesson.writingSheet} alt="Husnihat" fill className="object-contain p-[2px]" sizes="80px" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[13px] font-semibold text-amber-800 flex items-center gap-[4px]">
+                              <Pencil size={13} /> Husnihat yuklangan ✓
+                            </p>
+                            <p className="text-[11px] text-amber-600 mt-[2px] truncate">{editLesson.writingSheet.split("/").pop()}</p>
+                            <div className="flex items-center gap-[8px] mt-[10px]">
+                              <button onClick={() => lessonSheetInputRef.current?.click()} className="px-[12px] py-[6px] bg-amber-100 hover:bg-amber-200 text-amber-700 text-[11px] font-semibold rounded-[6px] flex items-center gap-[4px] transition-all">
+                                <Pencil size={11} /> Almashtirish
+                              </button>
+                              <button onClick={() => updateLesson({ writingSheet: "" })} className="px-[12px] py-[6px] bg-red-50 hover:bg-red-100 text-red-500 text-[11px] font-semibold rounded-[6px] flex items-center gap-[4px] transition-all">
+                                <X size={11} /> O&apos;chirish
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <button onClick={() => lessonSheetInputRef.current?.click()} disabled={uploadingLessonSheet}
+                        className="w-full py-[20px] border-2 border-dashed border-amber-200 rounded-[12px] bg-amber-50/30 hover:bg-amber-50 text-amber-600 flex flex-col items-center gap-[6px] transition-all disabled:opacity-50">
+                        {uploadingLessonSheet ? (
+                          <Loader2 size={24} className="animate-spin" />
+                        ) : (
+                          <Pencil size={24} />
+                        )}
+                        <span className="text-[13px] font-semibold">{uploadingLessonSheet ? "Yuklanmoqda..." : "Husnihat varaqasini yuklash"}</span>
+                        <span className="text-[11px] text-amber-400">A4 formatda rasm yoki PDF</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
 
