@@ -1122,7 +1122,7 @@ export default function LessonDetailPage() {
                     {(lesson!.writingSheets!).map((sheet, sIdx) => (
                       <div key={sIdx} className="flex flex-col items-center gap-[14px] min-h-0">
                         {/* Kartochka */}
-                        <div className="min-h-0 flex-1 w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden">
+                        <div className="min-h-0 flex-1 aspect-[3/4] w-full bg-white rounded-[10px] border border-gray-800 overflow-hidden">
                           <img
                             src={sheet}
                             alt={`Husnihat ${sIdx + 1}`}
