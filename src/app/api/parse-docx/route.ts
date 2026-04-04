@@ -4,8 +4,8 @@ import mammoth from "mammoth";
 /**
  * POST /api/parse-docx?type=dialogue|grammar
  * 
- * Accepts a .docx file and parses its text content.
- * Returns raw text lines for the client to process.
+ * Accepts a .docx file, converts to HTML with mammoth,
+ * then parses headings + paragraphs into structured data.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -27,14 +27,20 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const result = await mammoth.extractRawText({ buffer });
-    const rawText = result.value;
+
+    // Get HTML to detect headings, bold, structure
+    const htmlResult = await mammoth.convertToHtml({ buffer });
+    const html = htmlResult.value;
+
+    // Also get raw text as fallback
+    const textResult = await mammoth.extractRawText({ buffer });
+    const rawText = textResult.value;
 
     if (type === "dialogue") {
-      const dialogues = parseDialogueText(rawText);
+      const dialogues = parseDialogueFromHtml(html, rawText);
       return NextResponse.json({ dialogues });
     } else if (type === "grammar") {
-      const grammar = parseGrammarText(rawText);
+      const grammar = parseGrammarFromHtml(html, rawText);
       return NextResponse.json({ grammar });
     }
 
@@ -45,189 +51,281 @@ export async function POST(req: NextRequest) {
   }
 }
 
-/**
- * Parse dialogue text from Word document.
+/* ════════════════════════════════════════════════════════
+ *  HELPER: strip HTML tags → plain text
+ * ════════════════════════════════════════════════════════ */
+function stripTags(html: string): string {
+  return html.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, " ").trim();
+}
+
+/* ════════════════════════════════════════════════════════
+ *  HELPER: split HTML into structural blocks (headings + paragraphs)
+ * ════════════════════════════════════════════════════════ */
+interface HtmlBlock {
+  type: "heading" | "paragraph" | "list-item";
+  level?: number; // h1=1, h2=2 etc
+  text: string;
+  html: string;
+}
+
+function parseHtmlBlocks(html: string): HtmlBlock[] {
+  const blocks: HtmlBlock[] = [];
+  // Match headings, paragraphs, list items
+  const regex = /<(h[1-6]|p|li)[^>]*>([\s\S]*?)<\/\1>/gi;
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    const tag = match[1].toLowerCase();
+    const content = match[2];
+    const text = stripTags(content).trim();
+    if (!text) continue;
+
+    if (tag.startsWith("h")) {
+      blocks.push({ type: "heading", level: parseInt(tag[1]), text, html: content });
+    } else if (tag === "li") {
+      blocks.push({ type: "list-item", text, html: content });
+    } else {
+      blocks.push({ type: "paragraph", text, html: content });
+    }
+  }
+
+  // If no blocks parsed from HTML, fall back to splitting raw text by newlines
+  if (blocks.length === 0) {
+    const lines = stripTags(html).split("\n").map(l => l.trim()).filter(Boolean);
+    for (const line of lines) {
+      blocks.push({ type: "paragraph", text: line, html: line });
+    }
+  }
+
+  return blocks;
+}
+
+/* ════════════════════════════════════════════════════════
+ *  HELPER: detect if text contains Chinese characters
+ * ════════════════════════════════════════════════════════ */
+function hasChinese(text: string): boolean {
+  return /[\u4e00-\u9fff\u3400-\u4dbf]/.test(text);
+}
+
+/* ════════════════════════════════════════════════════════
+ *  HELPER: detect if text looks like pinyin (Latin with tone marks or numbers)
+ * ════════════════════════════════════════════════════════ */
+function looksLikePinyin(text: string): boolean {
+  // Contains pinyin tone marks or is all-latin with tone numbers
+  return /[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(text) || 
+    (/^[a-zA-Z\s,.\-!?;:'"()0-9]+$/.test(text) && /[a-z]/i.test(text) && text.length < 200);
+}
+
+/* ════════════════════════════════════════════════════════
+ *  DIALOGUE PARSER — from HTML
  * 
- * Expected format — each dialogue separated by a blank line,
- * within a dialogue, each line group has 3 lines:
- * 
- * Speaker Xitoycha_matn
- * Pinyin matni
- * Tarjima matni
- * 
- * Or speaker and text separated by colon:
- * Speaker: Xitoycha_matn
- * Pinyin matni
- * Tarjima matni
- * 
- * If the document has section headings (like "Salomlashuv", "Gaplashuv"),
- * they become dialogue group titles.
- */
-function parseDialogueText(raw: string): { title: string; dialogueLines: { speaker: string; text: string; pinyin: string; translation: string }[] }[] {
-  const lines = raw.split("\n").map(l => l.trim());
+ *  Strategy: 
+ *  - Headings → dialogue group titles
+ *  - Paragraphs → grouped into dialogue lines
+ *  - Each line group: 3 consecutive paragraphs
+ *    1) "Speaker: Chinese text" or "Speaker Chinese text"
+ *    2) Pinyin
+ *    3) Translation
+ * ════════════════════════════════════════════════════════ */
+function parseDialogueFromHtml(html: string, rawText: string): { title: string; dialogueLines: { speaker: string; text: string; pinyin: string; translation: string }[] }[] {
+  const blocks = parseHtmlBlocks(html);
   const dialogues: { title: string; dialogueLines: { speaker: string; text: string; pinyin: string; translation: string }[] }[] = [];
-
+  
   let currentTitle = "";
-  let currentLines: { speaker: string; text: string; pinyin: string; translation: string }[] = [];
-  let buffer: string[] = [];
+  let paragraphBuffer: string[] = [];
 
-  const flushBuffer = () => {
-    if (buffer.length >= 3) {
-      // Process buffer in groups of 3
-      for (let i = 0; i + 2 < buffer.length; i += 3) {
-        const firstLine = buffer[i];
-        const pinyin = buffer[i + 1];
-        const translation = buffer[i + 2];
+  const flushParagraphs = () => {
+    if (paragraphBuffer.length === 0) return;
 
-        // Parse speaker and text from first line
+    const lines: { speaker: string; text: string; pinyin: string; translation: string }[] = [];
+    
+    // Group paragraphs in sets of 3: (speaker+chinese, pinyin, translation)
+    let i = 0;
+    while (i < paragraphBuffer.length) {
+      const line1 = paragraphBuffer[i];
+      
+      // Check if this line has Chinese characters (dialogue first line)
+      if (hasChinese(line1)) {
         let speaker = "";
-        let text = "";
+        let text = line1;
+
+        // Try to extract speaker: "Speaker: text" or "Speaker（Pinyin）text"
+        const colonMatch = line1.match(/^(.+?)[:\uff1a]\s*([\u4e00-\u9fff].+)$/);
+        const spaceMatch = line1.match(/^([^\u4e00-\u9fff]+?)\s+([\u4e00-\u9fff].+)$/);
         
-        // Try "Speaker: text" or "Speaker text" with Chinese chars
-        const colonMatch = firstLine.match(/^(.+?)[:\uff1a]\s*(.+)$/);
         if (colonMatch) {
           speaker = colonMatch[1].trim();
           text = colonMatch[2].trim();
-        } else {
-          // Try to find where Chinese characters start
-          const chineseMatch = firstLine.match(/^(.+?)\s+([\u4e00-\u9fff].+)$/);
-          if (chineseMatch) {
-            speaker = chineseMatch[1].trim();
-            text = chineseMatch[2].trim();
-          } else {
-            text = firstLine;
-          }
+        } else if (spaceMatch && spaceMatch[1].trim().length < 40) {
+          speaker = spaceMatch[1].trim();
+          text = spaceMatch[2].trim();
         }
 
-        currentLines.push({ speaker, text, pinyin, translation });
-      }
-    } else if (buffer.length > 0) {
-      // Less than 3 lines — might be a title/heading
-      const possibleTitle = buffer.join(" ").trim();
-      if (possibleTitle && !possibleTitle.match(/[\u4e00-\u9fff]/)) {
-        // No Chinese characters — likely a section title
-        if (currentLines.length > 0) {
-          dialogues.push({ title: currentTitle || `Dialog ${dialogues.length + 1}`, dialogueLines: currentLines });
-          currentLines = [];
-        }
-        currentTitle = possibleTitle;
+        const pinyin = (i + 1 < paragraphBuffer.length) ? paragraphBuffer[i + 1] : "";
+        const translation = (i + 2 < paragraphBuffer.length) ? paragraphBuffer[i + 2] : "";
+        
+        lines.push({ speaker, text, pinyin, translation });
+        i += 3;
+      } else {
+        // Not Chinese — skip (could be a stray header text that wasn't an HTML heading)
+        i++;
       }
     }
-    buffer = [];
+
+    if (lines.length > 0) {
+      dialogues.push({
+        title: currentTitle || `Dialog ${dialogues.length + 1}`,
+        dialogueLines: lines
+      });
+    }
+    paragraphBuffer = [];
   };
 
-  for (const line of lines) {
-    if (line === "") {
-      flushBuffer();
+  for (const block of blocks) {
+    if (block.type === "heading") {
+      // Flush any accumulated paragraphs as a dialogue
+      flushParagraphs();
+      currentTitle = block.text;
     } else {
-      buffer.push(line);
+      paragraphBuffer.push(block.text);
     }
   }
-  flushBuffer();
+  flushParagraphs();
 
-  // Push remaining
-  if (currentLines.length > 0) {
-    dialogues.push({ title: currentTitle || `Dialog ${dialogues.length + 1}`, dialogueLines: currentLines });
-  }
-
-  // If no dialogues parsed, put everything in one
-  if (dialogues.length === 0 && lines.filter(l => l).length > 0) {
-    dialogues.push({
-      title: "Dialog 1",
-      dialogueLines: [{
-        speaker: "",
-        text: lines.filter(l => l).join(" "),
-        pinyin: "",
-        translation: ""
-      }]
-    });
+  // If nothing parsed, try raw text line-by-line
+  if (dialogues.length === 0) {
+    const rawLines = rawText.split("\n").map(l => l.trim()).filter(Boolean);
+    const lines: { speaker: string; text: string; pinyin: string; translation: string }[] = [];
+    
+    for (let i = 0; i < rawLines.length; i += 3) {
+      if (i + 2 < rawLines.length && hasChinese(rawLines[i])) {
+        let speaker = "", text = rawLines[i];
+        const cm = rawLines[i].match(/^(.+?)[:\uff1a]\s*([\u4e00-\u9fff].+)$/);
+        if (cm) { speaker = cm[1].trim(); text = cm[2].trim(); }
+        lines.push({ speaker, text, pinyin: rawLines[i+1], translation: rawLines[i+2] });
+      }
+    }
+    
+    if (lines.length > 0) {
+      dialogues.push({ title: "Dialog 1", dialogueLines: lines });
+    }
   }
 
   return dialogues;
 }
 
-/**
- * Parse grammar text from Word document.
+/* ════════════════════════════════════════════════════════
+ *  GRAMMAR PARSER — from HTML
  * 
- * Expected format:
- * 
- * Topic Title
- * 
- * Rule title
- * Explanation text (can be multiple lines)
- * Structure: ...
- * Tip: ...
- * Example: Chinese — Pinyin — Translation
- */
-function parseGrammarText(raw: string): { title: string; grammarRules: { id: string; title: string; explanation: string; structure: string; tip: string; examples: { chinese: string; pinyin: string; translation: string }[] }[] }[] {
-  const lines = raw.split("\n").map(l => l.trim());
+ *  Strategy: preserve Word structure as-is
+ *  - Headings → grammar topic titles
+ *  - Bold text at start → rule titles 
+ *  - Regular paragraphs → explanation
+ *  - Lines with Chinese + pinyin + translation → examples
+ *  
+ *  Each topic gets ONE rule with all the text as explanation,
+ *  so the Word content shows exactly as written.
+ * ════════════════════════════════════════════════════════ */
+function parseGrammarFromHtml(html: string, rawText: string): { title: string; grammarRules: { id: string; title: string; explanation: string; structure: string; tip: string; examples: { chinese: string; pinyin: string; translation: string }[] }[] }[] {
+  const blocks = parseHtmlBlocks(html);
   const topics: { title: string; grammarRules: { id: string; title: string; explanation: string; structure: string; tip: string; examples: { chinese: string; pinyin: string; translation: string }[] }[] }[] = [];
 
   let currentTopic: typeof topics[0] | null = null;
   let currentRule: typeof topics[0]["grammarRules"][0] | null = null;
-  let collectingExplanation = false;
 
   const flushRule = () => {
     if (currentRule && currentTopic) {
+      currentRule.explanation = currentRule.explanation.trim();
       currentTopic.grammarRules.push(currentRule);
-      currentRule = null;
     }
-    collectingExplanation = false;
+    currentRule = null;
   };
 
   const flushTopic = () => {
     flushRule();
-    if (currentTopic) {
+    if (currentTopic && (currentTopic.grammarRules.length > 0 || currentTopic.title)) {
       topics.push(currentTopic);
-      currentTopic = null;
+    }
+    currentTopic = null;
+  };
+
+  const ensureTopic = () => {
+    if (!currentTopic) {
+      currentTopic = { title: "Grammatika", grammarRules: [] };
     }
   };
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    
-    if (line === "") {
-      collectingExplanation = false;
-      continue;
+  const ensureRule = (title?: string) => {
+    ensureTopic();
+    if (!currentRule) {
+      currentRule = {
+        id: `gr-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        title: title || "",
+        explanation: "",
+        structure: "",
+        tip: "",
+        examples: []
+      };
     }
+  };
 
-    // Check for structure line
-    const structMatch = line.match(/^(?:Struktura|Structure|Tuzilma)[:\uff1a]\s*(.+)/i);
-    if (structMatch && currentRule) {
-      currentRule.structure = structMatch[1].trim();
-      collectingExplanation = false;
-      continue;
-    }
+  for (const block of blocks) {
+    const text = block.text;
 
-    // Check for tip line
-    const tipMatch = line.match(/^(?:Maslahat|Tip|Eslatma)[:\uff1a]\s*(.+)/i);
-    if (tipMatch && currentRule) {
-      currentRule.tip = tipMatch[1].trim();
-      collectingExplanation = false;
-      continue;
-    }
-
-    // Check for example line
-    const exMatch = line.match(/^(?:Misol|Example|Namuna)[:\uff1a]?\s*(.*)/i);
-    if (exMatch && currentRule) {
-      collectingExplanation = false;
-      const exText = exMatch[1].trim();
-      if (exText) {
-        const parts = exText.split(/\s*[—–-]\s*/);
-        currentRule.examples.push({
-          chinese: parts[0]?.trim() || "",
-          pinyin: parts[1]?.trim() || "",
-          translation: parts[2]?.trim() || "",
-        });
+    if (block.type === "heading") {
+      if (block.level && block.level <= 2) {
+        // Major heading → new topic
+        flushTopic();
+        currentTopic = { title: text, grammarRules: [] };
+      } else {
+        // Sub-heading → new rule title within topic
+        ensureTopic();
+        flushRule();
+        currentRule = {
+          id: `gr-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          title: text,
+          explanation: "",
+          structure: "",
+          tip: "",
+          examples: []
+        };
       }
       continue;
     }
 
-    // Check for example continuation (Chinese — Pinyin — Translation pattern)
-    if (currentRule && !collectingExplanation && line.match(/[\u4e00-\u9fff]/) && line.includes("—")) {
-      const parts = line.split(/\s*[—–-]\s*/);
+    // Check for structure/tip patterns
+    const structMatch = text.match(/^(?:Struktura|Structure|Tuzilma|Tuzilish)[:\uff1a]\s*(.+)/i);
+    if (structMatch) {
+      ensureRule();
+      currentRule!.structure = structMatch[1].trim();
+      continue;
+    }
+
+    const tipMatch = text.match(/^(?:Maslahat|Tip|Eslatma|Note)[:\uff1a]\s*(.+)/i);
+    if (tipMatch) {
+      ensureRule();
+      currentRule!.tip = tipMatch[1].trim();
+      continue;
+    }
+
+    // Check for example pattern: Chinese — Pinyin — Translation
+    const exampleMatch = text.match(/^(?:Misol|Example|Namuna)[:\uff1a]?\s*([\u4e00-\u9fff].+)/i);
+    if (exampleMatch) {
+      ensureRule();
+      const parts = exampleMatch[1].split(/\s*[—–\-]\s*/);
+      currentRule!.examples.push({
+        chinese: parts[0]?.trim() || "",
+        pinyin: parts[1]?.trim() || "",
+        translation: parts[2]?.trim() || "",
+      });
+      continue;
+    }
+
+    // Check if line itself is Chinese—Pinyin—Translation example
+    if (hasChinese(text) && (text.includes("—") || text.includes("–"))) {
+      const parts = text.split(/\s*[—–]\s*/);
       if (parts.length >= 2) {
-        currentRule.examples.push({
+        ensureRule();
+        currentRule!.examples.push({
           chinese: parts[0]?.trim() || "",
           pinyin: parts[1]?.trim() || "",
           translation: parts[2]?.trim() || "",
@@ -236,71 +334,52 @@ function parseGrammarText(raw: string): { title: string; grammarRules: { id: str
       }
     }
 
-    // Check for explanation line
-    const explMatch = line.match(/^(?:Tushuntirish|Explanation|Izoh)[:\uff1a]\s*(.+)/i);
-    if (explMatch && currentRule) {
-      currentRule.explanation = explMatch[1].trim();
-      collectingExplanation = true;
-      continue;
-    }
+    // Check if this looks like a bold/numbered rule title from HTML
+    const isBold = /<strong>|<b>/i.test(block.html);
+    const isNumbered = /^\d+[\.\)]\s/.test(text);
 
-    // Check for rule title (line starting with number or "Qoida")
-    const ruleMatch = line.match(/^(?:\d+[\.\)]\s*|Qoida[:\s]*)/i);
-    if (ruleMatch && currentTopic) {
+    if ((isBold || isNumbered) && text.length < 150) {
+      ensureTopic();
       flushRule();
+      const title = text.replace(/^\d+[\.\)]\s*/, "").trim();
       currentRule = {
-        id: `gr-${Date.now()}-${i}`,
-        title: line.replace(/^\d+[\.\)]\s*/, "").replace(/^Qoida[:\s]*/i, "").trim(),
+        id: `gr-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        title,
         explanation: "",
         structure: "",
         tip: "",
         examples: []
       };
-      collectingExplanation = true;
       continue;
     }
 
-    // If we're collecting explanation text
-    if (collectingExplanation && currentRule) {
-      currentRule.explanation += (currentRule.explanation ? "\n" : "") + line;
+    // Regular paragraph → add to explanation
+    ensureRule(text.length < 100 ? text : "");
+    if (currentRule!.title === text) {
+      // Already used as title, skip
       continue;
     }
-
-    // Otherwise, treat as a new topic or rule
-    if (!currentTopic) {
-      currentTopic = { title: line, grammarRules: [] };
-    } else if (!currentRule) {
-      // This might be a rule title
-      currentRule = {
-        id: `gr-${Date.now()}-${i}`,
-        title: line,
-        explanation: "",
-        structure: "",
-        tip: "",
-        examples: []
-      };
-      collectingExplanation = true;
-    } else {
-      // Continued text — probably explanation
-      currentRule.explanation += (currentRule.explanation ? "\n" : "") + line;
-    }
+    currentRule!.explanation += (currentRule!.explanation ? "\n" : "") + text;
   }
 
   flushTopic();
 
-  // If nothing parsed, create one topic with the raw text
-  if (topics.length === 0 && lines.filter(l => l).length > 0) {
-    topics.push({
-      title: "Grammatika",
-      grammarRules: [{
-        id: `gr-${Date.now()}`,
-        title: lines.filter(l => l)[0] || "Qoida",
-        explanation: lines.filter(l => l).slice(1).join("\n"),
-        structure: "",
-        tip: "",
-        examples: []
-      }]
-    });
+  // Fallback: if nothing parsed, use raw text
+  if (topics.length === 0) {
+    const lines = rawText.split("\n").map(l => l.trim()).filter(Boolean);
+    if (lines.length > 0) {
+      topics.push({
+        title: lines[0],
+        grammarRules: [{
+          id: `gr-${Date.now()}`,
+          title: lines.length > 1 ? lines[1] : "",
+          explanation: lines.slice(2).join("\n"),
+          structure: "",
+          tip: "",
+          examples: []
+        }]
+      });
+    }
   }
 
   return topics;
