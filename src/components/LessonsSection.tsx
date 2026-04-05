@@ -75,7 +75,7 @@ const lessons = [
 
 export default function LessonsSection() {
   return (
-    <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="lessons">
+    <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px] lg:pb-[80px]" id="lessons">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         {/* Heading */}
         <div className="text-center mb-[32px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
