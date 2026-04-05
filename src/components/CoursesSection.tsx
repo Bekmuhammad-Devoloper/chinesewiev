@@ -18,7 +18,7 @@ export default function CoursesSection() {
   return (
     <section id="courses" className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
-        <h2 className="text-gold font-bold text-[22px] md:text-[48px] lg:text-[60px] leading-[1.15] text-center mb-[40px] md:mb-[64px] lg:mb-[76px]">
+        <h2 className="text-gold font-bold text-[22px] md:text-[48px] lg:text-[60px] leading-[1.15] text-center mb-[40px] md:mb-[64px] lg:mb-[110px]">
           Darsliklar
         </h2>
 
