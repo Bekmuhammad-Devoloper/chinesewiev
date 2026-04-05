@@ -31,8 +31,8 @@ export default function WhyUsSection() {
   return (
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px] pb-0 lg:pb-[60px]" id="why-us">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
-        <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[80px] pt-[22px] md:pt-[60px] lg:pt-[70px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
-          <h2 className="text-primary font-bold text-[24px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[20px] md:mb-[70px] lg:mb-[80px]">
+        <div className="bg-gold rounded-[16px] md:rounded-[30px] lg:rounded-[45px] px-[16px] md:px-[50px] lg:px-[80px] pt-[22px] md:pt-[60px] lg:pt-[40px] pb-[18px] md:pb-[50px] lg:pb-[60px]">
+          <h2 className="text-primary font-bold text-[24px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[20px] md:mb-[70px] lg:mb-[100px]">
             Nima uchun aynan bizning kurs?
           </h2>
 
