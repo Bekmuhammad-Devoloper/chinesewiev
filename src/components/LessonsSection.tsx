@@ -85,6 +85,7 @@ export default function LessonsSection() {
           <p className="text-white font-normal text-[12px] md:text-[22px] lg:text-[28px] leading-[1.5] mb-[20px] md:mb-[30px] lg:mb-[70px]">
             Biz faqat nazariya bermaymiz &mdash; siz darsning o&apos;zidayoq gapira boshlaysiz.
           </p>
+          <br className="hidden lg:block" />
         </div>
 
         {/* Cards Grid */}
