@@ -16,6 +16,7 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <LessonsSection />
+      <div className="hidden lg:block h-[60px] bg-primary" />
       <WhyUsSection />
       <CoursesSection />
       <PricingSection />
