@@ -43,10 +43,9 @@ export default function OutcomesSection() {
   return (
     <section className="bg-primary pt-[30px] md:pt-[60px] lg:pt-[80px] pb-[20px] md:pb-[30px] lg:pb-[40px]" id="outcomes">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
-        <h2 className="font-[family-name:var(--font-castoro-titling)] text-gold italic text-[22px] md:text-[36px] lg:text-[48px] leading-[1.2] mb-[14px] md:mb-[24px] lg:mb-[32px]">
+        <h2 className="font-[family-name:var(--font-castoro-titling)] text-gold italic text-[22px] md:text-[36px] lg:text-[48px] leading-[1.2] mb-[14px] md:mb-[24px] lg:mb-[50px]">
           Bu kursdan keyin siz:
         </h2>
-        <br />
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-[8px] md:gap-x-[14px] lg:gap-x-[20px] gap-y-[16px] md:gap-y-[20px] lg:gap-y-[24px]">
           {outcomes.map((item) => (
