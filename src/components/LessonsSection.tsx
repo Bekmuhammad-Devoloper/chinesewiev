@@ -78,7 +78,7 @@ export default function LessonsSection() {
     <section className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]" id="lessons">
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         {/* Heading */}
-        <div className="text-center mb-[32px] md:mb-[50px] lg:mb-[60px] max-w-[1443px] mx-auto">
+        <div className="text-center mb-[44px] md:mb-[60px] lg:mb-[76px] max-w-[1443px] mx-auto">
           <h2 className="text-white font-bold text-[22px] md:text-[48px] lg:text-[56px] leading-[1.2] mb-[12px] md:mb-[16px]">
             Darslar qanday o&apos;tiladi?
           </h2>
