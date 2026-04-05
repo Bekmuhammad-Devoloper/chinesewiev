@@ -35,6 +35,7 @@ export default function WhyUsSection() {
           <h2 className="text-primary font-bold text-[24px] md:text-[38px] lg:text-[48px] leading-[1.2] text-center mb-[20px] md:mb-[70px] lg:mb-[130px]">
             Nima uchun aynan bizning kurs?
           </h2>
+          <br />
 
           {/* ── Desktop: 2x2 grid with single continuous vertical divider ── */}
           <div className="hidden md:block relative">
