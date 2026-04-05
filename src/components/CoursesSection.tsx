@@ -21,6 +21,7 @@ export default function CoursesSection() {
         <h2 className="text-gold font-bold text-[22px] md:text-[48px] lg:text-[60px] leading-[1.15] text-center mb-[40px] md:mb-[64px] lg:mb-[110px]">
           Darsliklar
         </h2>
+        <br />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[14px] md:gap-[24px] lg:gap-[30px]">
           {courses.map((course) => {
