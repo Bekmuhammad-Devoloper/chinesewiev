@@ -4,7 +4,7 @@ export default function HeroSection() {
   return (
     <section id="hero" className="bg-primary">
       {/* Mobile: natural flow | Desktop: exactly one viewport */}
-      <div className="flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:h-screen lg:pt-[90px]">
+      <div className="flex flex-col max-w-[1920px] mx-auto pt-[44px] md:pt-[72px] lg:min-h-screen lg:pt-[90px]">
 
         {/* Mobile: normal padding | Desktop: flex-1 centered */}
         <div className="flex flex-col items-center justify-center px-[20px] md:px-8 lg:px-[76px] gap-[8px] md:gap-[10px] lg:gap-[14px] pt-[20px] md:pt-[40px] lg:pt-0 pb-[40px] md:pb-[60px] lg:pb-[120px] lg:flex-1">
