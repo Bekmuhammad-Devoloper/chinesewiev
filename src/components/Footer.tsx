@@ -29,11 +29,11 @@ export default function Footer() {
       <div className="max-w-[1920px] mx-auto px-[16px] md:px-[60px] lg:px-[156px]">
         <div className="flex flex-row items-end lg:items-stretch justify-between gap-[16px] md:gap-0">
           {/* Contact Info */}
-          <div className="lg:flex lg:flex-col lg:justify-between lg:py-[10px]">
-            <h3 className="text-gold font-bold text-[18px] md:text-[36px] lg:text-[32px] leading-[1.2] mb-[18px] md:mb-[30px] lg:mb-[0px] text-left">
+          <div className="lg:flex lg:flex-col lg:justify-evenly lg:py-[0px]">
+            <h3 className="text-gold font-bold text-[18px] md:text-[36px] lg:text-[32px] leading-[1] mb-[18px] md:mb-[30px] lg:mb-[0px] text-left">
               Bog&apos;lanish:
             </h3>
-            <ul className="space-y-[18px] md:space-y-[24px] lg:space-y-[12px]">
+            <ul className="space-y-[18px] md:space-y-[24px] lg:space-y-[0px] lg:flex lg:flex-col lg:justify-evenly lg:flex-1">
               {contacts.map((c) => (
                 <li key={c.label}>
                   <a
