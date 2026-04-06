@@ -11,7 +11,7 @@ function getDataDir(): string {
   if (process.env.DATA_DIR) {
     return process.env.DATA_DIR;
   }
-  return path.join(process.cwd(), "data");
+  return path.join(/* turbopackIgnore: true */ process.cwd(), "data");
 }
 
 export function getDataPath(filename: string): string {

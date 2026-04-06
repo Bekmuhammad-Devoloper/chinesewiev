@@ -73,6 +73,27 @@ export default function LessonDetailPage() {
   const [activeTab, setActiveTab] = useState<"list" | "cards">("list");
   const [practiceIndex, setPracticeIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [fetchedImages, setFetchedImages] = useState<Record<string, string>>({});
+
+  /* So'zlar uchun rasmlarni avtomatik yuklash (rasm yo'q bo'lganda) */
+  useEffect(() => {
+    if (!lesson?.words) return;
+    const wordsWithoutImages = lesson.words.filter((w) => !w.image);
+    if (wordsWithoutImages.length === 0) return;
+
+    wordsWithoutImages.forEach((word) => {
+      const key = `${word.hanzi}|${word.translation}`;
+      if (fetchedImages[key]) return;
+      fetch(`/api/word-image?hanzi=${encodeURIComponent(word.hanzi)}&translation=${encodeURIComponent(word.translation)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.url) {
+            setFetchedImages((prev) => ({ ...prev, [key]: data.url }));
+          }
+        })
+        .catch(() => {});
+    });
+  }, [lesson?.words]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Audio player state */
   const [isPlaying, setIsPlaying] = useState(false);
@@ -958,6 +979,12 @@ export default function LessonDetailPage() {
                               alt={words[practiceIndex].translation}
                               className="w-full h-full object-contain p-[4px]"
                             />
+                          ) : fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`] ? (
+                            <img
+                              src={fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
+                              alt={words[practiceIndex].translation}
+                              className="w-full h-full object-contain p-[4px]"
+                            />
                           ) : (
                             <span className="text-[70px] sm:text-[90px] md:text-[100px] select-none">{getWordEmoji(words[practiceIndex].hanzi, words[practiceIndex].translation)}</span>
                           )}
@@ -1006,6 +1033,12 @@ export default function LessonDetailPage() {
                           {words[practiceIndex].image ? (
                             <img
                               src={words[practiceIndex].image!}
+                              alt={words[practiceIndex].translation}
+                              className="w-full h-full object-contain p-[4px]"
+                            />
+                          ) : fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`] ? (
+                            <img
+                              src={fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
                               alt={words[practiceIndex].translation}
                               className="w-full h-full object-contain p-[4px]"
                             />
