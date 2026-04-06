@@ -154,7 +154,7 @@ export default function LessonsPage() {
                       Tez kunda
                     </span>
                   ) : !isLocked ? (
-                    <span className="inline-block bg-orange-500 text-white text-[9px] sm:text-[10px] md:text-[12px] font-semibold px-[12px] sm:px-[16px] md:px-[20px] py-[4px] sm:py-[5px] md:py-[6px] rounded-full group-hover:bg-orange-600 transition-colors shadow-sm group-hover:shadow-md">
+                    <span className="block bg-orange-500 text-white text-[9px] sm:text-[10px] md:text-[12px] font-semibold px-[12px] sm:px-[16px] md:px-[20px] py-[4px] sm:py-[5px] md:py-[6px] rounded-full group-hover:bg-orange-600 transition-colors shadow-sm group-hover:shadow-md text-center">
                       Kirish
                     </span>
                   ) : (
