@@ -294,7 +294,7 @@ export default function AdminLessonsPage() {
       const data = await res.json();
       if (data.html) {
         const children = [...(getDialogueSection()?.children || [])];
-        children[dIdx] = { ...children[dIdx], contentHtml: data.html };
+        children[dIdx] = { ...children[dIdx], contentHtml: data.html, dialogueLines: [] };
         updateDialogueChildren(children);
       } else {
         alert("Word fayldan matn topilmadi");
@@ -321,7 +321,7 @@ export default function AdminLessonsPage() {
       const data = await res.json();
       if (data.html) {
         const children = [...(getGrammarSection()?.children || [])];
-        children[tIdx] = { ...children[tIdx], contentHtml: data.html };
+        children[tIdx] = { ...children[tIdx], contentHtml: data.html, grammarRules: [] };
         updateGrammarChildren(children);
       } else {
         alert("Word fayldan matn topilmadi");
@@ -776,7 +776,7 @@ export default function AdminLessonsPage() {
                           <div className="flex items-center justify-between">
                             <Input value={d.title} onChange={(v) => updateDialogueTitle(dIdx, v)} placeholder="Dialog nomi" className="flex-1 mr-[8px]" />
                             <div className="flex gap-[6px] flex-shrink-0">
-                              <button onClick={() => addDialogueLine(dIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qator</button>
+                              {!d.contentHtml && <button onClick={() => addDialogueLine(dIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qator</button>}
                               <button onClick={() => removeDialogue(dIdx)} className="px-[8px] py-[5px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /></button>
                             </div>
                           </div>
@@ -817,6 +817,10 @@ export default function AdminLessonsPage() {
                           </div>
                         </div>
                         <div className="p-[12px] flex flex-col gap-[6px]">
+                          {d.contentHtml ? (
+                            <div className="word-content prose prose-sm max-w-none bg-white border border-purple-100 rounded-[8px] p-[12px]" dangerouslySetInnerHTML={{ __html: d.contentHtml }} />
+                          ) : (
+                          <>
                           {(d.dialogueLines || []).map((line, lIdx) => (
                             <div key={lIdx} className="flex items-start gap-[6px] bg-white rounded-[6px] p-[8px] border border-gray-100">
                               <span className="text-[10px] text-gray-300 mt-[8px] w-[16px] flex-shrink-0">{lIdx + 1}</span>
@@ -831,7 +835,9 @@ export default function AdminLessonsPage() {
                               <button onClick={() => removeDialogueLine(dIdx, lIdx)} className="w-[24px] h-[24px] bg-red-50 text-red-400 rounded mt-[6px] flex-shrink-0 hover:bg-red-100 flex items-center justify-center" title="O'chirish"><X size={12} /></button>
                             </div>
                           ))}
-                          {(d.dialogueLines || []).length === 0 && <p className="text-[12px] text-gray-300 text-center py-[8px]">Hali qator yo&apos;q. &quot;+ Qator&quot; tugmasini bosing.</p>}
+                          {(d.dialogueLines || []).length === 0 && !d.contentHtml && <p className="text-[12px] text-gray-300 text-center py-[8px]">Hali qator yo&apos;q. &quot;+ Qator&quot; tugmasini bosing.</p>}
+                          </>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -862,7 +868,7 @@ export default function AdminLessonsPage() {
                           <div className="flex items-center justify-between">
                             <Input value={topic.title} onChange={(v) => updateGrammarTopicTitle(tIdx, v)} placeholder="Mavzu nomi" className="flex-1 mr-[8px]" />
                             <div className="flex gap-[6px] flex-shrink-0">
-                              <button onClick={() => addGrammarRule(tIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qoida</button>
+                              {!topic.contentHtml && <button onClick={() => addGrammarRule(tIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qoida</button>}
                               <button onClick={() => removeGrammarTopic(tIdx)} className="px-[8px] py-[5px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /></button>
                             </div>
                           </div>
@@ -883,6 +889,10 @@ export default function AdminLessonsPage() {
                           </div>
                         </div>
                         <div className="p-[12px] flex flex-col gap-[12px]">
+                          {topic.contentHtml ? (
+                            <div className="word-content prose prose-sm max-w-none bg-white border border-purple-100 rounded-[8px] p-[12px]" dangerouslySetInnerHTML={{ __html: topic.contentHtml }} />
+                          ) : (
+                          <>
                           {(topic.grammarRules || []).map((rule, rIdx) => (
                             <div key={rule.id} className="bg-white border border-gray-100 rounded-[8px] p-[12px]">
                               <div className="flex items-center justify-between mb-[8px]">
@@ -912,7 +922,9 @@ export default function AdminLessonsPage() {
                               </div>
                             </div>
                           ))}
-                          {(topic.grammarRules || []).length === 0 && <p className="text-[12px] text-gray-300 text-center py-[8px]">Hali qoida yo&apos;q.</p>}
+                          {(topic.grammarRules || []).length === 0 && !topic.contentHtml && <p className="text-[12px] text-gray-300 text-center py-[8px]">Hali qoida yo&apos;q.</p>}
+                          </>
+                          )}
                         </div>
                       </div>
                     ))}
