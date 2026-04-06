@@ -207,21 +207,21 @@ export default function LoginPage() {
 
         {/* ===== FOOTER ===== */}
         <footer className="max-w-[1920px] mx-auto w-full px-[16px] md:px-[60px] lg:px-[100px] xl:px-[132px] pt-[24px] pb-[16px] lg:pt-[14px] lg:pb-[10px]">
-          <div className="flex flex-row items-end justify-between gap-[16px]">
-            <div>
-              <h3 className="text-gold font-bold text-[16px] md:text-[24px] lg:text-[24px] leading-[1.2] mb-[16px] md:mb-[20px] lg:mb-[14px] text-left">
+          <div className="flex flex-row items-end lg:items-stretch justify-between gap-[16px]">
+            <div className="lg:flex lg:flex-col lg:justify-evenly">
+              <h3 className="text-gold font-bold text-[16px] md:text-[24px] lg:text-[20px] leading-[1] mb-[16px] md:mb-[20px] lg:mb-[0px] text-left">
                 Bog&apos;lanish:
               </h3>
-              <ul className="space-y-[16px] md:space-y-[18px] lg:space-y-[12px]">
+              <ul className="space-y-[16px] md:space-y-[18px] lg:space-y-[0px] lg:flex lg:flex-col lg:justify-evenly lg:flex-1">
                 {contacts.map((c) => (
                   <li key={c.label}>
                     <a
                       href={c.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-[6px] md:gap-[10px] text-gold text-[11px] md:text-[15px] lg:text-[16px] font-normal leading-[1.4] hover:text-gold-light transition-colors"
+                      className="flex items-center gap-[6px] md:gap-[10px] text-gold text-[11px] md:text-[15px] lg:text-[13px] font-normal leading-[1.4] hover:text-gold-light transition-colors"
                     >
-                      <Image src={c.icon} alt="" width={24} height={24} className="w-[14px] h-[14px] md:w-[18px] md:h-[18px] lg:w-[20px] lg:h-[20px]" />
+                      <Image src={c.icon} alt="" width={24} height={24} className="w-[14px] h-[14px] md:w-[18px] md:h-[18px] lg:w-[16px] lg:h-[16px]" />
                       {c.label}
                     </a>
                   </li>
