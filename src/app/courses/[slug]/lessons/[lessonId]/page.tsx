@@ -198,14 +198,6 @@ export default function LessonDetailPage() {
     const allLines = getDialogueLinesAll();
     const groupAudio = getDialogueAudio();
 
-    if (idx < 0 || idx >= allLines.length) {
-      // Barcha liniyalar tugadi
-      stopAudio();
-      setAudioProgress(100);
-      setCurrentLineIdx(0);
-      return;
-    }
-
     // Eski audioni to'xtat
     if (dialogueAudioRef.current) {
       dialogueAudioRef.current.pause();
@@ -215,10 +207,9 @@ export default function LessonDetailPage() {
       cancelAnimationFrame(progressAnimRef.current);
     }
 
-    setCurrentLineIdx(idx);
-
-    // Agar dialog umumiy audio bo'lsa — faqat birinchi marta play qilish
+    // Agar dialog umumiy audio bo'lsa — to'g'ridan-to'g'ri play qilish
     if (groupAudio && idx === 0) {
+      setCurrentLineIdx(0);
       const audio = new Audio(groupAudio);
       dialogueAudioRef.current = audio;
 
@@ -245,12 +236,21 @@ export default function LessonDetailPage() {
       return;
     }
 
-    // Agar dialog umumiy audio bo'lsa va idx > 0 — hech nima qilmaslik (audio allaqachon play bo'lyapti)
+    // Agar dialog umumiy audio bo'lsa va idx > 0 — hech nima qilmaslik
     if (groupAudio) {
       return;
     }
 
-    // Aks holda har bir qator uchun alohida audio (eski logika)
+    if (idx < 0 || idx >= allLines.length) {
+      stopAudio();
+      setAudioProgress(100);
+      setCurrentLineIdx(0);
+      return;
+    }
+
+    setCurrentLineIdx(idx);
+
+    // Har bir qator uchun alohida audio
     const line = allLines[idx];
 
     if (!line.audio) {
