@@ -970,25 +970,17 @@ export default function LessonDetailPage() {
                   >
                     <div className={`flashcard-card aspect-[10/14] sm:aspect-[10/13] max-h-[calc(100vh-220px)] ${flipped ? "flipped" : ""}`}>
                       {/* ── FRONT FACE: image + hanzi + pinyin + play ── */}
-                      <div className="flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px]">
-                        {/* Illustration */}
-                        <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
-                          {words[practiceIndex].image ? (
+                      <div className={`flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] ${!words[practiceIndex].image ? "justify-center" : ""}`}>
+                        {/* Illustration — faqat admin rasm yuklagan bo'lsa yoki Pixabay'dan topilgan bo'lsa */}
+                        {(words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]) ? (
+                          <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
                             <img
-                              src={words[practiceIndex].image!}
+                              src={words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
                               alt={words[practiceIndex].translation}
                               className="w-full h-full object-contain p-[4px]"
                             />
-                          ) : fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`] ? (
-                            <img
-                              src={fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
-                              alt={words[practiceIndex].translation}
-                              className="w-full h-full object-contain p-[4px]"
-                            />
-                          ) : (
-                            <span className="text-[70px] sm:text-[90px] md:text-[100px] select-none">{getWordEmoji(words[practiceIndex].hanzi, words[practiceIndex].translation)}</span>
-                          )}
-                        </div>
+                          </div>
+                        ) : null}
 
                         {/* Play button */}
                         <button
@@ -1027,25 +1019,17 @@ export default function LessonDetailPage() {
                       </div>
 
                       {/* ── BACK FACE: image + translation ── */}
-                      <div className="flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] justify-center">
-                        {/* Illustration (same image) */}
-                        <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
-                          {words[practiceIndex].image ? (
+                      <div className={`flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] justify-center`}>
+                        {/* Illustration (same image) — faqat rasm mavjud bo'lganda */}
+                        {(words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]) ? (
+                          <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
                             <img
-                              src={words[practiceIndex].image!}
+                              src={words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
                               alt={words[practiceIndex].translation}
                               className="w-full h-full object-contain p-[4px]"
                             />
-                          ) : fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`] ? (
-                            <img
-                              src={fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
-                              alt={words[practiceIndex].translation}
-                              className="w-full h-full object-contain p-[4px]"
-                            />
-                          ) : (
-                            <span className="text-[70px] sm:text-[90px] md:text-[100px] select-none">{getWordEmoji(words[practiceIndex].hanzi, words[practiceIndex].translation)}</span>
-                          )}
-                        </div>
+                          </div>
+                        ) : null}
 
                         {/* Translation (big, centered) */}
                         <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold text-[#1a1a2e] leading-tight">
