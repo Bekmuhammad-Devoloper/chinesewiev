@@ -155,3 +155,92 @@ body {
 .animate-slide-in-left {
   animation: slideInLeft 0.25s ease-out;
 }
+
+/* ── Word content (from docx) rendering ── */
+.word-content {
+  line-height: 1.8;
+  color: #333;
+}
+
+.word-content h1 {
+  font-size: 1.5em;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  margin-top: 20px;
+}
+
+.word-content h2 {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+  margin-top: 18px;
+}
+
+.word-content h3 {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  margin-top: 14px;
+}
+
+.word-content p {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.word-content strong,
+.word-content b {
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.word-content em,
+.word-content i {
+  font-style: italic;
+  color: #e8632b;
+}
+
+.word-content u {
+  text-decoration: underline;
+}
+
+.word-content s {
+  text-decoration: line-through;
+}
+
+.word-content ul,
+.word-content ol {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.word-content li {
+  margin-bottom: 4px;
+}
+
+.word-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+.word-content th,
+.word-content td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.word-content th {
+  background: #f8f9fa;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.word-content tr:nth-child(even) {
+  background: #fafafa;
+}

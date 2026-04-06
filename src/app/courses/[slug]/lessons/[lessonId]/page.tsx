@@ -410,17 +410,17 @@ export default function LessonDetailPage() {
     const dialogueSection = sections.find((s) => s.id === "dialogues");
     if (!dialogueSection?.children) return null;
     const child = dialogueSection.children.find((c) => c.id === activeSection);
-    if (!child?.dialogueLines) return null;
-    return { title: child.title, lines: child.dialogueLines };
+    if (!child?.dialogueLines && !child?.contentHtml) return null;
+    return { title: child.title, lines: child.dialogueLines || [], contentHtml: child.contentHtml };
   };
 
   /* Helper: find active grammar data */
-  const getActiveGrammar = (): { title: string; rules: GrammarRule[] } | null => {
+  const getActiveGrammar = (): { title: string; rules: GrammarRule[]; contentHtml?: string } | null => {
     const grammarSection = sections.find((s) => s.id === "grammar");
     if (!grammarSection?.children) return null;
     const child = grammarSection.children.find((c) => c.id === activeSection);
-    if (!child?.grammarRules) return null;
-    return { title: child.title, rules: child.grammarRules };
+    if (!child?.grammarRules && !child?.contentHtml) return null;
+    return { title: child.title, rules: child.grammarRules || [], contentHtml: child.contentHtml };
   };
 
   /* Task helpers */
@@ -1013,15 +1013,19 @@ export default function LessonDetailPage() {
                     {renderMobileTrigger()}
                   </div>
 
-                  {/* ── Dialogue Lines ── */}
+                  {/* ── Dialogue Content ── */}
                   <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] px-[20px] sm:px-[28px] md:px-[40px] py-[24px] sm:py-[32px] md:py-[40px]">
+                    {dialogue.contentHtml ? (
+                      <div
+                        className="word-content prose prose-sm sm:prose-base max-w-none"
+                        dangerouslySetInnerHTML={{ __html: dialogue.contentHtml }}
+                      />
+                    ) : (
                     <div className="flex flex-col gap-[24px] sm:gap-[30px] md:gap-[36px]">
                       {dialogue.lines.map((line, idx) => {
-                          /* highlight: currentLineIdx to'g'ridan-to'g'ri idx bilan taqqoslash */
                           const isCurrentlyPlaying = idx === currentLineIdx;
                           return (
                           <div key={idx} className={`group transition-all duration-300 rounded-[10px] px-[12px] py-[10px] -mx-[12px] ${isCurrentlyPlaying ? "bg-gradient-to-r from-[#e8632b]/10 to-[#f5a623]/10 ring-1 ring-[#e8632b]/20" : ""}`}>
-                            {/* Xitoycha matni */}
                             <p className="text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7]">
                               <span className={`font-extrabold ${isCurrentlyPlaying ? "text-[#e8632b]" : "text-[#1a1a2e]"} transition-colors duration-300`}>
                                 {line.speaker}
@@ -1029,11 +1033,9 @@ export default function LessonDetailPage() {
                               <span className="text-gray-300 mx-[2px]">:</span>
                               <span className={`font-medium ml-[4px] ${isCurrentlyPlaying ? "text-[#1a1a2e]" : "text-[#333]"} transition-colors duration-300`}>{line.text}</span>
                             </p>
-                            {/* Pinyin */}
                             <p className={`text-[13px] sm:text-[14px] italic mt-[3px] ml-[2px] transition-colors duration-300 ${isCurrentlyPlaying ? "text-[#e8632b] font-semibold" : "text-[#e8632b]"}`}>
                               {line.pinyin}
                             </p>
-                            {/* O'zbekcha tarjima */}
                             <p className={`text-[13px] sm:text-[14px] mt-[2px] ml-[2px] transition-colors duration-300 ${isCurrentlyPlaying ? "text-gray-600" : "text-gray-400"}`}>
                               {line.translation}
                             </p>
@@ -1041,6 +1043,7 @@ export default function LessonDetailPage() {
                           );
                         })}
                     </div>
+                    )}
                   </div>
                 </div>
               );
@@ -1124,7 +1127,15 @@ export default function LessonDetailPage() {
               return (
                 <div className="flex flex-col gap-[20px] sm:gap-[28px]">
                   {renderMobileTrigger()}
-                  {grammar.rules.map((rule, rIdx) => (
+                  {grammar.contentHtml ? (
+                    <div className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] overflow-hidden px-[20px] sm:px-[28px] md:px-[36px] py-[20px] sm:py-[24px]">
+                      <div
+                        className="word-content prose prose-sm sm:prose-base max-w-none"
+                        dangerouslySetInnerHTML={{ __html: grammar.contentHtml }}
+                      />
+                    </div>
+                  ) : (
+                  grammar.rules.map((rule, rIdx) => (
                     <div key={rule.id} className="bg-white rounded-[14px] border border-gray-100 shadow-[0_2px_16px_rgba(0,0,0,0.05)] overflow-hidden">
                       {/* Rule header */}
                       <div className="bg-gradient-to-r from-[#fef5f0] to-[#fff8f4] border-b border-[#f5ddd0] px-[20px] sm:px-[28px] md:px-[36px] py-[16px] sm:py-[20px]">
@@ -1192,7 +1203,8 @@ export default function LessonDetailPage() {
                         )}
                       </div>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </div>
               );
             })()}

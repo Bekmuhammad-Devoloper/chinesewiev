@@ -38,6 +38,12 @@ export default function AdminLessonsPage() {
   const grammarDocxInputRef = useRef<HTMLInputElement>(null);
   const [parsingDialogueDocx, setParsingDialogueDocx] = useState(false);
   const [parsingGrammarDocx, setParsingGrammarDocx] = useState(false);
+  const dialogueContentDocxInputRef = useRef<HTMLInputElement>(null);
+  const grammarContentDocxInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingDialogueContent, setUploadingDialogueContent] = useState<number | null>(null);
+  const [uploadingGrammarContent, setUploadingGrammarContent] = useState<number | null>(null);
+  const [activeDialogueContentUpload, setActiveDialogueContentUpload] = useState<number | null>(null);
+  const [activeGrammarContentUpload, setActiveGrammarContentUpload] = useState<number | null>(null);
 
   useEffect(() => {
     fetch("/api/courses")
@@ -278,6 +284,60 @@ export default function AdminLessonsPage() {
     setParsingGrammarDocx(false);
   };
 
+  /* ── Word fayl yuklash (contentHtml — dialoglar uchun) ── */
+  const handleDialogueContentDocxUpload = async (file: File, dIdx: number) => {
+    setUploadingDialogueContent(dIdx);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/parse-docx?type=raw", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.html) {
+        const children = [...(getDialogueSection()?.children || [])];
+        children[dIdx] = { ...children[dIdx], contentHtml: data.html };
+        updateDialogueChildren(children);
+      } else {
+        alert("Word fayldan matn topilmadi");
+      }
+    } catch {
+      alert("Word faylni o'qishda xatolik yuz berdi");
+    }
+    setUploadingDialogueContent(null);
+  };
+
+  const removeDialogueContentHtml = (dIdx: number) => {
+    const children = [...(getDialogueSection()?.children || [])];
+    children[dIdx] = { ...children[dIdx], contentHtml: undefined };
+    updateDialogueChildren(children);
+  };
+
+  /* ── Word fayl yuklash (contentHtml — grammatika uchun) ── */
+  const handleGrammarContentDocxUpload = async (file: File, tIdx: number) => {
+    setUploadingGrammarContent(tIdx);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/parse-docx?type=raw", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.html) {
+        const children = [...(getGrammarSection()?.children || [])];
+        children[tIdx] = { ...children[tIdx], contentHtml: data.html };
+        updateGrammarChildren(children);
+      } else {
+        alert("Word fayldan matn topilmadi");
+      }
+    } catch {
+      alert("Word faylni o'qishda xatolik yuz berdi");
+    }
+    setUploadingGrammarContent(null);
+  };
+
+  const removeGrammarContentHtml = (tIdx: number) => {
+    const children = [...(getGrammarSection()?.children || [])];
+    children[tIdx] = { ...children[tIdx], contentHtml: undefined };
+    updateGrammarChildren(children);
+  };
+
   /* ── Word helpers ── */
   const addWord = () => {
     const words = [...(editLesson?.words || []), { hanzi: "", pinyin: "", translation: "", audio: "", image: "" }];
@@ -422,6 +482,8 @@ export default function AdminLessonsPage() {
       <input type="file" ref={dialogueGroupAudioInputRef} accept="audio/*" className="hidden" onChange={onDialogueGroupAudioFileChange} title="Dialog umumiy audio" />
       <input type="file" ref={dialogueDocxInputRef} accept=".docx,.doc" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleDialogueDocxUpload(f); if (dialogueDocxInputRef.current) dialogueDocxInputRef.current.value = ""; }} title="Dialog Word fayl" />
       <input type="file" ref={grammarDocxInputRef} accept=".docx,.doc" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleGrammarDocxUpload(f); if (grammarDocxInputRef.current) grammarDocxInputRef.current.value = ""; }} title="Grammatika Word fayl" />
+      <input type="file" ref={dialogueContentDocxInputRef} accept=".docx,.doc" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f && activeDialogueContentUpload !== null) handleDialogueContentDocxUpload(f, activeDialogueContentUpload); if (dialogueContentDocxInputRef.current) dialogueContentDocxInputRef.current.value = ""; }} title="Dialog content Word fayl" />
+      <input type="file" ref={grammarContentDocxInputRef} accept=".docx,.doc" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f && activeGrammarContentUpload !== null) handleGrammarContentDocxUpload(f, activeGrammarContentUpload); if (grammarContentDocxInputRef.current) grammarContentDocxInputRef.current.value = ""; }} title="Grammatika content Word fayl" />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-[28px] flex-wrap gap-[12px]">
@@ -738,6 +800,21 @@ export default function AdminLessonsPage() {
                               </button>
                             )}
                           </div>
+                          {/* Word content upload */}
+                          <div className="flex items-center gap-[6px]">
+                            {d.contentHtml ? (
+                              <div className="flex items-center gap-[6px] bg-purple-50 rounded-[8px] px-[10px] py-[6px] flex-1 min-w-0">
+                                <FileText size={14} className="text-purple-500 flex-shrink-0" />
+                                <p className="text-[10px] font-semibold text-purple-700 truncate flex-1">Word matn yuklangan ✓</p>
+                                <button onClick={() => removeDialogueContentHtml(dIdx)} className="w-[20px] h-[20px] bg-purple-100 text-purple-600 rounded-full flex items-center justify-center hover:bg-purple-200 flex-shrink-0" title="Matnni o'chirish"><X size={10} /></button>
+                              </div>
+                            ) : (
+                              <button onClick={() => { setActiveDialogueContentUpload(dIdx); setTimeout(() => dialogueContentDocxInputRef.current?.click(), 50); }} disabled={uploadingDialogueContent === dIdx}
+                                className="flex items-center gap-[5px] bg-purple-50 hover:bg-purple-100 text-purple-600 px-[10px] py-[5px] rounded-[7px] text-[11px] font-semibold transition-all disabled:opacity-50">
+                                {uploadingDialogueContent === dIdx ? <Loader2 size={12} className="animate-spin" /> : <FileText size={12} />} Word matn yuklash
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="p-[12px] flex flex-col gap-[6px]">
                           {(d.dialogueLines || []).map((line, lIdx) => (
@@ -781,11 +858,28 @@ export default function AdminLessonsPage() {
                   <div className="flex flex-col gap-[20px]">
                     {(getGrammarSection()?.children || []).map((topic, tIdx) => (
                       <div key={topic.id} className="border border-gray-200 rounded-[10px] overflow-hidden">
-                        <div className="bg-[#fef5f0] px-[14px] py-[10px] flex items-center justify-between">
-                          <Input value={topic.title} onChange={(v) => updateGrammarTopicTitle(tIdx, v)} placeholder="Mavzu nomi" className="flex-1 mr-[8px]" />
-                          <div className="flex gap-[6px] flex-shrink-0">
-                            <button onClick={() => addGrammarRule(tIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qoida</button>
-                            <button onClick={() => removeGrammarTopic(tIdx)} className="px-[8px] py-[5px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /></button>
+                        <div className="bg-[#fef5f0] px-[14px] py-[10px] flex flex-col gap-[8px]">
+                          <div className="flex items-center justify-between">
+                            <Input value={topic.title} onChange={(v) => updateGrammarTopicTitle(tIdx, v)} placeholder="Mavzu nomi" className="flex-1 mr-[8px]" />
+                            <div className="flex gap-[6px] flex-shrink-0">
+                              <button onClick={() => addGrammarRule(tIdx)} className="px-[10px] py-[5px] bg-white border border-gray-200 text-[11px] font-semibold rounded-[6px] text-gray-600 hover:bg-gray-50 flex items-center gap-[3px]"><Plus size={11} /> Qoida</button>
+                              <button onClick={() => removeGrammarTopic(tIdx)} className="px-[8px] py-[5px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center gap-[3px]" title="O'chirish"><Trash2 size={12} /></button>
+                            </div>
+                          </div>
+                          {/* Word content upload */}
+                          <div className="flex items-center gap-[6px]">
+                            {topic.contentHtml ? (
+                              <div className="flex items-center gap-[6px] bg-purple-50 rounded-[8px] px-[10px] py-[6px] flex-1 min-w-0">
+                                <FileText size={14} className="text-purple-500 flex-shrink-0" />
+                                <p className="text-[10px] font-semibold text-purple-700 truncate flex-1">Word matn yuklangan ✓</p>
+                                <button onClick={() => removeGrammarContentHtml(tIdx)} className="w-[20px] h-[20px] bg-purple-100 text-purple-600 rounded-full flex items-center justify-center hover:bg-purple-200 flex-shrink-0" title="Matnni o'chirish"><X size={10} /></button>
+                              </div>
+                            ) : (
+                              <button onClick={() => { setActiveGrammarContentUpload(tIdx); setTimeout(() => grammarContentDocxInputRef.current?.click(), 50); }} disabled={uploadingGrammarContent === tIdx}
+                                className="flex items-center gap-[5px] bg-purple-50 hover:bg-purple-100 text-purple-600 px-[10px] py-[5px] rounded-[7px] text-[11px] font-semibold transition-all disabled:opacity-50">
+                                {uploadingGrammarContent === tIdx ? <Loader2 size={12} className="animate-spin" /> : <FileText size={12} />} Word matn yuklash
+                              </button>
+                            )}
                           </div>
                         </div>
                         <div className="p-[12px] flex flex-col gap-[12px]">

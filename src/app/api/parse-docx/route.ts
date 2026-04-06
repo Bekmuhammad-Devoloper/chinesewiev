@@ -29,12 +29,22 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // Get HTML to detect headings, bold, structure
-    const htmlResult = await mammoth.convertToHtml({ buffer });
+    const htmlResult = await mammoth.convertToHtml({ buffer }, {
+      styleMap: [
+        "u => u",
+        "strike => s",
+      ],
+    });
     const html = htmlResult.value;
 
     // Also get raw text as fallback
     const textResult = await mammoth.extractRawText({ buffer });
     const rawText = textResult.value;
+
+    // Raw HTML mode — return full formatted HTML from Word
+    if (type === "raw") {
+      return NextResponse.json({ html });
+    }
 
     if (type === "dialogue") {
       const dialogues = parseDialogueFromHtml(html, rawText);
