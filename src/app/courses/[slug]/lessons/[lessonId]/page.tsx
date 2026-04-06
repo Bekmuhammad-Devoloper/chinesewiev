@@ -663,41 +663,6 @@ export default function LessonDetailPage() {
 
                 {/* ── Integrated Audio Player ── */}
                 <div ref={playerRef} className="relative">
-                  {/* Disc + title row */}
-                  <div className="flex items-center gap-[14px] sm:gap-[16px] mb-[16px] sm:mb-[20px]">
-                    {/* Spinning vinyl disc */}
-                    <div className={`w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] rounded-full bg-gradient-to-br from-[#333] to-[#111] flex items-center justify-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] flex-shrink-0 ${isPlaying ? 'disc-spin' : 'disc-paused'}`}>
-                      <div className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] rounded-full bg-gradient-to-br from-[#e8632b] to-[#f5a623]">
-                        <div className="w-full h-full rounded-full flex items-center justify-center">
-                          <div className="w-[6px] h-[6px] rounded-full bg-[#1a1a2e]" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-[8px]">
-                        {/* Equalizer bars */}
-                        <div className="flex items-end gap-[2px] h-[16px] sm:h-[18px]">
-                          {[1,2,3,4].map((i) => (
-                            <div
-                              key={i}
-                              className={`w-[3px] rounded-full bg-[#f5a623] ${isPlaying ? `eq-bar eq-bar-${i}` : ''}`}
-                              style={!isPlaying ? { height: `${4 + i * 2}px` } : undefined}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-white text-[13px] sm:text-[14px] font-semibold truncate">
-                          {dlg?.title || "Audio"}
-                        </span>
-                      </div>
-                      <span className="text-white/30 text-[10px] sm:text-[11px] font-medium truncate block max-w-[280px] sm:max-w-[400px]">
-                        {getDialogueLinesAll()[currentLineIdx]
-                          ? `${getDialogueLinesAll()[currentLineIdx].speaker}: ${getDialogueLinesAll()[currentLineIdx].text}`
-                          : `${lesson.name} · Dialog audio`
-                        }
-                      </span>
-                    </div>
-                  </div>
 
                   {/* Waveform progress bar */}
                   <div
@@ -757,23 +722,7 @@ export default function LessonDetailPage() {
                   </div>
 
                   {/* Controls */}
-                  <div className="flex items-center justify-center gap-[16px] sm:gap-[22px] md:gap-[28px]">
-                    <button aria-label="Shuffle" className="w-[30px] h-[30px] flex items-center justify-center text-white/25 hover:text-white/50 transition-colors">
-                      <svg className="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="16 3 21 3 21 8" /><line x1="4" y1="20" x2="21" y2="3" /><polyline points="21 16 21 21 16 21" /><line x1="15" y1="15" x2="21" y2="21" /><line x1="4" y1="4" x2="9" y2="9" />
-                      </svg>
-                    </button>
-
-                    <button
-                      onClick={playPrev}
-                      aria-label="Oldingi"
-                      className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95"
-                    >
-                      <svg className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-                      </svg>
-                    </button>
-
+                  <div className="flex items-center justify-center">
                     {/* Play/Pause */}
                     <button
                       onClick={togglePlay}
@@ -798,18 +747,6 @@ export default function LessonDetailPage() {
                           <polygon points="5 3 19 12 5 21 5 3"/>
                         </svg>
                       )}
-                    </button>
-
-                    <button aria-label="Keyingi" title="Keyingi" onClick={playNext} className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95">
-                      <svg className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-                      </svg>
-                    </button>
-
-                    <button aria-label="Takrorlash" className="w-[30px] h-[30px] flex items-center justify-center text-white/25 hover:text-white/50 transition-colors">
-                      <svg className="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="17 1 21 5 17 9" /><path d="M3 11V9a4 4 0 0 1 4-4h14" /><polyline points="7 23 3 19 7 15" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                      </svg>
                     </button>
                   </div>
                 </div>
