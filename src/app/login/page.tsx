@@ -12,7 +12,7 @@ const contacts = [
   {
     icon: "/assets/telegram-icon.svg",
     label: "Telegram orqali bog\u2018lanish",
-    href: "https://t.me/Bobur_676",
+    href: "https://t.me/chinesewave_2026",
   },
   {
     icon: "/assets/telegram-icon.svg",
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
               {/* Steps */}
               <div className="space-y-[8px] md:space-y-[10px] lg:space-y-[6px] mb-[10px] md:mb-[14px] lg:mb-[8px]">
-                <Step number={1} text="Telegram orqali biz bilan bog'lanib o'zingizga mos kurs uchun darsga yoziling." linkText="biz bilan bog'lanib" linkHref="https://t.me/Bobur_676" />
+                <Step number={1} text="Telegram orqali biz bilan bog'lanib o'zingizga mos kurs uchun darsga yoziling." linkText="biz bilan bog'lanib" linkHref="https://t.me/chinesewave_2026" />
                 <Step number={2} text="To'lov qiling va skreenshotni Telegram orqali jo'nating." />
                 <Step number={3} text="Sizga kalit paroli beriladi, shu orqali websitega kirishingiz mumkin." highlight />
               </div>
@@ -197,7 +197,7 @@ export default function LoginPage() {
 
               {/* Telegram link */}
               <div className="bg-[#f4f4f7] rounded-[8px] px-[12px] py-[6px] md:px-[16px] md:py-[8px] text-center">
-                <a href="https://t.me/Bobur_676" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-primary text-[10px] md:text-[12px] lg:text-[13px] transition-colors">
+                <a href="https://t.me/chinesewave_2026" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-primary text-[10px] md:text-[12px] lg:text-[13px] transition-colors">
                   Agar sizda kalit bo&apos;lmasa telegram orqali bog&apos;laning →
                 </a>
               </div>

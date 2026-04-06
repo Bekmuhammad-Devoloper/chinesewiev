@@ -9,7 +9,7 @@ const contacts = [
   {
     icon: "/assets/telegram-icon.svg",
     label: "Telegram orqali bog\u2018lanish",
-    href: "https://t.me/Bobur_676",
+    href: "https://t.me/chinesewave_2026",
   },
   {
     icon: "/assets/telegram-icon.svg",
