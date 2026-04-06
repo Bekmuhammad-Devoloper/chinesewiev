@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Course, Lesson, LessonSection, GrammarRule, Task } from "@/data/courses";
 import LessonsClient from "@/components/LessonsClient";
+import { getWordEmoji } from "@/lib/word-emoji";
 
 export default function LessonDetailPage() {
   const params = useParams();
@@ -958,7 +959,7 @@ export default function LessonDetailPage() {
                               className="w-full h-full object-contain p-[4px]"
                             />
                           ) : (
-                            <span className="text-[60px] sm:text-[80px] text-gray-200">🖼</span>
+                            <span className="text-[70px] sm:text-[90px] md:text-[100px] select-none">{getWordEmoji(words[practiceIndex].hanzi, words[practiceIndex].translation)}</span>
                           )}
                         </div>
 
@@ -1009,7 +1010,7 @@ export default function LessonDetailPage() {
                               className="w-full h-full object-contain p-[4px]"
                             />
                           ) : (
-                            <span className="text-[60px] sm:text-[80px] text-gray-200">🖼</span>
+                            <span className="text-[70px] sm:text-[90px] md:text-[100px] select-none">{getWordEmoji(words[practiceIndex].hanzi, words[practiceIndex].translation)}</span>
                           )}
                         </div>
 
