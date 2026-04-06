@@ -1041,22 +1041,6 @@ export default function LessonDetailPage() {
                   <span className="text-[#e8632b] font-bold">汉字</span>
                   <span>{practiceIndex + 1}/{words.length}</span>
                 </div>
-
-                {/* Progress dots */}
-                <div className="mt-[12px] flex items-center gap-[6px] flex-wrap justify-center max-w-[400px]">
-                  {words.map((w, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => { setFlipped(false); setPracticeIndex(idx); }}
-                      aria-label={`${idx + 1}-so'z: ${w.hanzi}`}
-                      className={`w-[8px] h-[8px] rounded-full transition-all duration-200 ${
-                        idx === practiceIndex
-                          ? "bg-[#e8632b] scale-125"
-                          : "bg-gray-200 hover:bg-gray-300"
-                      }`}
-                    />
-                  ))}
-                </div>
               </div>
             )}
 
