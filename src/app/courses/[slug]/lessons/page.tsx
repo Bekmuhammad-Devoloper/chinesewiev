@@ -26,6 +26,10 @@ export default function LessonsPage() {
         if (user && user.course === slug && new Date(user.expiresAt) > new Date()) {
           setIsAuthenticated(true);
         }
+        // Bitta dars uchun kalit ham kurs sahifasida ko'rish mumkin
+        if (user && user.course === slug && user.lessonId && new Date(user.expiresAt) > new Date()) {
+          setIsAuthenticated(true);
+        }
       }
     } catch {}
 

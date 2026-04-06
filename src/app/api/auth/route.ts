@@ -7,6 +7,7 @@ interface UserRecord {
   phone: string;
   telegram: string;
   course: string;
+  lessonId?: number;
   key: string;
   devices: string[];
   maxDevices: number;
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
       id: user.id,
       name: user.name,
       course: user.course,
+      lessonId: user.lessonId || null,
       expiresAt: user.expiresAt,
     },
   });

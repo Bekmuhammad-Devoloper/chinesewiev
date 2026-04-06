@@ -25,8 +25,15 @@ export default function LessonDetailPage() {
       const session = localStorage.getItem("user_session");
       if (session) {
         const user = JSON.parse(session);
-        if (user && user.course === slug && new Date(user.expiresAt) > new Date()) {
-          isAuth = true;
+        if (user && new Date(user.expiresAt) > new Date()) {
+          // Umumiy kurs kaliti — barcha darslarga kirish mumkin
+          if (user.course === slug && !user.lessonId) {
+            isAuth = true;
+          }
+          // Bitta dars uchun kalit — faqat o'sha darsga kirish mumkin
+          if (user.course === slug && user.lessonId === lessonId) {
+            isAuth = true;
+          }
         }
       }
     } catch {}

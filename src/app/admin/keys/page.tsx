@@ -3,15 +3,17 @@
 import { useState, useEffect } from "react";
 import { KeyRound, CheckCircle, Package, Clock, Search, Copy, Check, X, Trash2, Loader2, Lightbulb, Plus } from "lucide-react";
 import type { UserRecord } from "@/app/api/users/route";
-import type { Course } from "@/data/courses";
+import type { Course, Lesson } from "@/data/courses";
 
 export default function AdminKeysPage() {
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [showGen, setShowGen] = useState(false);
   const [genCount, setGenCount] = useState(1);
   const [genCourse, setGenCourse] = useState("");
+  const [genLessonId, setGenLessonId] = useState<number | null>(null);
   const [genExpiry, setGenExpiry] = useState(365);
   const [genName, setGenName] = useState("");
   const [genPhone, setGenPhone] = useState("");
@@ -32,6 +34,18 @@ export default function AdminKeysPage() {
     });
   }, []);
 
+  // Kurs tanlanganda darslarni yuklash
+  useEffect(() => {
+    if (genCourse) {
+      fetch(`/api/lessons?slug=${genCourse}`).then((r) => r.json()).then((data) => {
+        setLessons(Array.isArray(data) ? data : []);
+      }).catch(() => setLessons([]));
+    } else {
+      setLessons([]);
+      setGenLessonId(null);
+    }
+  }, [genCourse]);
+
   const refetch = () => fetch("/api/users").then((r) => r.json()).then((d) => setUsers(Array.isArray(d) ? d : []));
 
   const generateKeys = async () => {
@@ -47,6 +61,7 @@ export default function AdminKeysPage() {
             phone: genPhone.trim(),
             telegram: "",
             course: genCourse,
+            lessonId: genLessonId || undefined,
             maxDevices: 2,
             active: true,
             ...(genUseExpiry
@@ -61,6 +76,7 @@ export default function AdminKeysPage() {
     setGenerating(false);
     setGenName("");
     setGenPhone("");
+    setGenLessonId(null);
     setGenUseExpiry(false);
     refetch();
   };
@@ -192,12 +208,22 @@ export default function AdminKeysPage() {
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Kurs</label>
-                <select value={genCourse} onChange={(e) => setGenCourse(e.target.value)} title="Kurs"
+                <select value={genCourse} onChange={(e) => { setGenCourse(e.target.value); setGenLessonId(null); }} title="Kurs"
                   className="w-full px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[13px] bg-[#f9fafb] text-gray-800 outline-none">
                   <option value="">Tanlanmagan (umumiy)</option>
                   {courses.map((c) => <option key={c.slug} value={c.slug}>{c.title}</option>)}
                 </select>
               </div>
+              {genCourse && lessons.length > 0 && (
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Dars (ixtiyoriy)</label>
+                  <select value={genLessonId ?? ""} onChange={(e) => setGenLessonId(e.target.value ? Number(e.target.value) : null)} title="Dars"
+                    className="w-full px-[12px] py-[10px] rounded-[8px] border border-gray-200 text-[13px] bg-[#f9fafb] text-gray-800 outline-none">
+                    <option value="">Barcha darslar (umumiy)</option>
+                    {lessons.map((l) => <option key={l.id} value={l.id}>{l.title} — {l.name}</option>)}
+                  </select>
+                </div>
+              )}
               <div>
                 <label className="flex items-center gap-[8px] cursor-pointer">
                   <input type="checkbox" checked={genUseExpiry} onChange={(e) => setGenUseExpiry(e.target.checked)}
@@ -220,7 +246,7 @@ export default function AdminKeysPage() {
                 </div>
               )}
               <div className="bg-violet-50 rounded-[10px] p-[12px] text-[12px] text-violet-700 flex items-start gap-[6px]">
-                <Lightbulb size={14} className="mt-[1px] flex-shrink-0" /> <span><strong>{genCount}</strong> ta yangi kalit yaratiladi{genName ? ` — ${genName}` : ""}{genPhone ? ` (${genPhone})` : ""}{genUseExpiry ? `, muddat: ${genExpiry} kun` : ", muddatsiz"}.</span>
+                <Lightbulb size={14} className="mt-[1px] flex-shrink-0" /> <span><strong>{genCount}</strong> ta yangi kalit yaratiladi{genName ? ` — ${genName}` : ""}{genPhone ? ` (${genPhone})` : ""}{genLessonId ? `, dars: ${lessons.find(l => l.id === genLessonId)?.title || genLessonId}` : ""}{genUseExpiry ? `, muddat: ${genExpiry} kun` : ", muddatsiz"}.</span>
               </div>
             </div>
             <div className="px-[24px] py-[14px] border-t border-gray-100 flex justify-end gap-[8px]">
@@ -249,6 +275,7 @@ export default function AdminKeysPage() {
                   <th className="px-[16px] py-[10px]">Kalit</th>
                   <th className="px-[16px] py-[10px]">Foydalanuvchi</th>
                   <th className="px-[16px] py-[10px]">Kurs</th>
+                  <th className="px-[16px] py-[10px]">Dars</th>
                   <th className="px-[16px] py-[10px]">Qurilmalar</th>
                   <th className="px-[16px] py-[10px]">Muddat</th>
                   <th className="px-[16px] py-[10px]">Holat</th>
@@ -280,6 +307,7 @@ export default function AdminKeysPage() {
                         )}
                       </td>
                       <td className="px-[16px] py-[10px] text-[12px] text-gray-500">{courses.find((c) => c.slug === u.course)?.title || u.course || "—"}</td>
+                      <td className="px-[16px] py-[10px] text-[12px] text-gray-500">{u.lessonId ? `Dars ${u.lessonId}` : <span className="text-gray-300">Umumiy</span>}</td>
                       <td className="px-[16px] py-[10px] text-[12px] text-gray-500">{u.devices?.length || 0} / {u.maxDevices}</td>
                       <td className="px-[16px] py-[10px]">
                         <span className={`text-[11px] font-medium ${expired ? "text-red-400" : "text-gray-500"}`}>
@@ -300,7 +328,7 @@ export default function AdminKeysPage() {
                   );
                 })}
                 {filtered.length === 0 && (
-                  <tr><td colSpan={8} className="text-center py-[32px] text-[13px] text-gray-300">
+                  <tr><td colSpan={9} className="text-center py-[32px] text-[13px] text-gray-300">
                     {search ? "Natija topilmadi" : "Hali kalit yo'q. Kalit yaratish tugmasini bosing."}
                   </td></tr>
                 )}

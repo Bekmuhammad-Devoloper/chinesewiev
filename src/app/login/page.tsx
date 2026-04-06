@@ -62,8 +62,16 @@ export default function LoginPage() {
       // Session saqlash
       localStorage.setItem("user_session", JSON.stringify(data.user));
       // Foydalanuvchining kursiga yo'naltirish
-      const courseSlug = data.user.course || "hsk-1";
-      router.push(`/courses/${courseSlug}/lessons`);
+      if (data.user.lessonId && data.user.course) {
+        // Bitta dars uchun yaratilgan kalit — o'sha darsga o'tish
+        router.push(`/courses/${data.user.course}/lessons/${data.user.lessonId}`);
+      } else if (data.user.course) {
+        // Umumiy kalit, kurs bor — kursning darslar sahifasiga o'tish
+        router.push(`/courses/${data.user.course}/lessons`);
+      } else {
+        // Umumiy kalit, kurs ham yo'q — landingdagi darsliklar bo'limiga o'tish
+        router.push("/#courses");
+      }
     } catch {
       setLoginError("Server bilan bog'lanishda xatolik");
       setLoginLoading(false);

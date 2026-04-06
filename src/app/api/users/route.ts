@@ -7,6 +7,7 @@ export interface UserRecord {
   phone: string;
   telegram: string;
   course: string;
+  lessonId?: number;
   key: string;
   devices: string[];
   maxDevices: number;
@@ -59,6 +60,7 @@ export async function POST(req: NextRequest) {
     phone: body.phone || "",
     telegram: body.telegram || "",
     course: body.course || "",
+    lessonId: body.lessonId || undefined,
     key: body.key || generateKey(),
     devices: [],
     maxDevices: body.maxDevices ?? 2,
