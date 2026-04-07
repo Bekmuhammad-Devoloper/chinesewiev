@@ -53,11 +53,11 @@ export default function CoursesSection() {
               </div>
 
               {/* Info */}
-              <div className="px-[16px] md:px-[22px] lg:px-[28px] pt-[16px] md:pt-[22px] lg:pt-[28px] pb-[16px] md:pb-[22px] lg:pb-[28px] flex flex-col flex-1">
-                <h3 className="text-gold font-bold text-[18px] md:text-[24px] lg:text-[30px] leading-[1.2] mb-[20px] md:mb-[26px] lg:mb-[30px] text-center">
+              <div className="px-[16px] md:px-[22px] lg:px-[28px] pt-[18px] md:pt-[22px] lg:pt-[28px] pb-[20px] md:pb-[22px] lg:pb-[28px] flex flex-col flex-1">
+                <h3 className="text-gold font-bold text-[18px] md:text-[24px] lg:text-[30px] leading-[1.2] mb-[14px] md:mb-[26px] lg:mb-[30px] text-center">
                   {course.title}
                 </h3>
-                <ul className="space-y-[8px] md:space-y-[10px] lg:space-y-[12px] text-gold text-[11px] md:text-[13px] lg:text-[15px] font-normal leading-[1.55] flex-1 mb-[50px] md:mb-[44px]">
+                <ul className="space-y-[10px] md:space-y-[10px] lg:space-y-[12px] text-gold text-[12px] md:text-[13px] lg:text-[15px] font-normal leading-[1.6] flex-1 mb-[20px] md:mb-[44px]">
                   {course.features.map((feature, i) => (
                     <li key={i}>&bull; {feature}</li>
                   ))}
