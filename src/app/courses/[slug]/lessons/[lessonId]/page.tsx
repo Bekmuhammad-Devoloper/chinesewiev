@@ -521,6 +521,7 @@ export default function LessonDetailPage() {
                   </svg>
                   Yangi so&apos;zlar praktikasi
                 </button>
+                {(lesson?.writingSheets || []).length > 0 && (
                 <button
                   onClick={() => { setActiveSection("writing"); setSidebarOpen(false); }}
                   className={`w-full text-left px-[10px] py-[8px] text-[12.5px] rounded-[8px] transition-all duration-150 flex items-center gap-[8px] ${
@@ -534,6 +535,7 @@ export default function LessonDetailPage() {
                   </svg>
                   So&apos;z yozilishi
                 </button>
+                )}
               </div>
             )}
 
