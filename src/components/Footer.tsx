@@ -30,24 +30,24 @@ export default function Footer() {
         <div className="flex flex-row items-end lg:items-stretch justify-between gap-[16px] md:gap-0">
           {/* Contact Info */}
           <div className="lg:flex lg:flex-col lg:justify-evenly lg:py-[0px]">
-            <h3 className="text-gold font-bold text-[18px] md:text-[36px] lg:text-[32px] leading-[1] mb-[18px] md:mb-[30px] lg:mb-[0px] text-left">
+            <h3 className="text-gold font-bold text-[16px] md:text-[36px] lg:text-[32px] leading-[1] mb-[14px] md:mb-[30px] lg:mb-[0px] text-left">
               Bog&apos;lanish:
             </h3>
-            <ul className="space-y-[18px] md:space-y-[24px] lg:space-y-[0px] lg:flex lg:flex-col lg:justify-evenly lg:flex-1">
+            <ul className="space-y-[12px] md:space-y-[24px] lg:space-y-[0px] lg:flex lg:flex-col lg:justify-evenly lg:flex-1">
               {contacts.map((c) => (
                 <li key={c.label}>
                   <a
                     href={c.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-[10px] md:gap-[14px] text-gold text-[13px] md:text-[20px] lg:text-[19px] font-normal leading-[1.5] hover:text-gold-light transition-colors"
+                    className="flex items-center gap-[8px] md:gap-[14px] text-gold text-[11px] md:text-[20px] lg:text-[19px] font-normal leading-[1.5] hover:text-gold-light transition-colors"
                   >
                     <Image
                       src={c.icon}
                       alt=""
                       width={32}
                       height={32}
-                      className="w-[16px] h-[16px] md:w-[26px] md:h-[26px] lg:w-[24px] lg:h-[24px]"
+                      className="w-[14px] h-[14px] md:w-[26px] md:h-[26px] lg:w-[24px] lg:h-[24px]"
                     />
                     {c.label}
                   </a>
@@ -63,7 +63,7 @@ export default function Footer() {
               alt="Chinese Wave"
               width={400}
               height={320}
-              className="w-[90px] md:w-[280px] lg:w-[350px] h-auto object-contain"
+              className="w-[120px] md:w-[280px] lg:w-[350px] h-auto object-contain"
             />
           </div>
         </div>
