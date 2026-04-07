@@ -46,6 +46,7 @@ export default function OutcomesSection() {
         <h2 className="font-[family-name:var(--font-castoro-titling)] text-gold italic text-[22px] md:text-[36px] lg:text-[48px] leading-[1.2] mb-[14px] md:mb-[24px] lg:mb-[50px]">
           Bu kursdan keyin siz:
         </h2>
+        <br className="block md:hidden" />
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-[8px] md:gap-x-[14px] lg:gap-x-[20px] gap-y-[16px] md:gap-y-[20px] lg:gap-y-[24px]">
           {outcomes.map((item) => (
