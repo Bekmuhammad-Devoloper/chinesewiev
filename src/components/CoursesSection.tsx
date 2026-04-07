@@ -62,6 +62,7 @@ export default function CoursesSection() {
                     <li key={i}>&bull; {feature}</li>
                   ))}
                 </ul>
+                <br className="block md:hidden" />
                 {isComingSoon ? (
                   <div className="mt-[28px] md:mt-[22px] w-full bg-gray-400/60 text-white/80 font-bold text-[13px] md:text-[15px] lg:text-[16px] px-[20px] py-[10px] md:py-[12px] rounded-[10px] text-center cursor-default">
                     Tez kunda
