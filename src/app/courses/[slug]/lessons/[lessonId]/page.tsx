@@ -65,7 +65,7 @@ export default function LessonDetailPage() {
   }, [slug, lessonId, router]);
 
   const [activeSection, setActiveSection] = useState("new-words");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({
     dialogues: true,
     grammar: true,
