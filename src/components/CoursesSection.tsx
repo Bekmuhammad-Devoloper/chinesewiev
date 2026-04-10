@@ -42,13 +42,19 @@ export default function CoursesSection() {
                       </span>
                     </div>
                   )}
-                  <Image
-                    src={course.image}
-                    alt={course.title}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
+                  {course.image ? (
+                    <Image
+                      src={course.image}
+                      alt={course.title}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
+                      <span className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-blue-300/60">{course.title}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 

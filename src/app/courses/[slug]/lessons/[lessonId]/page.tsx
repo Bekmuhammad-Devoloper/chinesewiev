@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
-import type { Course, Lesson, LessonSection, GrammarRule, Task } from "@/data/courses";
+import type { Course, Lesson, LessonSection, GrammarRule, Task, Word } from "@/data/courses";
 import LessonsClient from "@/components/LessonsClient";
 import { getWordEmoji } from "@/lib/word-emoji";
 
@@ -73,6 +73,7 @@ export default function LessonDetailPage() {
   const [activeTab, setActiveTab] = useState<"list" | "cards">("list");
   const [practiceIndex, setPracticeIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [shuffledWords, setShuffledWords] = useState<Word[]>([]);
   const [fetchedImages, setFetchedImages] = useState<Record<string, string>>({});
 
   /* So'zlar uchun rasmlarni avtomatik yuklash (rasm yo'q bo'lganda) */
@@ -94,6 +95,21 @@ export default function LessonDetailPage() {
         .catch(() => {});
     });
   }, [lesson?.words]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* Praktika sahifasi ochilganda so'zlarni random aralashtirish */
+  useEffect(() => {
+    if (activeSection === "new-words-practice" && lesson?.words && lesson.words.length > 0) {
+      const arr = [...lesson.words];
+      // Fisher-Yates shuffle
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      setShuffledWords(arr);
+      setPracticeIndex(0);
+      setFlipped(false);
+    }
+  }, [activeSection, lesson?.words]);
 
   /* Audio player state */
   const [isPlaying, setIsPlaying] = useState(false);
@@ -876,14 +892,14 @@ export default function LessonDetailPage() {
             {/* ══════════════════════════════════════════════ */}
             {/* ── PRACTICE VIEW (Yangi so'zlar praktisi) ── */}
             {/* ══════════════════════════════════════════════ */}
-            {activeSection === "new-words-practice" && words.length > 0 && (
+            {activeSection === "new-words-practice" && shuffledWords.length > 0 && (
               <div className="flex flex-col items-center h-[calc(100vh-140px)]">
                 {renderMobileTrigger()}
                 {/* Flashcard */}
                 <div className="relative w-full max-w-[480px] flex-1 min-h-0 flex flex-col justify-center">
                   {/* Navigation arrows */}
                   <button
-                    onClick={() => { setFlipped(false); setPracticeIndex((prev) => (prev - 1 + words.length) % words.length); }}
+                    onClick={() => { setFlipped(false); setPracticeIndex((prev) => (prev - 1 + shuffledWords.length) % shuffledWords.length); }}
                     aria-label="Oldingi so'z"
                     className="absolute left-[-20px] sm:left-[-28px] top-1/2 -translate-y-1/2 z-10 w-[40px] h-[40px] sm:w-[48px] sm:h-[48px] bg-gradient-to-br from-[#f5a623] to-[#e8932b] rounded-full flex items-center justify-center shadow-[0_3px_12px_rgba(245,166,35,0.3)] hover:shadow-[0_4px_16px_rgba(245,166,35,0.4)] hover:scale-110 active:scale-95 transition-all duration-200"
                   >
@@ -893,7 +909,7 @@ export default function LessonDetailPage() {
                   </button>
 
                   <button
-                    onClick={() => { setFlipped(false); setPracticeIndex((prev) => (prev + 1) % words.length); }}
+                    onClick={() => { setFlipped(false); setPracticeIndex((prev) => (prev + 1) % shuffledWords.length); }}
                     aria-label="Keyingi so'z"
                     className="absolute right-[-20px] sm:right-[-28px] top-1/2 -translate-y-1/2 z-10 w-[40px] h-[40px] sm:w-[48px] sm:h-[48px] bg-gradient-to-br from-[#f5a623] to-[#e8932b] rounded-full flex items-center justify-center shadow-[0_3px_12px_rgba(245,166,35,0.3)] hover:shadow-[0_4px_16px_rgba(245,166,35,0.4)] hover:scale-110 active:scale-95 transition-all duration-200"
                   >
@@ -909,13 +925,13 @@ export default function LessonDetailPage() {
                   >
                     <div className={`flashcard-card aspect-[10/14] sm:aspect-[10/13] max-h-[calc(100vh-220px)] ${flipped ? "flipped" : ""}`}>
                       {/* ── FRONT FACE: image + hanzi + pinyin + play ── */}
-                      <div className={`flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] ${!words[practiceIndex].image ? "justify-center" : ""}`}>
+                      <div className={`flashcard-face bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] ${!shuffledWords[practiceIndex]?.image ? "justify-center" : ""}`}>
                         {/* Illustration — faqat admin rasm yuklagan bo'lsa yoki Pixabay'dan topilgan bo'lsa */}
-                        {(words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]) ? (
+                        {(shuffledWords[practiceIndex]?.image || fetchedImages[`${shuffledWords[practiceIndex]?.hanzi}|${shuffledWords[practiceIndex]?.translation}`]) ? (
                           <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
                             <img
-                              src={words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
-                              alt={words[practiceIndex].translation}
+                              src={shuffledWords[practiceIndex]?.image || fetchedImages[`${shuffledWords[practiceIndex]?.hanzi}|${shuffledWords[practiceIndex]?.translation}`]}
+                              alt={shuffledWords[practiceIndex]?.translation}
                               className="w-full h-full object-contain p-[4px]"
                             />
                           </div>
@@ -923,9 +939,9 @@ export default function LessonDetailPage() {
 
                         {/* Play button */}
                         <button
-                          title={`${words[practiceIndex].pinyin} tinglash`}
-                          onClick={(e) => { e.stopPropagation(); if (words[practiceIndex].audio) new Audio(words[practiceIndex].audio!).play(); }}
-                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 flex-shrink-0 ${words[practiceIndex].audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
+                          title={`${shuffledWords[practiceIndex]?.pinyin} tinglash`}
+                          onClick={(e) => { e.stopPropagation(); if (shuffledWords[practiceIndex]?.audio) new Audio(shuffledWords[practiceIndex].audio!).play(); }}
+                          className={`w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.3)] hover:scale-110 active:scale-95 transition-all duration-200 flex-shrink-0 ${shuffledWords[practiceIndex]?.audio ? "bg-gradient-to-br from-[#f5a623] to-[#e8932b]" : "bg-gray-200"}`}
                         >
                           <svg viewBox="0 0 24 24" fill="white" className="w-[14px] h-[14px] ml-[1px]">
                             <polygon points="5 3 19 12 5 21 5 3" />
@@ -934,12 +950,12 @@ export default function LessonDetailPage() {
 
                         {/* Hanzi */}
                         <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#1a1a2e] leading-none">
-                          {words[practiceIndex].hanzi}
+                          {shuffledWords[practiceIndex]?.hanzi}
                         </h2>
 
                         {/* Pinyin */}
                         <p className="text-[15px] sm:text-[17px] md:text-[19px] text-[#e8632b] font-medium italic">
-                          {words[practiceIndex].pinyin}
+                          {shuffledWords[practiceIndex]?.pinyin}
                         </p>
 
                         {/* Flip hint */}
@@ -960,11 +976,11 @@ export default function LessonDetailPage() {
                       {/* ── BACK FACE: image + translation ── */}
                       <div className={`flashcard-face flashcard-face--back bg-white border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-[16px] sm:p-[24px] md:p-[32px] flex flex-col items-center text-center gap-[14px] sm:gap-[18px] justify-center`}>
                         {/* Illustration (same image) — faqat rasm mavjud bo'lganda */}
-                        {(words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]) ? (
+                        {(shuffledWords[practiceIndex]?.image || fetchedImages[`${shuffledWords[practiceIndex]?.hanzi}|${shuffledWords[practiceIndex]?.translation}`]) ? (
                           <div className="w-full flex-1 max-h-[48%] rounded-[12px] bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] border border-gray-100 flex items-center justify-center overflow-hidden">
                             <img
-                              src={words[practiceIndex].image || fetchedImages[`${words[practiceIndex].hanzi}|${words[practiceIndex].translation}`]}
-                              alt={words[practiceIndex].translation}
+                              src={shuffledWords[practiceIndex]?.image || fetchedImages[`${shuffledWords[practiceIndex]?.hanzi}|${shuffledWords[practiceIndex]?.translation}`]}
+                              alt={shuffledWords[practiceIndex]?.translation}
                               className="w-full h-full object-contain p-[4px]"
                             />
                           </div>
@@ -972,7 +988,7 @@ export default function LessonDetailPage() {
 
                         {/* Translation (big, centered) */}
                         <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold text-[#1a1a2e] leading-tight">
-                          {words[practiceIndex].translation}
+                          {shuffledWords[practiceIndex]?.translation}
                         </h2>
 
                         {/* Flip back hint */}
@@ -996,7 +1012,7 @@ export default function LessonDetailPage() {
                 {/* Counter */}
                 <div className="mt-[20px] sm:mt-[28px] flex items-center gap-[8px] text-[13px] sm:text-[14px] text-gray-400 font-medium">
                   <span className="text-[#e8632b] font-bold">汉字</span>
-                  <span>{practiceIndex + 1}/{words.length}</span>
+                  <span>{practiceIndex + 1}/{shuffledWords.length}</span>
                 </div>
               </div>
             )}

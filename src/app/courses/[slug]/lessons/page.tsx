@@ -124,7 +124,7 @@ export default function LessonsPage() {
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                     </svg>
-                  ) : lesson.image ? (
+                  ) : lesson.image && lesson.image.trim() ? (
                     <Image
                       src={lesson.image}
                       alt={lesson.title}
@@ -133,7 +133,11 @@ export default function LessonsPage() {
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gray-100" />
+                    <div className="w-full h-full bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+                      <span className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-orange-200/80">
+                        {lesson.id}
+                      </span>
+                    </div>
                   )}
                 </div>
 
