@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import { getUploadDir } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();

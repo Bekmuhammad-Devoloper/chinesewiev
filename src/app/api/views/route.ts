@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 interface DailyView {
   date: string; // "2026-04-04"
   count: number;

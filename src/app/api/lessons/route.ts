@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import type { Course, Lesson } from "@/data/courses";
 import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 const DATA_FILE = "courses-data.json";
 
 function readData(): Course[] {

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export interface UserRecord {
   id: string;
   name: string;

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getDataPath, writeJsonFile } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 const DATA_FILE = "courses-data.json";
 
 // POST /api/seed — seed JSON data from the TS courses array

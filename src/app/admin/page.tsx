@@ -45,7 +45,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/seed", { method: "POST" }).then(() => fetch("/api/courses").then((r) => r.json())),
+      fetch("/api/courses").then((r) => r.json()),
       fetch("/api/users").then((r) => r.json()).catch(() => []),
       fetch("/api/views").then((r) => r.json()).catch(() => ({ daily: [], total: 0 })),
     ]).then(([coursesData, usersData, views]) => {
