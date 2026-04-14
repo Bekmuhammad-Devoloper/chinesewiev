@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import type { Course } from "@/data/courses";
@@ -32,8 +31,9 @@ export default function CoursesSection() {
               className={`bg-accent rounded-[16px] md:rounded-[20px] flex flex-col ${isComingSoon ? "opacity-70" : ""}`}
             >
               {/* Image with padding */}
-              <div className="px-[14px] md:px-[22px] lg:px-[28px] pt-[14px] md:pt-[22px] lg:pt-[28px]">
-                <div className="h-[180px] md:h-[280px] lg:h-[340px] w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden bg-white">
+              {/* Image with padding */}
+              <div className="pt-[14px] md:pt-[22px] lg:pt-[28px] px-[14px] md:px-[22px] lg:px-[28px]">
+                <div className="w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden">
                   {isComingSoon && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 rounded-[10px] md:rounded-[16px]">
                       <span className="bg-amber-500 text-white text-[14px] md:text-[18px] font-bold px-[20px] py-[8px] rounded-full shadow-lg flex items-center gap-[6px]">
@@ -43,15 +43,13 @@ export default function CoursesSection() {
                     </div>
                   )}
                   {course.image ? (
-                    <Image
+                    <img
                       src={course.image}
                       alt={course.title}
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="w-full h-auto rounded-[10px] md:rounded-[16px]"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
+                    <div className="w-full h-[180px] md:h-[280px] lg:h-[340px] flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 rounded-[10px] md:rounded-[16px]">
                       <span className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-blue-300/60">{course.title}</span>
                     </div>
                   )}
