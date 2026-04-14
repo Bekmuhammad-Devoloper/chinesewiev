@@ -30,9 +30,11 @@ export default function AdminLessonsPage() {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const writingSheetInputRef = useRef<HTMLInputElement>(null);
   const lessonSheetInputRef = useRef<HTMLInputElement>(null);
+  const lessonImageInputRef = useRef<HTMLInputElement>(null);
   const dialogueGroupAudioInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadIdx, setActiveUploadIdx] = useState(-1);
   const [uploadingDialogueGroupAudio, setUploadingDialogueGroupAudio] = useState<number | null>(null);
+  const [uploadingLessonImage, setUploadingLessonImage] = useState(false);
   const [activeDialogueGroupUpload, setActiveDialogueGroupUpload] = useState<number | null>(null);
   const dialogueDocxInputRef = useRef<HTMLInputElement>(null);
   const grammarDocxInputRef = useRef<HTMLInputElement>(null);
@@ -198,6 +200,30 @@ export default function AdminLessonsPage() {
     const file = e.target.files?.[0];
     if (file) handleLessonSheetUpload(file);
     if (lessonSheetInputRef.current) lessonSheetInputRef.current.value = "";
+  };
+
+  /* ── Lesson image upload handler ── */
+  const handleLessonImageUpload = async (file: File) => {
+    setUploadingLessonImage(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) {
+        updateLesson({ image: data.url });
+      } else {
+        alert(data.error || "Yuklashda xatolik");
+      }
+    } catch {
+      alert("Rasm yuklashda xatolik yuz berdi");
+    }
+    setUploadingLessonImage(false);
+  };
+  const onLessonImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleLessonImageUpload(file);
+    if (lessonImageInputRef.current) lessonImageInputRef.current.value = "";
   };
 
   /* ── Dialogue GROUP audio upload handler (one audio per dialogue) ── */
@@ -562,6 +588,40 @@ export default function AdminLessonsPage() {
                   <div>
                     <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[6px]">Tavsif</label>
                     <Input value={editLesson.description} onChange={(v) => updateLesson({ description: v })} placeholder="Greetings / Salomlashlar" className="w-full !py-[10px] !px-[14px] !rounded-[10px] !text-[14px]" />
+                  </div>
+
+                  {/* Dars rasmi */}
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.06em] mb-[6px]">Dars rasmi</label>
+                    <input type="file" ref={lessonImageInputRef} accept="image/*" className="hidden" onChange={onLessonImageFileChange} title="Dars rasmi yuklash" />
+                    {editLesson.image && editLesson.image.trim() ? (
+                      <div className="relative group w-full max-w-[320px]">
+                        <img src={editLesson.image} alt="Dars rasmi" className="w-full h-auto rounded-[10px] border border-gray-200" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 rounded-[10px] flex items-center justify-center gap-[8px] transition-opacity">
+                          <button type="button" onClick={() => lessonImageInputRef.current?.click()} className="px-[12px] py-[6px] bg-white text-gray-700 text-[12px] font-semibold rounded-[8px] hover:bg-gray-100 transition-colors">Almashtirish</button>
+                          <button type="button" onClick={() => updateLesson({ image: "" })} className="px-[12px] py-[6px] bg-red-500 text-white text-[12px] font-semibold rounded-[8px] hover:bg-red-600 transition-colors">O'chirish</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={uploadingLessonImage}
+                        onClick={() => lessonImageInputRef.current?.click()}
+                        className="flex items-center gap-[8px] px-[16px] py-[10px] bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-dashed border-orange-200 rounded-[10px] text-[13px] font-semibold text-orange-600 hover:border-orange-400 hover:from-orange-100 hover:to-amber-100 transition-all"
+                      >
+                        {uploadingLessonImage ? (
+                          <>
+                            <svg className="w-[16px] h-[16px] animate-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="31.4 31.4" strokeLinecap="round" /></svg>
+                            Yuklanmoqda...
+                          </>
+                        ) : (
+                          <>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[16px] h-[16px]"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" /></svg>
+                            Rasm yuklash
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
