@@ -45,7 +45,8 @@ export default function HeroSection() {
             src="/assets/hero-bg.png"
             alt="Shanghai skyline"
             fill
-            priority
+            loading="lazy"
+            placeholder="empty"
             className="object-cover object-center"
           />
           <Image

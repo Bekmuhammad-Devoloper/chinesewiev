@@ -6,13 +6,15 @@ import Navbar from "@/components/Navbar";
 const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-be-vietnam-pro",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 const castoroTitling = Castoro_Titling({
   variable: "--font-castoro-titling",
   subsets: ["latin"],
   weight: ["400"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

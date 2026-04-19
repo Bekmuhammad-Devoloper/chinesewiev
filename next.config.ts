@@ -6,8 +6,14 @@ const nextConfig: NextConfig = {
 
   // Rasmlarni optimallashtirish
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 kun cache
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
+
+  // Compress
+  compress: true,
 
   // Security headers
   async headers() {
@@ -26,6 +32,13 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         headers: [
           { key: "Cache-Control", value: "no-store, max-age=0" },
+        ],
+      },
+      {
+        // Static assets uchun uzoq cache
+        source: "/assets/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
     ];
