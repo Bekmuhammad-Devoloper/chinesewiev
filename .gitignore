@@ -44,6 +44,6 @@ next-env.d.ts
 # vscode
 .vscode/
 
-# runtime data (production da yaratiladi)
-/data/
+# runtime data
+# /data/ - git'ga kiritilgan, ma'lumotlar saqlanishi uchun
 ssh_pass.bat

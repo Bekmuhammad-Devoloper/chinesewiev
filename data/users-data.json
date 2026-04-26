@@ -1,0 +1,48 @@
+[
+  {
+    "id": "u-1775358566697",
+    "name": "Ali",
+    "phone": "+998900152601",
+    "telegram": "",
+    "course": "hsk-1",
+    "key": "CW-Q8P2-QU59-DGJQ",
+    "devices": [
+      "dev-jdbejjhxbjmnlaq7i6",
+      "dev-z37rlr1i0rnmnsz8233"
+    ],
+    "maxDevices": 2,
+    "active": true,
+    "createdAt": "2026-04-05T03:09:26.699Z",
+    "expiresAt": "2036-04-02T03:09:26.699Z"
+  },
+  {
+    "id": "u-1775358609752",
+    "name": "test",
+    "phone": "+998900152601",
+    "telegram": "",
+    "course": "",
+    "key": "CW-9WGL-7856-FTJ3",
+    "devices": [
+      "dev-jdbejjhxbjmnlaq7i6"
+    ],
+    "maxDevices": 2,
+    "active": true,
+    "createdAt": "2026-04-05T03:10:09.752Z",
+    "expiresAt": "2036-04-02T03:10:09.752Z"
+  },
+  {
+    "id": "u-1775480792637",
+    "name": "Test",
+    "phone": "+998900152601",
+    "telegram": "",
+    "course": "hsk-2",
+    "key": "CW-U7J2-9KU9-9TVA",
+    "devices": [
+      "dev-jdbejjhxbjmnlaq7i6"
+    ],
+    "maxDevices": 2,
+    "active": true,
+    "createdAt": "2026-04-06T13:06:32.637Z",
+    "expiresAt": "2036-04-03T13:06:32.637Z"
+  }
+]
