@@ -1,18 +1,9 @@
-"use client";
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import type { Course } from "@/data/courses";
+import Image from "next/image";
+import { getCoursesData } from "@/lib/courses-server";
 
 export default function CoursesSection() {
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  useEffect(() => {
-    fetch("/api/courses")
-      .then((r) => r.json())
-      .then((data) => setCourses(Array.isArray(data) ? data : []))
-      .catch(() => {});
-  }, []);
+  const courses = getCoursesData();
 
   return (
     <section id="courses" className="bg-primary pt-[30px] md:pt-[90px] lg:pt-[100px]">
@@ -30,8 +21,6 @@ export default function CoursesSection() {
               key={course.title}
               className={`bg-accent rounded-[16px] md:rounded-[20px] flex flex-col ${isComingSoon ? "opacity-70" : ""}`}
             >
-              {/* Image with padding */}
-              {/* Image with padding */}
               <div className="pt-[14px] md:pt-[22px] lg:pt-[28px] px-[14px] md:px-[22px] lg:px-[28px]">
                 <div className="w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden">
                   {isComingSoon && (
@@ -43,9 +32,12 @@ export default function CoursesSection() {
                     </div>
                   )}
                   {course.image ? (
-                    <img
+                    <Image
                       src={course.image}
                       alt={course.title}
+                      width={800}
+                      height={600}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="w-full h-auto rounded-[10px] md:rounded-[16px]"
                     />
                   ) : (
@@ -56,7 +48,6 @@ export default function CoursesSection() {
                 </div>
               </div>
 
-              {/* Info */}
               <div className="px-[16px] md:px-[22px] lg:px-[28px] pt-[18px] md:pt-[22px] lg:pt-[28px] pb-[20px] md:pb-[22px] lg:pb-[28px] flex flex-col flex-1">
                 <h3 className="text-gold font-bold text-[18px] md:text-[24px] lg:text-[30px] leading-[1.2] mb-[14px] md:mb-[26px] lg:mb-[30px] text-center">
                   {course.title}

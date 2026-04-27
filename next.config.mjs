@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   // Production uchun standalone output (Docker/VPS deploy uchun)
   output: "standalone",
 
@@ -15,7 +14,8 @@ const nextConfig: NextConfig = {
   // Compress
   compress: true,
 
-  // Security headers
+  // Cache API responses on the server (api/courses, api/lessons GET)
+  // and far-future cache for /assets static files.
   async headers() {
     return [
       {
@@ -28,14 +28,6 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // API uchun cache-control
-        source: "/api/:path*",
-        headers: [
-          { key: "Cache-Control", value: "no-store, max-age=0" },
-        ],
-      },
-      {
-        // Static assets uchun uzoq cache
         source: "/assets/:path*",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
@@ -44,7 +36,6 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Powered by headerni yashirish
   poweredByHeader: false,
 };
 

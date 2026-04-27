@@ -16,86 +16,56 @@ export default function LessonsClient() {
   const [chinaTime, setChinaTime] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
 
-  // Internetdan aniq vaqt olish va har sekundda yangilash
   useEffect(() => {
-    // Offset: kompyuter soati va haqiqiy vaqt orasidagi farq (ms)
-    let offsetMs = 0;
-    let synced = false;
-
-    // Bir nechta API dan vaqt olishga harakat qilamiz
-    async function syncTime() {
-      try {
-        // 1-urinish: WorldTimeAPI — Toshkent
-        const before = Date.now();
-        const res = await fetch("https://worldtimeapi.org/api/timezone/Asia/Tashkent");
-        const after = Date.now();
-        const data = await res.json();
-        // API javob vaqtining yarmini hisobga olamiz (network latency)
-        const networkDelay = (after - before) / 2;
-        // datetime: "2026-03-26T22:03:15.123456+05:00"
-        const serverTime = new Date(data.datetime).getTime() + networkDelay;
-        offsetMs = serverTime - Date.now();
-        synced = true;
-      } catch {
-        try {
-          // 2-urinish: TimeAPI.io
-          const before2 = Date.now();
-          const res2 = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia/Tashkent");
-          const after2 = Date.now();
-          const data2 = await res2.json();
-          const networkDelay2 = (after2 - before2) / 2;
-          // {year, month, day, hour, minute, seconds, milliSeconds}
-          const isoStr = `${data2.year}-${String(data2.month).padStart(2,"0")}-${String(data2.day).padStart(2,"0")}T${String(data2.hour).padStart(2,"0")}:${String(data2.minute).padStart(2,"0")}:${String(data2.seconds).padStart(2,"0")}+05:00`;
-          const serverTime2 = new Date(isoStr).getTime() + networkDelay2;
-          offsetMs = serverTime2 - Date.now();
-          synced = true;
-        } catch {
-          // Agar hech qaysi API ishlamasa, offset 0 bo'lib qoladi (lokal vaqt ishlatiladi)
-          offsetMs = 0;
-          synced = false;
-        }
-      }
-    }
-
-    function formatTime(date: Date, tz: string): string {
-      const f = new Intl.DateTimeFormat("en-GB", {
-        timeZone: tz,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      });
-      return f.format(date);
-    }
+    const uzbFmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Tashkent",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+    const chinaFmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Shanghai",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
 
     function updateClocks() {
-      // Haqiqiy vaqt = kompyuter vaqti + offset (API dan olingan farq)
-      const realNow = new Date(Date.now() + offsetMs);
-      setUzbTime(formatTime(realNow, "Asia/Tashkent"));
-      setChinaTime(formatTime(realNow, "Asia/Shanghai"));
+      const now = new Date();
+      setUzbTime(uzbFmt.format(now));
+      setChinaTime(chinaFmt.format(now));
     }
 
-    // Dastlab sinxronlash, keyin har sekundda yangilash
-    syncTime().then(() => {
-      updateClocks();
-    });
-    updateClocks(); // API javobini kutmasdan darhol ko'rsatish
-
+    updateClocks();
     const interval = setInterval(updateClocks, 1000);
-
-    // Har 5 daqiqada qayta sinxronlash
-    const resyncInterval = setInterval(() => {
-      syncTime();
-    }, 5 * 60 * 1000);
-
-    return () => {
-      clearInterval(interval);
-      clearInterval(resyncInterval);
-    };
+    return () => clearInterval(interval);
   }, []);
 
-  // Get weather based on geolocation
+  // Get weather based on geolocation (cached in sessionStorage for 15 min)
   useEffect(() => {
+    const WEATHER_CACHE_KEY = "weather_cache_v1";
+    const WEATHER_TTL_MS = 15 * 60 * 1000;
+
+    try {
+      const cached = sessionStorage.getItem(WEATHER_CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached) as { ts: number; data: WeatherData };
+        if (Date.now() - parsed.ts < WEATHER_TTL_MS) {
+          setWeather(parsed.data);
+          return;
+        }
+      }
+    } catch {}
+
+    function saveWeather(w: WeatherData) {
+      setWeather(w);
+      try {
+        sessionStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: w }));
+      } catch {}
+    }
+
     async function fetchWeather(lat: number, lon: number) {
       try {
         const res = await fetch(
@@ -111,7 +81,7 @@ export default function LessonsClient() {
         else if (lat > 40.7 && lat < 41.5 && lon > 71 && lon < 72) city = "Namangan";
         else if (lat > 40.5 && lat < 41 && lon > 70.5 && lon < 71.5) city = "Andijon";
 
-        setWeather({
+        saveWeather({
           temp,
           description: getWeatherDescription(code),
           icon: getWeatherIcon(code),
@@ -125,7 +95,7 @@ export default function LessonsClient() {
           );
           const data = await res.json();
           const wCode = data.current.weather_code;
-          setWeather({
+          saveWeather({
             temp: Math.round(data.current.temperature_2m),
             description: getWeatherDescription(wCode),
             icon: getWeatherIcon(wCode),

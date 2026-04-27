@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { Course, Lesson } from "@/data/courses";
-import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
-
-export const dynamic = "force-dynamic";
+import { getDataPath, writeJsonFile } from "@/lib/data";
+import { getCoursesData } from "@/lib/courses-server";
 
 const DATA_FILE = "courses-data.json";
-
-function readData(): Course[] {
-  return readJsonFile<Course[]>(getDataPath(DATA_FILE), []);
-}
 
 function writeData(courses: Course[]) {
   writeJsonFile(getDataPath(DATA_FILE), courses);
 }
+
+const cacheHeaders = {
+  "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+};
 
 // GET /api/lessons?slug=hsk-1 — get all lessons for a course
 // GET /api/lessons?slug=hsk-1&id=1 — get one lesson
@@ -21,17 +20,17 @@ export async function GET(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
   if (!slug) return NextResponse.json({ error: "slug kerak" }, { status: 400 });
 
-  const courses = readData();
+  const courses = getCoursesData();
   const course = courses.find((c) => c.slug === slug);
   if (!course) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 
   if (id) {
     const lesson = course.lessons.find((l) => l.id === Number(id));
     if (!lesson) return NextResponse.json({ error: "Dars topilmadi" }, { status: 404 });
-    return NextResponse.json(lesson);
+    return NextResponse.json(lesson, { headers: cacheHeaders });
   }
 
-  return NextResponse.json(course.lessons);
+  return NextResponse.json(course.lessons, { headers: cacheHeaders });
 }
 
 // POST /api/lessons?slug=hsk-1 — add a lesson
@@ -40,7 +39,7 @@ export async function POST(req: NextRequest) {
   if (!slug) return NextResponse.json({ error: "slug kerak" }, { status: 400 });
 
   const body = await req.json();
-  const courses = readData();
+  const courses = getCoursesData();
   const course = courses.find((c) => c.slug === slug);
   if (!course) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 
@@ -74,7 +73,7 @@ export async function PUT(req: NextRequest) {
   if (!slug || !id) return NextResponse.json({ error: "slug va id kerak" }, { status: 400 });
 
   const body = await req.json();
-  const courses = readData();
+  const courses = getCoursesData();
   const course = courses.find((c) => c.slug === slug);
   if (!course) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 
@@ -92,7 +91,7 @@ export async function DELETE(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
   if (!slug || !id) return NextResponse.json({ error: "slug va id kerak" }, { status: 400 });
 
-  const courses = readData();
+  const courses = getCoursesData();
   const course = courses.find((c) => c.slug === slug);
   if (!course) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 

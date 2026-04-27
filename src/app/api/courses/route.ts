@@ -1,41 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Course } from "@/data/courses";
-import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
-
-export const dynamic = "force-dynamic";
+import { getDataPath, writeJsonFile } from "@/lib/data";
+import { getCoursesData } from "@/lib/courses-server";
 
 const DATA_FILE = "courses-data.json";
-
-function readData(): Course[] {
-  const filePath = getDataPath(DATA_FILE);
-  const data = readJsonFile<Course[]>(filePath, []);
-  if (data.length === 0) {
-    // fallback: boshlang'ich ma'lumotlarni src/data dan o'qish
-    try {
-      const { courses } = require("@/data/courses");
-      writeJsonFile(filePath, courses);
-      return courses;
-    } catch {
-      return [];
-    }
-  }
-  return data;
-}
 
 function writeData(courses: Course[]) {
   writeJsonFile(getDataPath(DATA_FILE), courses);
 }
 
-// GET /api/courses — get all courses
+// GET /api/courses — get all courses (cached, mtime-invalidated)
 export async function GET() {
-  const courses = readData();
-  return NextResponse.json(courses);
+  const courses = getCoursesData();
+  return NextResponse.json(courses, {
+    headers: {
+      "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+    },
+  });
 }
 
 // POST /api/courses — add a new course
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const courses = readData();
+  const courses = getCoursesData();
 
   const newCourse: Course = {
     slug: body.slug || `course-${Date.now()}`,
@@ -61,7 +48,7 @@ export async function POST(req: NextRequest) {
 // PUT /api/courses — update a course by slug
 export async function PUT(req: NextRequest) {
   const body = await req.json();
-  const courses = readData();
+  const courses = getCoursesData();
   const idx = courses.findIndex((c) => c.slug === body.slug);
   if (idx === -1) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 
@@ -73,7 +60,7 @@ export async function PUT(req: NextRequest) {
 // DELETE /api/courses — delete course by slug (send { slug } in body)
 export async function DELETE(req: NextRequest) {
   const body = await req.json();
-  let courses = readData();
+  let courses = getCoursesData();
   const before = courses.length;
   courses = courses.filter((c) => c.slug !== body.slug);
   if (courses.length === before) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
