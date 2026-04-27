@@ -25,6 +25,8 @@ export default async function LessonsPage({
     redirect("/");
   }
 
+  const pageTitle = `${course.title.trim()} Darsliklar`;
+
   return (
     <main className="min-h-screen bg-[#fafafa]">
       <LessonsClient />
@@ -35,11 +37,11 @@ export default async function LessonsPage({
             Asosiy
           </Link>
           <span className="text-gray-300">&gt;</span>
-          <span className="text-gray-500 font-medium">HSK 1.0 Darsliklar</span>
+          <span className="text-gray-500 font-medium">{pageTitle}</span>
         </nav>
 
         <h1 className="text-[20px] sm:text-[24px] md:text-[32px] lg:text-[38px] font-bold text-[#ff4d5a] mt-[12px] md:mt-[24px] mb-[16px] md:mb-[36px]">
-          HSK 1.0 Darsliklar
+          {pageTitle}
         </h1>
 
         <LessonsList slug={slug} lessons={course.lessons} />
