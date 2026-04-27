@@ -21,7 +21,7 @@ export default function LessonsList({ slug, lessons }: { slug: string; lessons: 
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[20px]">
-      {lessons.map((lesson) => {
+      {lessons.map((lesson, index) => {
         const isPublished = lesson.published !== false;
         const isLocked = isPublished ? (isAuthenticated ? false : lesson.locked) : true;
         const isComingSoon = !isPublished;
@@ -61,7 +61,8 @@ export default function LessonsList({ slug, lessons }: { slug: string; lessons: 
                   src={lesson.image}
                   alt={lesson.title}
                   fill
-                  loading="lazy"
+                  loading={index < 12 ? "eager" : "lazy"}
+                  priority={index < 6}
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
                 />

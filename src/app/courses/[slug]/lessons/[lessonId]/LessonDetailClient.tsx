@@ -54,25 +54,35 @@ export default function LessonDetailClient({
   const [shuffledWords, setShuffledWords] = useState<Word[]>([]);
   const [fetchedImages, setFetchedImages] = useState<Record<string, string>>({});
 
-  /* So'zlar uchun rasmlarni avtomatik yuklash (rasm yo'q bo'lganda) */
+  /* So'zlar uchun rasmlarni faqat praktika sahifasida yuklash */
   useEffect(() => {
+    if (activeSection !== "new-words-practice") return;
     if (!lesson?.words) return;
     const wordsWithoutImages = lesson.words.filter((w) => !w.image);
     if (wordsWithoutImages.length === 0) return;
 
-    wordsWithoutImages.forEach((word) => {
-      const key = `${word.hanzi}|${word.translation}`;
-      if (fetchedImages[key]) return;
-      fetch(`/api/word-image?hanzi=${encodeURIComponent(word.hanzi)}&translation=${encodeURIComponent(word.translation)}`)
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.url) {
+    let cancelled = false;
+    (async () => {
+      for (const word of wordsWithoutImages) {
+        if (cancelled) return;
+        const key = `${word.hanzi}|${word.translation}`;
+        if (fetchedImages[key]) continue;
+        try {
+          const r = await fetch(
+            `/api/word-image?hanzi=${encodeURIComponent(word.hanzi)}&translation=${encodeURIComponent(word.translation)}`
+          );
+          const data = await r.json();
+          if (!cancelled && data.url) {
             setFetchedImages((prev) => ({ ...prev, [key]: data.url }));
           }
-        })
-        .catch(() => {});
-    });
-  }, [lesson?.words]); // eslint-disable-line react-hooks/exhaustive-deps
+        } catch {}
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeSection, lesson?.words]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Praktika sahifasi ochilganda so'zlarni random aralashtirish */
   useEffect(() => {

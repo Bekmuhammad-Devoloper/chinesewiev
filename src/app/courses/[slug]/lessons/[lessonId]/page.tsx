@@ -1,6 +1,21 @@
 import { redirect, notFound } from "next/navigation";
-import { getLessonByIds } from "@/lib/courses-server";
+import { getLessonByIds, getCoursesData } from "@/lib/courses-server";
 import LessonDetailClient from "./LessonDetailClient";
+
+export const revalidate = 60;
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  const params: Array<{ slug: string; lessonId: string }> = [];
+  for (const course of getCoursesData()) {
+    if (course.published === false) continue;
+    for (const lesson of course.lessons) {
+      if (lesson.published === false) continue;
+      params.push({ slug: course.slug, lessonId: String(lesson.id) });
+    }
+  }
+  return params;
+}
 
 export default async function LessonDetailPage({
   params,

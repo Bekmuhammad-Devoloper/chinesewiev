@@ -11,6 +11,11 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
+  // Sharp parallelizmni oshirish — bir yo'la ko'p rasm optimallashtirish uchun
+  experimental: {
+    imgOptConcurrency: 8,
+  },
+
   // Compress
   compress: true,
 

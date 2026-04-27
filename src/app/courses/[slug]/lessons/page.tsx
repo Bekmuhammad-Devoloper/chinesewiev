@@ -2,7 +2,16 @@ import { redirect } from "next/navigation";
 import LessonsList from "./LessonsList";
 import LessonsClient from "@/components/LessonsClient";
 import Link from "next/link";
-import { getCourseBySlug } from "@/lib/courses-server";
+import { getCourseBySlug, getCoursesData } from "@/lib/courses-server";
+
+export const revalidate = 60;
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  return getCoursesData()
+    .filter((c) => c.published !== false)
+    .map((c) => ({ slug: c.slug }));
+}
 
 export default async function LessonsPage({
   params,

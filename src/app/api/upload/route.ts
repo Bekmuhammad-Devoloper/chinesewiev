@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import sharp from "sharp";
 import { getUploadDir } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
+
+const MAX_IMAGE_DIMENSION = 1600;
+const JPG_QUALITY = 80;
+const PNG_QUALITY = 80;
 
 export async function POST(req: NextRequest) {
   try {
@@ -45,7 +50,38 @@ export async function POST(req: NextRequest) {
     const uploadDir = getUploadDir(subDir);
 
     const filePath = path.join(uploadDir, filename);
-    const buffer = Buffer.from(await file.arrayBuffer());
+    let buffer = Buffer.from(await file.arrayBuffer());
+
+    // Rasm bo'lsa avtomatik kichraytirish (SVG ham audio ham emas)
+    if (!isAudio && file.type !== "image/svg+xml") {
+      try {
+        let pipeline = sharp(buffer, { failOn: "none" }).rotate();
+        const meta = await sharp(buffer).metadata();
+        if (
+          (meta.width && meta.width > MAX_IMAGE_DIMENSION) ||
+          (meta.height && meta.height > MAX_IMAGE_DIMENSION)
+        ) {
+          pipeline = pipeline.resize({
+            width: MAX_IMAGE_DIMENSION,
+            height: MAX_IMAGE_DIMENSION,
+            fit: "inside",
+            withoutEnlargement: true,
+          });
+        }
+        let out: Buffer;
+        if (file.type === "image/png") {
+          out = await pipeline.png({ quality: PNG_QUALITY, compressionLevel: 9 }).toBuffer();
+        } else if (file.type === "image/webp") {
+          out = await pipeline.webp({ quality: 82 }).toBuffer();
+        } else {
+          out = await pipeline.jpeg({ quality: JPG_QUALITY, mozjpeg: true }).toBuffer();
+        }
+        buffer = Buffer.from(out);
+      } catch (err) {
+        console.error("Image resize failed, saving original:", err);
+      }
+    }
+
     fs.writeFileSync(filePath, buffer);
 
     const publicUrl = subDir ? `/assets/${subDir}/${filename}` : `/assets/${filename}`;
