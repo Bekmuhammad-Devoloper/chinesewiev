@@ -21,7 +21,7 @@ export default function CoursesSection() {
               className={`bg-accent rounded-[16px] md:rounded-[20px] flex flex-col ${isComingSoon ? "opacity-70" : ""}`}
             >
               <div className="pt-[14px] md:pt-[22px] lg:pt-[28px] px-[14px] md:px-[22px] lg:px-[28px]">
-                <div className="w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden aspect-[4/3] bg-gradient-to-br from-blue-50 to-blue-100">
+                <div className="w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden aspect-[5/6] bg-white">
                   {isComingSoon && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 rounded-[10px] md:rounded-[16px]">
                       <span className="bg-amber-500 text-white text-[14px] md:text-[18px] font-bold px-[20px] py-[8px] rounded-full shadow-lg flex items-center gap-[6px]">
@@ -37,10 +37,10 @@ export default function CoursesSection() {
                       alt={course.title}
                       loading="lazy"
                       decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-contain"
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
                       <span className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-blue-300/60">{course.title}</span>
                     </div>
                   )}
