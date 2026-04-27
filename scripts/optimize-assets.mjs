@@ -15,16 +15,26 @@ import sharp from "sharp";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSETS_DIR = join(__dirname, "..", "public", "assets");
 
-const MAX_WIDTH = 1600;
-const MAX_HEIGHT = 1600;
-const JPG_QUALITY = 80;
-const PNG_QUALITY = 80;
-const SKIP_BELOW_BYTES = 200 * 1024;
+const MAX_WIDTH = 1200;
+const MAX_HEIGHT = 1200;
+const JPG_QUALITY = 78;
+const PNG_QUALITY = 75;
+const SKIP_BELOW_BYTES = 100 * 1024;
 
 const dryRun = process.argv.includes("--dry");
 
 const exts = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 const skipNames = new Set(["logo.png", "hero-bg.png", "hero-overlay.png"]);
+
+async function hasAlpha(buf) {
+  try {
+    const stats = await sharp(buf).stats();
+    if (stats.isOpaque === false) return true;
+    return false;
+  } catch {
+    return true; // be safe — keep PNG
+  }
+}
 
 async function* walk(dir) {
   for (const name of await readdir(dir)) {
@@ -79,7 +89,16 @@ for await (const file of walk(ASSETS_DIR)) {
   if (ext === ".jpg" || ext === ".jpeg") {
     out = await pipeline.jpeg({ quality: JPG_QUALITY, mozjpeg: true }).toBuffer();
   } else if (ext === ".png") {
-    out = await pipeline.png({ quality: PNG_QUALITY, compressionLevel: 9 }).toBuffer();
+    // Alfa kanali yo'q rasm (foto) bo'lsa palitra rejimi 50-70% kichik qiladi
+    const transparent = await hasAlpha(buf);
+    out = await pipeline
+      .png({
+        quality: PNG_QUALITY,
+        compressionLevel: 9,
+        palette: !transparent,
+        effort: 7,
+      })
+      .toBuffer();
   } else if (ext === ".webp") {
     out = await pipeline.webp({ quality: 82 }).toBuffer();
   } else continue;

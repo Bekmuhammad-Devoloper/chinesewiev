@@ -5,15 +5,18 @@ const nextConfig = {
 
   // Rasmlarni optimallashtirish
   images: {
-    formats: ["image/avif", "image/webp"],
+    // AVIF olib tashlandi — kodlash juda sekin (5-10× WebP'dan).
+    // Faqat WebP — brauzerlar 95%+ qo'llab-quvvatlaydi va sharp tez ishlaydi.
+    formats: ["image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 kun cache
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [60, 75],
   },
 
   // Sharp parallelizmni oshirish — bir yo'la ko'p rasm optimallashtirish uchun
   experimental: {
-    imgOptConcurrency: 8,
+    imgOptConcurrency: 12,
   },
 
   // Compress

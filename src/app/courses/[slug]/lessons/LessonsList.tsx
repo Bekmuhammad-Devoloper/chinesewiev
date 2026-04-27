@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Lesson } from "@/data/courses";
@@ -57,14 +56,13 @@ export default function LessonsList({ slug, lessons }: { slug: string; lessons: 
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               ) : lesson.image && lesson.image.trim() ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={lesson.image}
                   alt={lesson.title}
-                  fill
-                  loading={index < 12 ? "eager" : "lazy"}
-                  priority={index < 6}
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
