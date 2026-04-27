@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getCoursesData } from "@/lib/courses-server";
 
 export default function CoursesSection() {
@@ -22,7 +21,7 @@ export default function CoursesSection() {
               className={`bg-accent rounded-[16px] md:rounded-[20px] flex flex-col ${isComingSoon ? "opacity-70" : ""}`}
             >
               <div className="pt-[14px] md:pt-[22px] lg:pt-[28px] px-[14px] md:px-[22px] lg:px-[28px]">
-                <div className="w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden">
+                <div className="w-full relative rounded-[10px] md:rounded-[16px] overflow-hidden aspect-[4/3] bg-gradient-to-br from-blue-50 to-blue-100">
                   {isComingSoon && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 rounded-[10px] md:rounded-[16px]">
                       <span className="bg-amber-500 text-white text-[14px] md:text-[18px] font-bold px-[20px] py-[8px] rounded-full shadow-lg flex items-center gap-[6px]">
@@ -32,16 +31,16 @@ export default function CoursesSection() {
                     </div>
                   )}
                   {course.image ? (
-                    <Image
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
                       src={course.image}
                       alt={course.title}
-                      width={800}
-                      height={600}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="w-full h-auto rounded-[10px] md:rounded-[16px]"
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-[180px] md:h-[280px] lg:h-[340px] flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 rounded-[10px] md:rounded-[16px]">
+                    <div className="absolute inset-0 flex items-center justify-center">
                       <span className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-blue-300/60">{course.title}</span>
                     </div>
                   )}
