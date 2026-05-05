@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import type { Course, Lesson } from "@/data/courses";
 import { getDataPath, writeJsonFile } from "@/lib/data";
 import { getCoursesData } from "@/lib/courses-server";
@@ -7,6 +8,13 @@ const DATA_FILE = "courses-data.json";
 
 function writeData(courses: Course[]) {
   writeJsonFile(getDataPath(DATA_FILE), courses);
+}
+
+function revalidatePublicPages() {
+  revalidatePath("/", "layout");
+  revalidatePath("/courses/[slug]", "page");
+  revalidatePath("/courses/[slug]/lessons", "page");
+  revalidatePath("/courses/[slug]/lessons/[lessonId]", "page");
 }
 
 const cacheHeaders = {
@@ -63,6 +71,7 @@ export async function POST(req: NextRequest) {
 
   course.lessons.push(newLesson);
   writeData(courses);
+  revalidatePublicPages();
   return NextResponse.json(newLesson, { status: 201 });
 }
 
@@ -82,6 +91,7 @@ export async function PUT(req: NextRequest) {
 
   course.lessons[idx] = { ...course.lessons[idx], ...body, id: Number(id) };
   writeData(courses);
+  revalidatePublicPages();
   return NextResponse.json(course.lessons[idx]);
 }
 
@@ -100,5 +110,6 @@ export async function DELETE(req: NextRequest) {
   if (course.lessons.length === before) return NextResponse.json({ error: "Dars topilmadi" }, { status: 404 });
 
   writeData(courses);
+  revalidatePublicPages();
   return NextResponse.json({ success: true });
 }

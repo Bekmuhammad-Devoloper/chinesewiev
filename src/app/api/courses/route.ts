@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { Course } from "@/data/courses";
 import { getDataPath, writeJsonFile } from "@/lib/data";
 import { getCoursesData } from "@/lib/courses-server";
@@ -7,6 +8,14 @@ const DATA_FILE = "courses-data.json";
 
 function writeData(courses: Course[]) {
   writeJsonFile(getDataPath(DATA_FILE), courses);
+}
+
+// Bust caches for every public page that derives from courses-data.json.
+function revalidatePublicPages() {
+  revalidatePath("/", "layout");
+  revalidatePath("/courses/[slug]", "page");
+  revalidatePath("/courses/[slug]/lessons", "page");
+  revalidatePath("/courses/[slug]/lessons/[lessonId]", "page");
 }
 
 // GET /api/courses — slim listing (strips heavy per-lesson `sections` content
@@ -52,6 +61,7 @@ export async function POST(req: NextRequest) {
 
   courses.push(newCourse);
   writeData(courses);
+  revalidatePublicPages();
   return NextResponse.json(newCourse, { status: 201 });
 }
 
@@ -64,6 +74,7 @@ export async function PUT(req: NextRequest) {
 
   courses[idx] = { ...courses[idx], ...body };
   writeData(courses);
+  revalidatePublicPages();
   return NextResponse.json(courses[idx]);
 }
 
@@ -76,5 +87,6 @@ export async function DELETE(req: NextRequest) {
   if (courses.length === before) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 
   writeData(courses);
+  revalidatePublicPages();
   return NextResponse.json({ success: true });
 }
