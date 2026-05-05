@@ -15,6 +15,7 @@ export default function CoursesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[14px] md:gap-[24px] lg:gap-[30px]">
           {courses.map((course) => {
             const isComingSoon = course.published === false;
+            const imgSrc = course.image?.trim() || "/assets/course-1.png";
             return (
             <div
               key={course.title}
@@ -30,20 +31,15 @@ export default function CoursesSection() {
                       </span>
                     </div>
                   )}
-                  {course.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={course.image}
-                      alt={course.title}
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-contain"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-                      <span className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-blue-300/60">{course.title}</span>
-                    </div>
-                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imgSrc}
+                    alt={course.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-contain"
+                  />
+
                 </div>
               </div>
 
