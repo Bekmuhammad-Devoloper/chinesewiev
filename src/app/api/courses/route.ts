@@ -9,10 +9,20 @@ function writeData(courses: Course[]) {
   writeJsonFile(getDataPath(DATA_FILE), courses);
 }
 
-// GET /api/courses — get all courses (cached, mtime-invalidated)
+// GET /api/courses — slim listing (strips heavy per-lesson `sections` content
+// — those contain Word-extracted contentHtml and grow into MBs each).
+// Full lesson detail is available at /api/lessons?slug=X&id=Y.
 export async function GET() {
   const courses = getCoursesData();
-  return NextResponse.json(courses, {
+  const slim = courses.map((c) => ({
+    ...c,
+    lessons: c.lessons.map((l) => {
+      const { sections: _sections, writingSheets: _writingSheets, ...rest } = l;
+      void _sections; void _writingSheets;
+      return rest;
+    }),
+  }));
+  return NextResponse.json(slim, {
     headers: {
       "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
     },
