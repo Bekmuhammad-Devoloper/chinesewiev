@@ -18,9 +18,9 @@ const Input = ({ value, onChange, placeholder, className = "" }: { value: string
 export default function AdminLessonsPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedSlug, setSelectedSlug] = useState("");
-  const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [editLesson, setEditLesson] = useState<Lesson | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"general" | "words" | "dialogues" | "grammar">("general");
@@ -47,31 +47,36 @@ export default function AdminLessonsPage() {
   const [activeDialogueContentUpload, setActiveDialogueContentUpload] = useState<number | null>(null);
   const [activeGrammarContentUpload, setActiveGrammarContentUpload] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetch("/api/courses")
-      .then((r) => r.json())
-      .then((data) => {
-        const arr = Array.isArray(data) ? data : [];
-        setCourses(arr);
-        if (arr.length > 0) setSelectedSlug(arr[0].slug);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  const loadCourses = async () => {
+    try {
+      const r = await fetch("/api/courses", { cache: "no-store" });
+      const data = await r.json();
+      const arr = Array.isArray(data) ? data : [];
+      setCourses(arr);
+      setSelectedSlug((prev) => prev || (arr[0]?.slug ?? ""));
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    if (!selectedSlug) return;
-    fetch(`/api/lessons?slug=${selectedSlug}`)
-      .then((r) => r.json())
-      .then((data) => setLessons(Array.isArray(data) ? data : []))
-      .catch(() => setLessons([]));
-  }, [selectedSlug]);
+  useEffect(() => { loadCourses(); }, []);
 
-  const refetchLessons = () => {
-    if (!selectedSlug) return;
-    fetch(`/api/lessons?slug=${selectedSlug}`)
-      .then((r) => r.json())
-      .then((data) => setLessons(Array.isArray(data) ? data : []));
+  const lessons: Lesson[] = (courses.find((c) => c.slug === selectedSlug)?.lessons ?? []) as Lesson[];
+
+  const openEditor = async (lessonId: number) => {
+    setEditLoading(true);
+    try {
+      const r = await fetch(`/api/lessons?slug=${selectedSlug}&id=${lessonId}`, { cache: "no-store" });
+      if (!r.ok) throw new Error("fetch failed");
+      const full = (await r.json()) as Lesson;
+      setEditLesson(full);
+      setIsNew(false);
+      setActiveTab("general");
+    } catch {
+      alert("Darslikni yuklashda xatolik");
+    } finally {
+      setEditLoading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -89,7 +94,7 @@ export default function AdminLessonsPage() {
       });
       setEditLesson(null);
       setIsNew(false);
-      refetchLessons();
+      await loadCourses();
     } catch {
       alert("Xatolik yuz berdi");
     }
@@ -99,7 +104,7 @@ export default function AdminLessonsPage() {
   const handleDelete = async (id: number) => {
     if (!confirm(`Darslik #${id} ni o'chirmoqchimisiz?`)) return;
     await fetch(`/api/lessons?slug=${selectedSlug}&id=${id}`, { method: "DELETE" });
-    refetchLessons();
+    await loadCourses();
   };
 
   const handleNew = () => {
@@ -1054,8 +1059,8 @@ export default function AdminLessonsPage() {
                     </td>
                     <td className="px-[16px] py-[12px]">
                       <div className="flex gap-[6px]">
-                        <button onClick={() => { setEditLesson(l); setIsNew(false); setActiveTab("general"); }}
-                          className="px-[12px] py-[6px] bg-[#f1f5f9] text-[11px] font-semibold text-[#1a1a2e] rounded-[6px] hover:bg-[#e2e8f0] flex items-center gap-[4px]"><Pencil size={12} /> Tahrir</button>
+                        <button disabled={editLoading} onClick={() => openEditor(l.id)}
+                          className="px-[12px] py-[6px] bg-[#f1f5f9] text-[11px] font-semibold text-[#1a1a2e] rounded-[6px] hover:bg-[#e2e8f0] disabled:opacity-50 flex items-center gap-[4px]"><Pencil size={12} /> Tahrir</button>
                         <button onClick={() => handleDelete(l.id)}
                           className="px-[10px] py-[6px] bg-red-50 text-red-400 text-[11px] rounded-[6px] hover:bg-red-100 flex items-center justify-center" title="O'chirish"><Trash2 size={13} /></button>
                       </div>
