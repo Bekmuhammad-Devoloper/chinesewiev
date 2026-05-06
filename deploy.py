@@ -3,10 +3,11 @@ import time
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect('161.97.135.226', username='root', password='24680bek')
+ssh.connect('104.248.25.130', username='root', password='Yuksalish2026Bek')
 
 commands = [
-    'cd /var/www/chinesewave && git pull origin main',
+    'cd /var/www/chinesewave && git fetch origin main',
+    'cd /var/www/chinesewave && git reset --hard origin/main',
     'cd /var/www/chinesewave && npm run build',
     'cd /var/www/chinesewave && pm2 restart chinesewave'
 ]
