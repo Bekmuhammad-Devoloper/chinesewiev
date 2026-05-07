@@ -1,4 +1,4 @@
-import { Course } from "@/data/courses";
+import { Course, Lesson } from "@/data/courses";
 import { getDataPath, readJsonFile, writeJsonFile } from "./data";
 
 const DATA_FILE = "courses-data.json";
@@ -27,4 +27,17 @@ export function getLessonByIds(slug: string, lessonId: number) {
   if (!course) return { course: null, lesson: null };
   const lesson = course.lessons.find((l) => l.id === lessonId) ?? null;
   return { course, lesson };
+}
+
+// Strip heavy per-lesson fields (sections, writingSheets, words, tasks) for
+// list/sibling rendering — sections embed Word-extracted base64 images that
+// inflate the SSR payload to many MB per page.
+export function slimLesson(l: Lesson): Lesson {
+  const { sections: _s, writingSheets: _ws, words: _w, tasks: _t, ...rest } = l;
+  void _s; void _ws; void _w; void _t;
+  return rest as Lesson;
+}
+
+export function slimCourse(c: Course): Course {
+  return { ...c, lessons: c.lessons.map(slimLesson) };
 }

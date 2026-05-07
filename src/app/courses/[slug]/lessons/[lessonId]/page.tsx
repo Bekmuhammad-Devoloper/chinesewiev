@@ -1,5 +1,5 @@
 import { redirect, notFound } from "next/navigation";
-import { getLessonByIds, getCoursesData } from "@/lib/courses-server";
+import { getLessonByIds, getCoursesData, slimCourse } from "@/lib/courses-server";
 import LessonDetailClient from "./LessonDetailClient";
 
 export const revalidate = 60;
@@ -40,7 +40,7 @@ export default async function LessonDetailPage({
     <LessonDetailClient
       slug={slug}
       lessonId={lessonId}
-      initialCourse={course}
+      initialCourse={slimCourse(course)}
       initialLesson={lesson}
     />
   );

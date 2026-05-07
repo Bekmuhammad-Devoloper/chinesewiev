@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import LessonsList from "./LessonsList";
 import LessonsClient from "@/components/LessonsClient";
 import Link from "next/link";
-import { getCourseBySlug, getCoursesData } from "@/lib/courses-server";
+import { getCourseBySlug, getCoursesData, slimLesson } from "@/lib/courses-server";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -44,7 +44,7 @@ export default async function LessonsPage({
           {pageTitle}
         </h1>
 
-        <LessonsList slug={slug} lessons={course.lessons} />
+        <LessonsList slug={slug} lessons={course.lessons.map(slimLesson)} />
       </div>
     </main>
   );
