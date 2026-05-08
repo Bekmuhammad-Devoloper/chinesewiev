@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
     grammarCount: body.grammarCount || "0 mavzu",
     price: body.price || "0",
     priceNote: body.priceNote || "so'm / oyiga",
+    published: body.published ?? false,
     lessons: body.lessons || [],
   };
 
@@ -65,14 +66,27 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(newCourse, { status: 201 });
 }
 
-// PUT /api/courses — update a course by slug
+// PUT /api/courses — update course METADATA only. We deliberately drop
+// body.lessons here: the admin /admin/courses page loads courses via the
+// slim GET (which strips sections/writingSheets/words/tasks). If we accepted
+// body.lessons, every "save" would replace the full lessons with the slim
+// version — wiping every lesson's sections/words on a single price edit.
+// Lessons are managed exclusively via /api/lessons.
 export async function PUT(req: NextRequest) {
   const body = await req.json();
   const courses = getCoursesData();
   const idx = courses.findIndex((c) => c.slug === body.slug);
   if (idx === -1) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
 
-  courses[idx] = { ...courses[idx], ...body };
+  // Strip undefined values so a missing field never overwrites an existing one,
+  // and explicitly drop `lessons` (and other slim-stripped fields) so the slim
+  // payload from GET /api/courses cannot wipe the full lesson data.
+  const { lessons: _lessons, ...rest } = body as Record<string, unknown>;
+  void _lessons;
+  const meta = Object.fromEntries(
+    Object.entries(rest).filter(([, v]) => v !== undefined)
+  );
+  courses[idx] = { ...courses[idx], ...meta };
   writeData(courses);
   revalidatePublicPages();
   return NextResponse.json(courses[idx]);

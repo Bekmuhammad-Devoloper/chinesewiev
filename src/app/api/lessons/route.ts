@@ -81,7 +81,7 @@ export async function PUT(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
   if (!slug || !id) return NextResponse.json({ error: "slug va id kerak" }, { status: 400 });
 
-  const body = await req.json();
+  const body = (await req.json()) as Record<string, unknown>;
   const courses = getCoursesData();
   const course = courses.find((c) => c.slug === slug);
   if (!course) return NextResponse.json({ error: "Kurs topilmadi" }, { status: 404 });
@@ -89,7 +89,12 @@ export async function PUT(req: NextRequest) {
   const idx = course.lessons.findIndex((l) => l.id === Number(id));
   if (idx === -1) return NextResponse.json({ error: "Dars topilmadi" }, { status: 404 });
 
-  course.lessons[idx] = { ...course.lessons[idx], ...body, id: Number(id) };
+  // Drop undefined entries so a client that omits/clears a field cannot
+  // overwrite an existing populated value with undefined.
+  const patch = Object.fromEntries(
+    Object.entries(body).filter(([, v]) => v !== undefined)
+  );
+  course.lessons[idx] = { ...course.lessons[idx], ...patch, id: Number(id) } as typeof course.lessons[typeof idx];
   writeData(courses);
   revalidatePublicPages();
   return NextResponse.json(course.lessons[idx]);
