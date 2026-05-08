@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
+import { getDataPath, readJsonFile, mutateJsonFile } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
@@ -14,16 +14,7 @@ interface ViewsData {
 }
 
 const VIEWS_FILE = "views.json";
-
-function getViews(): ViewsData {
-  const filePath = getDataPath(VIEWS_FILE);
-  return readJsonFile<ViewsData>(filePath, { daily: [], total: 0 });
-}
-
-function saveViews(data: ViewsData): void {
-  const filePath = getDataPath(VIEWS_FILE);
-  writeJsonFile(filePath, data);
-}
+const EMPTY: ViewsData = { daily: [], total: 0 };
 
 function getTodayStr(): string {
   const now = new Date();
@@ -32,37 +23,33 @@ function getTodayStr(): string {
 
 // GET — ko'rishlar statistikasini olish
 export async function GET() {
-  const views = getViews();
+  const views = readJsonFile<ViewsData>(getDataPath(VIEWS_FILE), EMPTY);
   return NextResponse.json(views);
 }
 
-// POST — yangi ko'rish yozish
+// POST — yangi ko'rish yozish (concurrent page loads can stack up; the lock
+// in mutateJsonFile serializes them so increments aren't dropped).
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
     const page = (body as { page?: string }).page || "/";
-
-    const views = getViews();
     const today = getTodayStr();
 
-    // Bugungi yozuv bormi?
-    const idx = views.daily.findIndex((d) => d.date === today);
-    if (idx >= 0) {
-      views.daily[idx].count += 1;
-    } else {
-      views.daily.push({ date: today, count: 1 });
-    }
+    let total = 0;
+    await mutateJsonFile<ViewsData>(getDataPath(VIEWS_FILE), (views) => {
+      const daily = views.daily.slice();
+      const idx = daily.findIndex((d) => d.date === today);
+      if (idx >= 0) {
+        daily[idx] = { ...daily[idx], count: daily[idx].count + 1 };
+      } else {
+        daily.push({ date: today, count: 1 });
+      }
+      const trimmed = daily.length > 90 ? daily.slice(-90) : daily;
+      total = views.total + 1;
+      return { daily: trimmed, total };
+    }, EMPTY);
 
-    // Oxirgi 90 kunni saqlash (ortiqchasini o'chirish)
-    if (views.daily.length > 90) {
-      views.daily = views.daily.slice(-90);
-    }
-
-    views.total += 1;
-
-    saveViews(views);
-
-    return NextResponse.json({ ok: true, page, today, total: views.total });
+    return NextResponse.json({ ok: true, page, today, total });
   } catch {
     return NextResponse.json({ error: "Xatolik" }, { status: 500 });
   }

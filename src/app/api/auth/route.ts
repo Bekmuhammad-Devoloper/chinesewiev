@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDataPath, readJsonFile, writeJsonFile } from "@/lib/data";
+import { getDataPath, readJsonFile, mutateJsonFile } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
@@ -20,14 +20,6 @@ interface UserRecord {
 
 const DATA_FILE = "users-data.json";
 
-function readUsers(): UserRecord[] {
-  return readJsonFile<UserRecord[]>(getDataPath(DATA_FILE), []);
-}
-
-function writeUsers(users: UserRecord[]) {
-  writeJsonFile(getDataPath(DATA_FILE), users);
-}
-
 // POST /api/auth — kalit orqali login
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -37,35 +29,37 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Kalit kiritilmagan" }, { status: 400 });
   }
 
-  const users = readUsers();
+  // Snapshot read first to validate the key + return early on auth failures
+  // without acquiring the write lock unnecessarily.
+  const users = readJsonFile<UserRecord[]>(getDataPath(DATA_FILE), []);
   const user = users.find((u) => u.key === key);
 
-  if (!user) {
-    return NextResponse.json({ error: "Kalit topilmadi" }, { status: 404 });
-  }
-
-  if (!user.active) {
-    return NextResponse.json({ error: "Kalit bloklangan" }, { status: 403 });
-  }
-
-  // Muddati tekshirish
+  if (!user) return NextResponse.json({ error: "Kalit topilmadi" }, { status: 404 });
+  if (!user.active) return NextResponse.json({ error: "Kalit bloklangan" }, { status: 403 });
   if (new Date(user.expiresAt) < new Date()) {
     return NextResponse.json({ error: "Kalit muddati tugagan" }, { status: 403 });
   }
 
-  // Device tekshirish
+  // Device registration is the only mutation. Do it inside the write lock so
+  // concurrent logins from different devices cannot drop one another's id.
   if (deviceId && !user.devices.includes(deviceId)) {
-    if (user.devices.length >= user.maxDevices) {
+    let exceeded = false;
+    await mutateJsonFile<UserRecord[]>(getDataPath(DATA_FILE), (latest) => {
+      const idx = latest.findIndex((u) => u.id === user.id);
+      if (idx === -1) return latest;
+      const u = latest[idx];
+      if (u.devices.includes(deviceId)) return latest;
+      if (u.devices.length >= u.maxDevices) { exceeded = true; return latest; }
+      const next = latest.slice();
+      next[idx] = { ...u, devices: [...u.devices, deviceId] };
+      return next;
+    }, []);
+    if (exceeded) {
       return NextResponse.json(
         { error: `Maksimum ${user.maxDevices} ta qurilma ruxsat etilgan` },
         { status: 403 }
       );
     }
-    // Yangi deviceni qo'shish
-    user.devices.push(deviceId);
-    const idx = users.findIndex((u) => u.id === user.id);
-    users[idx] = user;
-    writeUsers(users);
   }
 
   return NextResponse.json({

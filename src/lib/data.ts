@@ -70,6 +70,44 @@ export function writeJsonFile<T>(filePath: string, data: T): void {
   jsonCache.delete(filePath);
 }
 
+// Per-file write queues. Two concurrent admin saves on the same JSON
+// previously raced read-modify-write: A reads, B reads (same data), A writes,
+// B writes — A's edit silently lost. mutateJsonFile chains read+modify+write
+// inside a single critical section per filePath, eliminating the race within
+// one Node process (PM2 fork mode runs one instance, so this is sufficient
+// for the current setup).
+const writeQueues = new Map<string, Promise<unknown>>();
+
+export async function mutateJsonFile<T>(
+  filePath: string,
+  mutator: (data: T) => T | Promise<T>,
+  fallback: T,
+): Promise<T> {
+  const prev = writeQueues.get(filePath) ?? Promise.resolve();
+  // Run sequentially regardless of whether the previous run resolved or rejected.
+  const next = prev.then(
+    () => runMutation<T>(filePath, mutator, fallback),
+    () => runMutation<T>(filePath, mutator, fallback),
+  );
+  writeQueues.set(filePath, next);
+  next.finally(() => {
+    if (writeQueues.get(filePath) === next) writeQueues.delete(filePath);
+  });
+  return next;
+}
+
+async function runMutation<T>(
+  filePath: string,
+  mutator: (data: T) => T | Promise<T>,
+  fallback: T,
+): Promise<T> {
+  // Re-read inside the lock so we work against the latest on-disk state.
+  const current = readJsonFile<T>(filePath, fallback);
+  const updated = await mutator(current);
+  writeJsonFile(filePath, updated);
+  return updated;
+}
+
 /**
  * Upload fayllarni saqlash uchun papka
  */
