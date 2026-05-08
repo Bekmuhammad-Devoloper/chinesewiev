@@ -79,31 +79,56 @@ export default function AdminLessonsPage() {
     }
   };
 
+  const isUploadInFlight = () =>
+    !!uploadingWord ||
+    uploadingLessonImage ||
+    uploadingLessonSheet ||
+    uploadingDialogueGroupAudio !== null ||
+    parsingDialogueDocx ||
+    parsingGrammarDocx ||
+    uploadingDialogueContent !== null ||
+    uploadingGrammarContent !== null;
+
   const handleSave = async () => {
     if (!editLesson) return;
+    if (isUploadInFlight()) {
+      alert("Fayl yuklanyapti — biroz kuting va qayta urinib ko'ring");
+      return;
+    }
     setSaving(true);
     try {
       const method = isNew ? "POST" : "PUT";
       const url = isNew
         ? `/api/lessons?slug=${selectedSlug}`
         : `/api/lessons?slug=${selectedSlug}&id=${editLesson.id}`;
-      await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editLesson),
       });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        alert(`Saqlashda xatolik: ${j.error || res.status}`);
+        return;
+      }
       setEditLesson(null);
       setIsNew(false);
       await loadCourses();
     } catch {
-      alert("Xatolik yuz berdi");
+      alert("Tarmoq xatosi — saqlanmadi");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleDelete = async (id: number) => {
     if (!confirm(`Darslik #${id} ni o'chirmoqchimisiz?`)) return;
-    await fetch(`/api/lessons?slug=${selectedSlug}&id=${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/lessons?slug=${selectedSlug}&id=${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert(`O'chirishda xatolik: ${j.error || res.status}`);
+      return;
+    }
     await loadCourses();
   };
 

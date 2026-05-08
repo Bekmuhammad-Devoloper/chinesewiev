@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import type { Course, Lesson } from "@/data/courses";
 import { getDataPath, mutateJsonFile } from "@/lib/data";
 import { getCoursesData } from "@/lib/courses-server";
+import { requireAdmin } from "@/lib/admin-auth";
 
 const DATA_FILE = "courses-data.json";
 
@@ -37,8 +38,10 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(course.lessons, { headers: cacheHeaders });
 }
 
-// POST /api/lessons?slug=hsk-1 — add a lesson
+// POST /api/lessons?slug=hsk-1 — add a lesson (admin only)
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const slug = req.nextUrl.searchParams.get("slug");
   if (!slug) return NextResponse.json({ error: "slug kerak" }, { status: 400 });
 
@@ -75,8 +78,10 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(created, { status: 201 });
 }
 
-// PUT /api/lessons?slug=hsk-1&id=1 — update a lesson
+// PUT /api/lessons?slug=hsk-1&id=1 — update a lesson (admin only)
 export async function PUT(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const slug = req.nextUrl.searchParams.get("slug");
   const id = req.nextUrl.searchParams.get("id");
   if (!slug || !id) return NextResponse.json({ error: "slug va id kerak" }, { status: 400 });
@@ -111,8 +116,10 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json(updated);
 }
 
-// DELETE /api/lessons?slug=hsk-1&id=1 — delete a lesson
+// DELETE /api/lessons?slug=hsk-1&id=1 — delete a lesson (admin only)
 export async function DELETE(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const slug = req.nextUrl.searchParams.get("slug");
   const id = req.nextUrl.searchParams.get("id");
   if (!slug || !id) return NextResponse.json({ error: "slug va id kerak" }, { status: 400 });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDataPath, readJsonFile, mutateJsonFile } from "@/lib/data";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -30,9 +31,10 @@ function generateKey(): string {
   return key;
 }
 
-// GET /api/users — all users
-// GET /api/users?id=xxx — one user
+// GET /api/users — admin only (returns full user records with keys/devices/phones).
 export async function GET(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const id = req.nextUrl.searchParams.get("id");
   const users = readJsonFile<UserRecord[]>(getDataPath(DATA_FILE), []);
   if (id) {
@@ -43,8 +45,10 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(users);
 }
 
-// POST /api/users — create user + auto-generate key
+// POST /api/users — create user + auto-generate key (admin only)
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   let created: UserRecord | null = null;
   await mutateJsonFile<UserRecord[]>(getDataPath(DATA_FILE), (users) => {
@@ -67,8 +71,10 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(created, { status: 201 });
 }
 
-// PUT /api/users?id=xxx — update user
+// PUT /api/users?id=xxx — update user (admin only)
 export async function PUT(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id kerak" }, { status: 400 });
 
@@ -90,8 +96,10 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json(updated);
 }
 
-// DELETE /api/users?id=xxx
+// DELETE /api/users?id=xxx (admin only)
 export async function DELETE(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id kerak" }, { status: 400 });
 

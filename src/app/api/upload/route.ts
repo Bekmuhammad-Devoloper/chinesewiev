@@ -3,15 +3,25 @@ import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 import { getUploadDir } from "@/lib/data";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 const MAX_IMAGE_DIMENSION = 1600;
 const JPG_QUALITY = 80;
 const PNG_QUALITY = 80;
+const MAX_BYTES = 10 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   try {
+    // Reject early on Content-Length so we never buffer 500 MB into memory.
+    const lenHeader = req.headers.get("content-length");
+    if (lenHeader && Number(lenHeader) > MAX_BYTES + 1024) {
+      return NextResponse.json({ error: "Fayl hajmi 10MB dan oshmasligi kerak" }, { status: 413 });
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
 
@@ -19,28 +29,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Fayl topilmadi" }, { status: 400 });
     }
 
-    // Validate file type
+    // Validate file type. SVG is intentionally excluded — it can carry inline
+    // <script> that runs same-origin from /assets/, an XSS vector.
     const allowedTypes = [
-      "image/png", "image/jpeg", "image/jpg", "image/webp", "image/svg+xml",
+      "image/png", "image/jpeg", "image/jpg", "image/webp",
       "audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg", "audio/mp4", "audio/m4a", "audio/x-m4a", "audio/aac",
     ];
     if (!allowedTypes.includes(file.type)) {
-      return NextResponse.json({ error: "Faqat rasm (PNG, JPG, WEBP, SVG) yoki audio (MP3, WAV, OGG, M4A) fayllari ruxsat etilgan" }, { status: 400 });
+      return NextResponse.json({ error: "Faqat rasm (PNG, JPG, WEBP) yoki audio (MP3, WAV, OGG, M4A) fayllari ruxsat etilgan" }, { status: 400 });
     }
 
     // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: "Fayl hajmi 10MB dan oshmasligi kerak" }, { status: 400 });
+    if (file.size > MAX_BYTES) {
+      return NextResponse.json({ error: "Fayl hajmi 10MB dan oshmasligi kerak" }, { status: 413 });
     }
 
-    // Generate unique filename
-    const ext = path.extname(file.name) || ".png";
-    const safeName = file.name
-      .replace(/[^a-zA-Z0-9.-]/g, "-")
+    // Generate unique filename. Sanitize the basename — strip path separators
+    // and limit length so a maliciously long/traversal-style name cannot
+    // escape the upload dir or fill the FS with one filename.
+    const rawExt = path.extname(file.name).toLowerCase().replace(/[^a-z0-9.]/g, "");
+    const ext = rawExt || ".bin";
+    const baseRaw = path.basename(file.name, path.extname(file.name));
+    const safeBase = baseRaw
+      .replace(/[^a-zA-Z0-9-]/g, "-")
       .replace(/-+/g, "-")
-      .toLowerCase();
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60)
+      .toLowerCase() || "file";
     const timestamp = Date.now();
-    const filename = `${timestamp}-${safeName}`;
+    const filename = `${timestamp}-${safeBase}${ext}`;
 
     // Determine subfolder based on type
     const isAudio = file.type.startsWith("audio/");
@@ -52,8 +69,8 @@ export async function POST(req: NextRequest) {
     const filePath = path.join(uploadDir, filename);
     let buffer = Buffer.from(await file.arrayBuffer());
 
-    // Rasm bo'lsa avtomatik kichraytirish (SVG ham audio ham emas)
-    if (!isAudio && file.type !== "image/svg+xml") {
+    // Rasm bo'lsa avtomatik kichraytirish
+    if (!isAudio) {
       try {
         let pipeline = sharp(buffer, { failOn: "none" }).rotate();
         const meta = await sharp(buffer).metadata();

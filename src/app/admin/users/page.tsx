@@ -43,17 +43,27 @@ export default function AdminUsersPage() {
     try {
       const method = isNew ? "POST" : "PUT";
       const url = isNew ? "/api/users" : `/api/users?id=${editUser.id}`;
-      await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(editUser) });
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(editUser) });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        alert(`Saqlashda xatolik: ${j.error || res.status}`);
+        return;
+      }
       setEditUser(null);
       setIsNew(false);
       refetch();
-    } catch { alert("Xatolik!"); }
-    setSaving(false);
+    } catch { alert("Tarmoq xatosi"); }
+    finally { setSaving(false); }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Bu foydalanuvchini o'chirmoqchimisiz?")) return;
-    await fetch(`/api/users?id=${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/users?id=${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert(`O'chirishda xatolik: ${j.error || res.status}`);
+      return;
+    }
     refetch();
   };
 
@@ -169,7 +179,12 @@ export default function AdminUsersPage() {
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-[0.06em] mb-[4px]">Muddati</label>
-                  <Input value={editUser.expiresAt.slice(0, 10)} onChange={(v) => setEditUser({ ...editUser, expiresAt: new Date(v).toISOString() })} placeholder="2027-01-01" className="w-full" type="date" />
+                  <Input value={editUser.expiresAt.slice(0, 10)} onChange={(v) => {
+                    if (!v) return;
+                    const d = new Date(v);
+                    if (isNaN(d.getTime())) return;
+                    setEditUser({ ...editUser, expiresAt: d.toISOString() });
+                  }} placeholder="2027-01-01" className="w-full" type="date" />
                 </div>
               </div>
               <div className="flex items-center gap-[12px]">

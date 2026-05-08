@@ -51,27 +51,38 @@ export default function AdminCoursesPage() {
     try {
       const url = "/api/courses";
       const method = isNew ? "POST" : "PUT";
-      await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editCourse),
       });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        alert(`Saqlashda xatolik: ${j.error || res.status}`);
+        return;
+      }
       setEditCourse(null);
       setIsNew(false);
       fetchCourses();
-    } catch (err) {
-      alert("Xatolik yuz berdi");
+    } catch {
+      alert("Tarmoq xatosi — saqlanmadi");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleDelete = async (slug: string) => {
     if (!confirm(`"${slug}" kursini o'chirmoqchimisiz?`)) return;
-    await fetch("/api/courses", {
+    const res = await fetch("/api/courses", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),
     });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert(`O'chirishda xatolik: ${j.error || res.status}`);
+      return;
+    }
     fetchCourses();
   };
 

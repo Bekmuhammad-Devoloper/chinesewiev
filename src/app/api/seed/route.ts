@@ -1,25 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import { getDataPath, writeJsonFile } from "@/lib/data";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 const DATA_FILE = "courses-data.json";
 
 // POST /api/seed — overwrite courses-data.json with the bundled seed array.
-// This was previously public+unauthed, meaning anyone could DELETE all admin
-// data with a single curl. It now requires:
-//   1. an explicit admin secret (env SEED_SECRET) in the x-seed-secret header
-//   2. the existing courses file to be empty/missing — we refuse to clobber
-//      a populated file. To force, pass ?force=1 alongside the secret.
+// Requires an admin session AND refuses to clobber a populated file unless
+// ?force=1 is passed.
 export async function POST(req: NextRequest) {
-  const expected = process.env.SEED_SECRET;
-  if (!expected) {
-    return NextResponse.json({ error: "seed disabled (SEED_SECRET not set)" }, { status: 503 });
-  }
-  if (req.headers.get("x-seed-secret") !== expected) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const force = req.nextUrl.searchParams.get("force") === "1";
   const filePath = getDataPath(DATA_FILE);
   if (!force && fs.existsSync(filePath) && fs.statSync(filePath).size > 2) {

@@ -1,20 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import mammoth from "mammoth";
+import { requireAdmin } from "@/lib/admin-auth";
+
+const MAX_BYTES = 25 * 1024 * 1024; // 25MB cap so a malicious huge .docx cannot OOM the process
 
 /**
  * POST /api/parse-docx?type=dialogue|grammar
- * 
+ *
  * Accepts a .docx file, converts to HTML with mammoth,
  * then parses headings + paragraphs into structured data.
  */
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   try {
+    // Reject early on Content-Length to avoid buffering huge bodies before
+    // we can check file.size below.
+    const lenHeader = req.headers.get("content-length");
+    if (lenHeader && Number(lenHeader) > MAX_BYTES + 4096) {
+      return NextResponse.json({ error: "Fayl hajmi 25MB dan oshmasligi kerak" }, { status: 413 });
+    }
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const type = req.nextUrl.searchParams.get("type") || "dialogue";
 
     if (!file) {
       return NextResponse.json({ error: "Fayl topilmadi" }, { status: 400 });
+    }
+    if (file.size > MAX_BYTES) {
+      return NextResponse.json({ error: "Fayl hajmi 25MB dan oshmasligi kerak" }, { status: 413 });
     }
 
     // Validate file type

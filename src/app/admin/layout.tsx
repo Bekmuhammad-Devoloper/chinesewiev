@@ -16,8 +16,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "boburbek";
-
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/courses", label: "Kurslar", icon: BookOpen },
@@ -27,33 +25,64 @@ const sidebarLinks = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [authed, setAuthed] = useState(false);
+  // null = checking; false = login form; true = admin UI.
+  const [authed, setAuthed] = useState<boolean | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
+  // Check the HTTP-only session cookie via the server. Anything client-side
+  // (sessionStorage, NEXT_PUBLIC_ADMIN_PASSWORD) cannot be trusted because
+  // the password used to be shipped to every browser bundle.
   useEffect(() => {
-    const stored = sessionStorage.getItem("admin_auth");
-    if (stored === "true") setAuthed(true);
+    fetch("/api/admin-session", { cache: "no-store", credentials: "include" })
+      .then((r) => setAuthed(r.ok))
+      .catch(() => setAuthed(false));
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem("admin_auth", "true");
-      setAuthed(true);
-      setError("");
-    } else {
-      setError("Parol noto\u2018g\u2018ri!");
+    setLoggingIn(true);
+    setError("");
+    try {
+      const res = await fetch("/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ password }),
+        cache: "no-store",
+      });
+      if (res.ok) {
+        setAuthed(true);
+        setPassword("");
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setError(j.error || "Parol noto'g'ri");
+      }
+    } catch {
+      setError("Tarmoq xatosi");
+    } finally {
+      setLoggingIn(false);
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("admin_auth");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin-session", { method: "POST", credentials: "include" });
+    } catch {}
     setAuthed(false);
     router.push("/admin");
   };
+
+  if (authed === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-400 text-sm">
+        Yuklanmoqda\u2026
+      </div>
+    );
+  }
 
   if (!authed) {
     return (
@@ -104,9 +133,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           )}
           <button
             type="submit"
-            className="w-full py-[14px] bg-gradient-to-r from-[#063087] to-[#041e56] text-[#edcc8a] font-bold text-[15px] rounded-[12px] hover:from-[#041e56] hover:to-[#031845] active:scale-[0.98] transition-all shadow-[0_8px_32px_rgba(6,48,135,0.35)] tracking-[0.02em]"
+            disabled={loggingIn}
+            className="w-full py-[14px] bg-gradient-to-r from-[#063087] to-[#041e56] text-[#edcc8a] font-bold text-[15px] rounded-[12px] hover:from-[#041e56] hover:to-[#031845] active:scale-[0.98] transition-all shadow-[0_8px_32px_rgba(6,48,135,0.35)] tracking-[0.02em] disabled:opacity-60"
           >
-            Kirish &rarr;
+            {loggingIn ? "Tekshirilmoqda…" : "Kirish →"}
           </button>
           <div className="text-center mt-[20px]">
             <Link href="/" className="text-[13px] text-[#063087]/35 hover:text-[#063087]/60 font-medium transition-colors">

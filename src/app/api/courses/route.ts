@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { Course } from "@/data/courses";
 import { getDataPath, mutateJsonFile } from "@/lib/data";
 import { getCoursesData } from "@/lib/courses-server";
+import { requireAdmin } from "@/lib/admin-auth";
 
 const DATA_FILE = "courses-data.json";
 
@@ -34,8 +35,10 @@ export async function GET() {
   });
 }
 
-// POST /api/courses — add a new course
+// POST /api/courses — add a new course (admin only)
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   let created: Course | null = null;
   await mutateJsonFile<Course[]>(getDataPath(DATA_FILE), (courses) => {
@@ -68,6 +71,8 @@ export async function POST(req: NextRequest) {
 // version — wiping every lesson's sections/words on a single price edit.
 // Lessons are managed exclusively via /api/lessons.
 export async function PUT(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = (await req.json()) as Record<string, unknown>;
   if (!body.slug) return NextResponse.json({ error: "slug kerak" }, { status: 400 });
 
@@ -91,8 +96,10 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json(updated);
 }
 
-// DELETE /api/courses — delete course by slug (send { slug } in body)
+// DELETE /api/courses — delete course by slug (admin only)
 export async function DELETE(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   let removed = false;
   await mutateJsonFile<Course[]>(getDataPath(DATA_FILE), (courses) => {

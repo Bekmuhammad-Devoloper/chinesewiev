@@ -95,17 +95,27 @@ export default function AdminKeysPage() {
   };
 
   const toggleActive = async (user: UserRecord) => {
-    await fetch(`/api/users?id=${user.id}`, {
+    const res = await fetch(`/api/users?id=${user.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ active: !user.active }),
     });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert(`Xatolik: ${j.error || res.status}`);
+      return;
+    }
     refetch();
   };
 
   const deleteKey = async (id: string) => {
     if (!confirm("Bu kalitni o'chirmoqchimisiz?")) return;
-    await fetch(`/api/users?id=${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/users?id=${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert(`O'chirishda xatolik: ${j.error || res.status}`);
+      return;
+    }
     refetch();
   };
 
