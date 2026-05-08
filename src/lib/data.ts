@@ -19,29 +19,54 @@ export function getDataPath(filename: string): string {
 type CacheEntry = { mtimeMs: number; size: number; value: unknown };
 const jsonCache = new Map<string, CacheEntry>();
 
-export function readJsonFile<T>(filePath: string, fallback: T): T {
-  try {
-    if (!fs.existsSync(filePath)) return fallback;
-    const stat = fs.statSync(filePath);
-    const cached = jsonCache.get(filePath);
-    if (cached && cached.mtimeMs === stat.mtimeMs && cached.size === stat.size) {
-      return cached.value as T;
-    }
-    const raw = fs.readFileSync(filePath, "utf-8");
-    const value = JSON.parse(raw) as T;
-    jsonCache.set(filePath, { mtimeMs: stat.mtimeMs, size: stat.size, value });
-    return value;
-  } catch {
-    return fallback;
-  }
+// Distinguishes "file legitimately missing" (ok, return fallback) from
+// "file present but unreadable / unparseable" (NOT ok, must propagate so the
+// caller does not silently overwrite real data with a seed).
+class JsonReadError extends Error {
+  constructor(msg: string, readonly cause: unknown) { super(msg); }
 }
 
+export function readJsonFile<T>(filePath: string, fallback: T): T {
+  if (!fs.existsSync(filePath)) return fallback;
+  let stat: fs.Stats;
+  try {
+    stat = fs.statSync(filePath);
+  } catch (err) {
+    throw new JsonReadError(`stat failed for ${filePath}`, err);
+  }
+  const cached = jsonCache.get(filePath);
+  if (cached && cached.mtimeMs === stat.mtimeMs && cached.size === stat.size) {
+    return cached.value as T;
+  }
+  let raw: string;
+  try {
+    raw = fs.readFileSync(filePath, "utf-8");
+  } catch (err) {
+    throw new JsonReadError(`read failed for ${filePath}`, err);
+  }
+  let value: T;
+  try {
+    value = JSON.parse(raw) as T;
+  } catch (err) {
+    throw new JsonReadError(`parse failed for ${filePath} (${stat.size} bytes)`, err);
+  }
+  jsonCache.set(filePath, { mtimeMs: stat.mtimeMs, size: stat.size, value });
+  return value;
+}
+
+// Atomic write via tmp + rename so a crash mid-write cannot leave a
+// half-written/corrupt file in place. Also keeps a rolling .bak copy of the
+// last good version as a safety net for accidental destructive writes.
 export function writeJsonFile<T>(filePath: string, data: T): void {
   const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  const json = JSON.stringify(data, null, 2);
+  const tmp = `${filePath}.tmp.${process.pid}.${Date.now()}`;
+  fs.writeFileSync(tmp, json, "utf-8");
+  if (fs.existsSync(filePath)) {
+    try { fs.copyFileSync(filePath, `${filePath}.bak`); } catch {}
   }
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  fs.renameSync(tmp, filePath);
   jsonCache.delete(filePath);
 }
 
