@@ -413,9 +413,16 @@ export default function AdminLessonsPage() {
   const getDialogueSection = () => editLesson?.sections?.find((s) => s.id === "dialogues");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateDialogueChildren = (children: any) => {
-    const sections = (editLesson?.sections || []).map((s) =>
-      s.id === "dialogues" ? { ...s, children } : s
-    );
+    // Older lessons (and lessons whose sections were once wiped) can come
+    // back with an empty/missing sections array. Without auto-creating the
+    // "dialogues" section here, clicking "Dialog qo'shish" was a silent no-op.
+    let sections = (editLesson?.sections || []).slice();
+    const idx = sections.findIndex((s) => s.id === "dialogues");
+    if (idx === -1) {
+      sections.push({ id: "dialogues", title: "Dialoglar", type: "dialogue", children });
+    } else {
+      sections = sections.map((s) => (s.id === "dialogues" ? { ...s, children } : s));
+    }
     updateLesson({ sections });
   };
   const addDialogue = () => {
@@ -456,9 +463,13 @@ export default function AdminLessonsPage() {
   const getGrammarSection = () => editLesson?.sections?.find((s) => s.id === "grammar");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateGrammarChildren = (children: any) => {
-    const sections = (editLesson?.sections || []).map((s) =>
-      s.id === "grammar" ? { ...s, children } : s
-    );
+    let sections = (editLesson?.sections || []).slice();
+    const idx = sections.findIndex((s) => s.id === "grammar");
+    if (idx === -1) {
+      sections.push({ id: "grammar", title: "Grammatika", type: "grammar", children });
+    } else {
+      sections = sections.map((s) => (s.id === "grammar" ? { ...s, children } : s));
+    }
     updateLesson({ sections });
   };
   const addGrammarTopic = () => {
